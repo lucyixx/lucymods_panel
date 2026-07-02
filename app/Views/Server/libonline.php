@@ -104,7 +104,7 @@ function formatPermissions($file) : string
 </main>
 <?= $this->endSection() ?>
 <?= $this->section('js') ?>
-<script <?= csp_script_nonce() ?>>
+<script>
     $(document).ready(function() {
         $('#table').DataTable();
     });

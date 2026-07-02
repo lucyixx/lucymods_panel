@@ -4,9 +4,9 @@
             <div class="me-auto">
                 <a class="navbar-brand text-body d-flex align-items-center p-0" href="<?= site_url(!session()->has('userid') ? '' : 'dashboard') ?>">
                     <i class="bi bi-controller me-2"></i>
-                    <div class="d-flex flex-column lh-1">
-                        <span><?= BASE_NAME ?></span>
-                        <span class="text-secondary" style="font-size: 0.6rem;">World of game mods</span>
+                    <div class="row p-0">
+                        <span style="transform: translateY(-0.2rem);"><?= BASE_NAME ?></span>
+                        <span class="text-secondary position-absolute w-auto" style="top:2rem;font-size: 0.46rem;">World of game mods</span>
                     </div>
                 </a>
             </div>
@@ -59,7 +59,7 @@
     </nav>
 </header>
 
-<script <?= csp_script_nonce() ?>>
+<script>
     $(document).ready(function() {
         $('#bd-theme').click(function(e) {
             var htmlElement = document.querySelector('html');

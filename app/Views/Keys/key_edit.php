@@ -101,7 +101,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
-<script <?= csp_script_nonce() ?>>
+<script>
     $(document).ready(function() {
         const old_duration = parseInt(<?= $key->duration ?>);
         const expired = $('#expired_date').val();

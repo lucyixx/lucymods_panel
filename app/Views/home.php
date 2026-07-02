@@ -188,7 +188,7 @@ $games = [
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
-<script <?= csp_script_nonce() ?>>
+<script>
     window.onload = function() {
         loadAudio();
     };

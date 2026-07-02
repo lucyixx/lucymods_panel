@@ -55,7 +55,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
-<script type="text/javascript" <?= csp_script_nonce() ?>>
+<script type="text/javascript">
     $(document).ready(function() {
         const table = $('#datatable').DataTable({
             processing: true,
@@ -116,21 +116,14 @@
                 {
                     data: null,
                     render: function(data, type, row, meta) {
-                        const btnReset = `<button class="btn text-warning btn-reset-key" data-key="${row.user_key}"><i class="bi bi-bootstrap-reboot"></i></button>`;
+                        console.log(row);
+                        const btnReset = `<button class="btn text-warning" onclick="resetUserKey('${row.user_key}')"><i class="bi bi-bootstrap-reboot"></i></button>`;
                         const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-sm"><i class="bi bi-gear"></i></a>`;
-                        const btnDelete = `<button class="btn text-danger btn-sm btn-delete-key" data-key="${row.user_key}"><i class="bi bi-trash"></i></button>`;
+                        const btnDelete = `<button class="btn text-danger btn-sm" onclick="deleteKeys('${row.user_key}')"><i class="bi bi-trash"></i></button>`;
                         return `<div class="btn-group btn-group-sm">${btnReset} ${btnEdits} ${btnDelete}</div>`;
                     }
                 }
             ]
-        });
-
-        // Ủy quyền sự kiện vì các nút Reset/Delete được DataTables render động
-        $('#datatable').on('click', '.btn-reset-key', function() {
-            resetUserKey($(this).data('key'));
-        });
-        $('#datatable').on('click', '.btn-delete-key', function() {
-            deleteKeys($(this).data('key'));
         });
     });
 

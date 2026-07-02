@@ -53,7 +53,7 @@
 <?= script_tag('public/assets/js/natacode.js') ?>
 <?= $this->renderSection('js') ?>
 
-<script <?= csp_script_nonce() ?>>
+<script>
     function adjustBottomPadding() {
         const fixedTop = document.querySelector('.fixed-top');
         const fixedBottom = document.querySelector('.fixed-bottom');
@@ -90,14 +90,14 @@
         <div>
             <p>This website uses cookies, or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to the <a href="#">Privacy Policy</a></p>
             <div>
-                <button class="btn btn-success w-100 shadow-sm" id="cookieAcceptBtn">Accept</button>
+                <button class="btn btn-success w-100 shadow-sm" onclick="acceptCookieConsent();">Accept</button>
             </div>
         </div>
     </div>
 </div>
 
 
-<script <?= csp_script_nonce() ?>>
+<script>
     // Create cookie
     function setCookie(cname, cvalue, exdays) {
         const d = new Date();
@@ -143,9 +143,8 @@
     } else {
         document.getElementById("cookieNotice").style.display = "block";
     }
-    document.getElementById("cookieAcceptBtn").addEventListener("click", acceptCookieConsent);
 </script>
-<style <?= csp_style_nonce() ?>>
+<style>
     #cookieNotice.display-right {
         right: 10px;
         bottom: 10px;

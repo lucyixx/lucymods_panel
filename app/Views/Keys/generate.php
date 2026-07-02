@@ -118,7 +118,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
-<script <?= csp_script_nonce() ?>>
+<script>
     $(document).ready(function() {
         const price = JSON.parse('<?= $price ?>');
         getPrice(price);

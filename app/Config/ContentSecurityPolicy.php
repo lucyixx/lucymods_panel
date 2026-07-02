@@ -52,50 +52,23 @@ class ContentSecurityPolicy extends BaseConfig
     /**
      * Lists allowed scripts' URLs.
      *
-     * NOTE: Layout dùng jQuery/Bootstrap/SweetAlert2/DataTables tải từ CDN,
-     * nên phải whitelist đúng domain thay vì tắt CSP. Không thêm 'unsafe-inline'
-     * ở đây — các <script> viết tay trong view đã được gắn nonce riêng
-     * (xem csp_script_nonce()).
-     *
      * @var string|string[]
      */
-    public $scriptSrc = [
-        'self',
-        'code.jquery.com',
-        'cdn.jsdelivr.net',
-        'cdnjs.cloudflare.com',
-        'cdn.datatables.net',
-    ];
+    public $scriptSrc = 'self';
 
     /**
      * Lists allowed stylesheets' URLs.
      *
-     * NOTE: 'unsafe-inline' bắt buộc phải giữ vì các view đang dùng rất nhiều
-     * thuộc tính style="" nội tuyến (style attribute không nhận nonce theo
-     * chuẩn CSP). Rủi ro thấp hơn nhiều so với script-src nên chấp nhận được.
-     *
      * @var string|string[]
      */
-    public $styleSrc = [
-        'self',
-        'unsafe-inline',
-        'fonts.googleapis.com',
-        'cdn.jsdelivr.net',
-        'cdnjs.cloudflare.com',
-        'cdn.datatables.net',
-    ];
+    public $styleSrc = 'self';
 
     /**
      * Defines the origins from which images can be loaded.
      *
      * @var string|string[]
      */
-    public $imageSrc = [
-        'self',
-        'data:',
-        'avatars.githubusercontent.com',
-        'play-lh.googleusercontent.com',
-    ];
+    public $imageSrc = 'self';
 
     /**
      * Restricts the URLs that can appear in a page's `<base>` element.
@@ -126,11 +99,7 @@ class ContentSecurityPolicy extends BaseConfig
      *
      * @var string|string[]
      */
-    public $fontSrc = [
-        'self',
-        'fonts.gstatic.com',
-        'cdn.jsdelivr.net',
-    ];
+    public $fontSrc;
 
     /**
      * Lists valid endpoints for submission from `<form>` tags.
@@ -160,16 +129,9 @@ class ContentSecurityPolicy extends BaseConfig
     /**
      * Restricts the origins allowed to deliver video and audio.
      *
-     * NOTE: trang chủ có video hero load từ www.callofduty.com — nếu để trống,
-     * media-src sẽ rơi về default-src 'self' và bị CSP chặn (hộp trống không
-     * hiện video).
-     *
      * @var string|string[]|null
      */
-    public $mediaSrc = [
-        'self',
-        'www.callofduty.com',
-    ];
+    public $mediaSrc;
 
     /**
      * Allows control over Flash and other plugins.

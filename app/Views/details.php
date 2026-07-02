@@ -133,7 +133,7 @@
 </div>
 
 
-<script <?= csp_script_nonce() ?>>
+<script>
     $(document).ready(function() {
         $.ajax({
             url: "<?= site_url('public/proxy.php?id=') . $_GET['id'] ?>",

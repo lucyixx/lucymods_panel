@@ -49,7 +49,6 @@ class Filters extends BaseConfig
         ],
         'after' => [
             'toolbar',
-            'secureheaders',
         ],
     ];
 
