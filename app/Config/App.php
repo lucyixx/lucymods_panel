@@ -16,7 +16,6 @@ class App extends BaseConfig
     public array $supportedLocales = ['en', 'vi'];
     public string $appTimezone = 'UTC';
     public string $charset = 'UTF-8';
-    public bool $forceGlobalSecureRequests = false;
     public array $proxyIPs = [];
     // public bool $CSPEnabled = false;
     
