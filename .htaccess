@@ -1,0 +1,114 @@
+# Allow direct access to all files in /downloads/
+# RewriteCond %{REQUEST_URI} ^/downloads/ [NC]
+# RewriteRule ^ - [L]
+
+
+
+# BEGIN HTTPS Redirect
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+# END HTTPS Redirect
+
+# BEGIN Security Headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Header always set Content-Security-Policy "upgrade-insecure-requests;"
+</IfModule>
+# END Security Headers
+
+# BEGIN Disable Directory Listing
+Options -Indexes
+# END Disable Directory Listing
+
+RewriteOptions inherit
+# ----------------------------------------------------------------------
+# Basic Security Settings
+# ----------------------------------------------------------------------
+# Disable directory browsing
+Options -Indexes
+
+# Disable server signature to hide server details
+ServerSignature Off
+
+# Prevent access to system and application folders
+RewriteRule ^(system|application) - [F,L]
+
+# Prevent access to other sensitive files and directories
+<FilesMatch "(^\.|composer\.(json|lock)|env|phpunit\.xml|.*\.(zip|git|sql|sh|ini|env|bak|log|swp))">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+RedirectMatch 404 ^/(app|system|vendor|writable)/.*
+
+# ----------------------------------------------------------------------
+# Rewrite Engine
+# ----------------------------------------------------------------------
+
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks
+    RewriteEngine On
+
+    # Set the base if CodeIgniter is in a subfolder
+    # Uncomment and adjust if CodeIgniter is in a subdirectory
+    # RewriteBase /your-subfolder
+
+    # Redirect Trailing Slashes if not a directory
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Force HTTPS (optional, uncomment if needed)
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Remove "www" prefix
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
+
+    # Redirect all requests to index.php if not accessing a real file or directory
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L,NC,QSA]
+
+    # Pass Authorization headers to index.php
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    # If mod_rewrite is not available, redirect 404 errors to index.php
+    ErrorDocument 404 /index.php
+</IfModule>
+
+# ----------------------------------------------------------------------
+# Additional Security Headers
+# ----------------------------------------------------------------------
+
+# Prevent Clickjacking
+Header always append X-Frame-Options SAMEORIGIN
+
+# Prevent MIME-type sniffing
+Header set X-Content-Type-Options nosniff
+
+# Cross-Site Scripting (XSS) protection
+Header set X-XSS-Protection "1; mode=block"
+
+# Strict Transport Security (only use if HTTPS is enabled)
+# Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+# Referrer Policy (adjust as needed)
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Content Security Policy (customize to allow specific sources)
+# Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; object-src 'none'"
+
+# Giới hạn 10 yêu cầu mỗi giây cho mỗi IP
+<Limit GET POST>
+  Order Allow,Deny
+  Allow from all
+  Deny from env=slow_down
+</Limit>
+

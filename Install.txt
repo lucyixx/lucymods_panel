@@ -1,0 +1,6 @@
+composer create-project codeigniter4/appstarter project-test
+composer require hermawan/codeigniter4-datatables
+
+
+--  fix Class "Locale" not found
+https://stackoverflow.com/questions/62968301/codeigniter-4-running-error-first-time-with-xampp
