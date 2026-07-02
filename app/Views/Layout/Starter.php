@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?= link_tag('public/favicon.ico', "shortcut icon", "image/x-icon") ?>
+    <?= link_tag('favicon.ico', "shortcut icon", "image/x-icon") ?>
     <title><?= BASE_NAME ?> - <?= isset($title) ? $title : 'Panel' ?></title>
     <?= link_tag('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css') ?>
     <?= link_tag("https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap5.css") ?>
-    <?= link_tag('public/assets/css/style.css') ?>
+    <?= link_tag('assets/css/style.css') ?>
     <?= $this->renderSection('css') ?>
 
     <?= script_tag('https://code.jquery.com/jquery-3.6.0.js') ?>
