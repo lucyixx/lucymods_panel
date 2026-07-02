@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <div class="d-flex min-vh-100 flex-column justify-content-center">
+    <div class="d-flex min-vh-60 flex-column justify-content-center">
         <?= $this->include('Layout/Header') ?>
         <main class="content">
             <div class="container p-3 px-sm-0"><?= $this->renderSection('content') ?></div>
