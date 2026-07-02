@@ -160,9 +160,16 @@ class ContentSecurityPolicy extends BaseConfig
     /**
      * Restricts the origins allowed to deliver video and audio.
      *
+     * NOTE: trang chủ có video hero load từ www.callofduty.com — nếu để trống,
+     * media-src sẽ rơi về default-src 'self' và bị CSP chặn (hộp trống không
+     * hiện video).
+     *
      * @var string|string[]|null
      */
-    public $mediaSrc;
+    public $mediaSrc = [
+        'self',
+        'www.callofduty.com',
+    ];
 
     /**
      * Allows control over Flash and other plugins.
