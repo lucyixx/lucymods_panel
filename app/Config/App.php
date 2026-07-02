@@ -63,7 +63,7 @@ class App extends BaseConfig
     public bool   $sessionMatchIP       = true;      // check IP để chống session hijacking
     public bool   $sessionRegenerateDestroy = true;  // hủy session cũ khi regenerate
 
-    public bool $CSPEnabled = true;                  // bật CSP để hạn chế XSS
+    public bool $CSPEnabled = false;                  // bật CSP để hạn chế XSS
     public bool $forceGlobalSecureRequests = true; // ép HTTPS cho toàn site
     
     public function __construct()
