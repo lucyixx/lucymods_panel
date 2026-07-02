@@ -51,7 +51,7 @@
 
 </html>
 
-<?= script_tag('public/assets/js/natacode.js') ?>
+<?= script_tag('assets/js/natacode.js') ?>
 <?= $this->renderSection('js') ?>
 
 <script>

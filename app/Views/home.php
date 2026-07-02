@@ -193,7 +193,7 @@ $games = [
         loadAudio();
     };
     const loadAudio = function() {
-        const audioCls = new Audio("<?= base_url('public/assets/audio/m.mp3') ?>");
+        const audioCls = new Audio("<?= base_url('assets/audio/m.mp3') ?>");
         audioCls.autoplay = true;
         audioCls.loop = true;
 

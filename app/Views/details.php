@@ -136,7 +136,7 @@
 <script>
     $(document).ready(function() {
         $.ajax({
-            url: "<?= site_url('public/proxy.php?id=') . $_GET['id'] ?>",
+            url: "<?= site_url('proxy.php?id=') . $_GET['id'] ?>",
             type: "GET",
             dataType: "json",
             success: function(response) {
