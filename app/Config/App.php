@@ -65,7 +65,7 @@ class App extends BaseConfig
     public bool   $sessionRegenerateDestroy = true;  // hủy session cũ khi regenerate
 
     public bool $CSPEnabled = true;                  // bật CSP để hạn chế XSS
-    // public string $forceGlobalSecureRequests = true; // ép HTTPS cho toàn site
+    public string $forceGlobalSecureRequests = true; // ép HTTPS cho toàn site
     
     public function __construct()
     {
