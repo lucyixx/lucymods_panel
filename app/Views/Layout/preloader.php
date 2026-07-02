@@ -97,3 +97,15 @@
 <div class='body__preloader'>
     <div id="loading"></div>
 </div>
+
+<script>
+window.addEventListener("load", function () {
+    const loader = document.querySelector(".body__preloader");
+
+    if (!loader) return;
+
+    setTimeout(() => {
+        loader.classList.add("loaded");
+    }, 600);
+});
+</script>

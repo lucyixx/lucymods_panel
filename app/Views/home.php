@@ -84,8 +84,6 @@ $games = [
 ];
 ?>
 
-<?= $this->extend('Layout/preloader') ?>
-
 <?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
 <div class="row justify-content-center">
