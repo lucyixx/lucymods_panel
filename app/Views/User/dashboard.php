@@ -13,7 +13,7 @@
 
 <div class="flex flex-wrap mb-3 gap-4">
     <div class="w-full sm:w-1/2 lg:w-1/4">
-        <div class="card mb-3 shadow-sm border-0">
+        <div class="panel mb-3 shadow-sm border-0">
             <div class="p-3 flex">
                 <div class="mr-5">
                     <i class="bi bi-currency-bitcoin text-success"></i>
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="w-full sm:w-1/2 lg:w-1/4">
-        <div class="card mb-3 shadow-sm border-0">
+        <div class="panel mb-3 shadow-sm border-0">
             <div class="p-3 flex">
                 <div class="mr-5">
                     <i class="bi bi-cart-check-fill" style="color: #ab8ce4;"></i>
@@ -39,7 +39,7 @@
         </div>
     </div>
     <div class="w-full sm:w-1/2 lg:w-1/4">
-        <div class="card mb-3 shadow-sm border-0">
+        <div class="panel mb-3 shadow-sm border-0">
             <div class="p-3 flex">
                 <div class="mr-5">
                     <i class="bi bi-wallet-fill text-primary"></i>
@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="w-full sm:w-1/2 lg:w-1/4">
-        <div class="card mb-3 shadow-sm border-0">
+        <div class="panel mb-3 shadow-sm border-0">
             <div class="p-3 flex">
                 <div class="mr-5">
                     <i class="bi bi-people-fill text-error"></i>
@@ -72,9 +72,9 @@
     </div>
 
     <div class="w-full lg:w-2/3">
-        <div class="card mb-3">
-            <div class="border-b px-4 py-3 font-semibold">Registration History</div>
-            <div class="card-body">
+        <div class="panel mb-3">
+            <div class="panel-head"><span class="panel-head-title">Registration History</span></div>
+            <div class="panel-body">
                 <div class="overflow-x-auto">
                     <table class="table table-zebra text-center">
                         <tbody>
@@ -97,9 +97,9 @@
     </div>
 
     <div class="w-full lg:w-1/3">
-        <div class="card mb-3">
-            <div class="border-b px-4 py-3 font-semibold">Top Up Price</div>
-            <div class="card-body">
+        <div class="panel mb-3">
+            <div class="panel-head"><span class="panel-head-title">Top Up Price</span></div>
+            <div class="panel-body">
                 <div class="overflow-x-auto">
                     <table class="table table-zebra">
                         <thead>
@@ -133,9 +133,9 @@
                 </div>
             </div>
         </div>
-        <div class="card mb-3">
-            <div class="border-b px-4 py-3 font-semibold">Information</div>
-            <div class="card-body">
+        <div class="panel mb-3">
+            <div class="panel-head"><span class="panel-head-title">Information</span></div>
+            <div class="panel-body">
                 <ul class="mb-3">
                     <li class="flex justify-between items-center px-3 py-2 border-b border-base-300/20">
                         Roles

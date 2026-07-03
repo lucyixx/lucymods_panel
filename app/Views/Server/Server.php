@@ -3,9 +3,9 @@
 <div class="flex justify-center">
     <div class="w-full lg:w-1/2">
         <?= $this->include('Layout/msgStatus') ?>
-        <div class="card shadow-sm mb-3">
-            <div class="border-b px-4 py-3 font-semibold">Server Base Mod</div>
-            <div class="card-body">
+        <div class="panel shadow-sm mb-3">
+            <div class="panel-head"><span class="panel-head-title">Server Base Mod</span></div>
+            <div class="panel-body">
                 <?= form_open() ?>
                 <div class="my-3">
                     <div class="mb-3">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="text-right mt-3">
-                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                    <button type="submit" class="btn btn-sm btn-primary btn-hud">Update</button>
                 </div>
                 <?= form_close() ?>
             </div>

@@ -6,15 +6,15 @@
         <?= $this->include('Layout/msgStatus') ?>
     </div>
     <div class="w-full lg:w-2/3 mb-3">
-        <div class="card">
-            <div class="flex items-center justify-between border-b px-4 py-3">
-                <div class="font-semibold"><span>Key Information</span></div>
+        <div class="panel">
+            <div class="panel-head">
+                <span class="panel-head-title">Key Information</span>
                 <div class="text-right">
                     <a class="btn btn-sm btn-default" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
                     <a class="btn btn-sm btn-default" href="<?= site_url('keys') ?>"><i class="bi bi-people"></i></a>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="panel-body">
                 <?= form_open('keys/edit') ?>
                 <input type="hidden" name="id_keys" value="<?= $key->id_keys ?>">
 
@@ -82,7 +82,7 @@
                     <textarea class="textarea textarea-bordered w-full" name="devices" id="devices" rows="<?= ($key_info->total > $key->max_devices) ? 3 : $key_info->total ?>"><?= old('devices') ?? ($key_info->total ? $key_info->devices : '') ?></textarea>
                 </div>
                 <div class="mt-3 text-right">
-                    <button class="btn btn-sm btn-primary btnUpdate" disabled>Update User Key</button>
+                    <button class="btn btn-sm btn-primary btn-hud btnUpdate" disabled>Update User Key</button>
                 </div>
                 <?= form_close() ?>
             </div>

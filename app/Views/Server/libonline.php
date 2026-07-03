@@ -34,9 +34,9 @@ function formatPermissions($file) : string
     <div class="w-full">
         <?= $this->include('Layout/msgStatus') ?>
     </div>
-    <div class="card mb-3">
-        <div class="flex items-center justify-between border-b px-4 py-3">
-            <div class="font-semibold"><span>Lib Online</span></div>
+    <div class="panel mb-3">
+        <div class="panel-head">
+            <span class="panel-head-title">Lib Online</span>
             <div class="text-right">
                 <button type="button" class="btn btn-default btn-sm" onclick="uploadModal.showModal()">
                     Open Upload
@@ -59,7 +59,7 @@ function formatPermissions($file) : string
                 </dialog>
             </div>
         </div>
-        <div class="card-body">
+        <div class="panel-body">
             <div class="overflow-x-auto">
                 <table id="table" class="table table-sm table-zebra">
                     <thead>

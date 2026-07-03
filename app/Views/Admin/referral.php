@@ -6,9 +6,9 @@
         <?= $this->include('Layout/msgStatus') ?>
     </div>
     <div class="w-full lg:w-1/3 mb-3">
-        <div class="card">
-            <div class="border-b px-4 py-3 font-semibold">Generate <?= $title ?></div>
-            <div class="card-body">
+        <div class="panel">
+            <div class="panel-head"><span class="panel-head-title">Generate <?= $title ?></span></div>
+            <div class="panel-body">
                 <?= form_open() ?>
                 <div class="mb-3">
                     <label for="saldo" class="label"><span class="label-text">You can set with multiple saldo</span></label>
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="text-right">
-                    <button type="submit" class="btn btn-sm btn-primary">Create Code</button>
+                    <button type="submit" class="btn btn-sm btn-primary btn-hud">Create Code</button>
                 </div>
                 <?= form_close() ?>
             </div>
@@ -36,9 +36,9 @@
     </div>
     <div class="w-full lg:w-2/3">
         <?php if ($code) : ?>
-            <div class="card mb-3">
-                <div class="border-b px-4 py-3 font-semibold">History Generate - Total <?= $total_code ?></div>
-                <div class="card-body">
+            <div class="panel mb-3">
+                <div class="panel-head"><span class="panel-head-title">History Generate - Total <?= $total_code ?></span></div>
+                <div class="panel-body">
                     <div class="overflow-x-auto">
                         <table class="table table-sm table-zebra" style="width:100%">
                             <thead>

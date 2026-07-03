@@ -20,12 +20,12 @@
                         </small>
                     </div>
                 <?php endif; ?>
-                <div class="card mb-3">
-                    <div class="flex items-center justify-between border-b px-4 py-3">
-                        <div class="font-semibold"><span>Create License</span></div>
+                <div class="panel mb-3">
+                    <div class="panel-head">
+                        <span class="panel-head-title">Create License</span>
                         <a class="btn btn-sm btn-default" href="<?= site_url('keys') ?>"><i class="bi bi-people"></i></a>
                     </div>
-                    <div class="card-body">
+                    <div class="panel-body">
                         <?= form_open() ?>
                         <div class="flex flex-wrap gap-4">
                             <div class="w-full md:w-1/2 mb-3">
@@ -67,16 +67,16 @@
                             </div>
                         </div>
                         <div class="mt-3 text-right">
-                            <button type="submit" class="btn btn-sm btn-primary">Generate</button>
+                            <button type="submit" class="btn btn-sm btn-primary btn-hud">Generate</button>
                         </div>
                         <?= form_close() ?>
                     </div>
                 </div>
             </div>
             <div class="w-full lg:w-1/3">
-                <div class="card mb-3">
-                    <div class="border-b px-4 py-3 font-semibold">Minimum Seller Price</div>
-                    <div class="card-body">
+                <div class="panel mb-3">
+                    <div class="panel-head"><span class="panel-head-title">Minimum Seller Price</span></div>
+                    <div class="panel-body">
                         <table class="table table-zebra">
                             <thead>
                                 <tr>

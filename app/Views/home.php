@@ -88,7 +88,7 @@ $games = [
 <?= $this->section('content') ?>
 <div class="flex flex-wrap justify-center gap-4">
     <aside class="w-full lg:w-1/4 mb-3 lg:mb-0">
-        <section class="card pt-3 px-3">
+        <section class="panel pt-3 px-3">
             <div class="">
                 <div class="mb-3 flex items-center">
                     <div class="mb-1">
@@ -115,7 +115,7 @@ $games = [
                     </div>
                 </div>
                 <div>
-                    <h2 class="text-base mt-4 md:mt-4">Recent activity</h2>
+                    <h2 class="font-display text-base mt-4 md:mt-4">Recent activity</h2>
                     <div class="mt-2 mb-4">
                         <div class="border border-dashed rounded p-3 mt-2">
                             <p class="note mt-0 text-sm">
@@ -128,21 +128,22 @@ $games = [
         </section>
     </aside>
     <main class="w-full lg:w-3/4">
-        <section class="border shadow-sm rounded overflow-hidden p-0 mb-3">
+        <section class="panel overflow-hidden p-0 mb-3">
             <div class="relative">
                 <video class="w-full h-auto object-cover block" autoplay loop muted>
                     <source src="https://www.callofduty.com/cdn/codm/videos/home/codm-hero-video-desktop.mp4" type="video/mp4">
                 </video>
-                <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-                    <div class="text-center text-white">
-                        <h1 class="text-xl md:text-4xl">Call <span class="text-2xl md:text-5xl">of</span> Duty MOBILE</h1>
-                        <p class="text-lg" style="color: yellow;">PLAY FREE NOW</p>
-                    </div>
+                <div class="absolute inset-0" style="background: linear-gradient(0deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.15) 55%, rgba(0,0,0,.35) 100%);"></div>
+                <div class="absolute left-0 bottom-0 p-4 md:p-6 w-full">
+                    <div class="font-mono text-xs uppercase tracking-widest text-primary mb-1">// Featured Target</div>
+                    <h1 class="font-display text-2xl md:text-4xl text-white font-semibold leading-tight">Call of Duty <span class="text-primary">Mobile</span></h1>
+                    <p class="text-sm md:text-base text-white/70 mt-1 mb-3">ESP &middot; Aimbot &middot; Bullet Track — live license keys, ready to deploy.</p>
+                    <a href="<?= site_url('keys/free') ?>" class="btn btn-primary btn-hud btn-sm">Get Free Key</a>
                 </div>
             </div>
         </section>
         <!--
-            <section class="card border rounded pt-3 px-2 md:px-3 mb-3">
+            <section class="panel border rounded pt-3 px-2 md:px-3 mb-3">
                 <header class="flex justify-between mb-3">
                     <div class="flex">
                         <h2 class="text-base ms-1"><a href="#" class="link-body">Game Mods</a></h2>

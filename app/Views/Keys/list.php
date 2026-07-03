@@ -11,22 +11,22 @@
         <?= $this->include('Layout/msgStatus') ?>
     </div>
     <div class="w-full">
-        <div class="card mb-3">
-            <div class="flex items-center justify-between border-b px-4 py-3">
-                <div class="font-semibold"><span>Keys Registered</span></div>
+        <div class="panel mb-3">
+            <div class="panel-head">
+                <span class="panel-head-title">Keys Registered</span>
                 <div class="text-right flex items-center gap-1">
                     <a class="btn btn-default btn-sm" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
                     <a class="btn btn-default btn-sm" href="<?= site_url('keys/download/all') ?>"><i class="bi bi-download"></i></a>
                     <div class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="btn btn-default btn-sm"><i class="bi bi-trash"></i></div>
-                        <ul tabindex="0" class="dropdown-content menu app-header-bg rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300/20">
+                        <ul tabindex="0" class="dropdown-content menu bg-base-200 rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300/20">
                             <li><a href="<?= site_url('keys/start')  ?>">Keys Not Use</a></li>
                             <li><a href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="panel-body">
                 <?php if ($keylist) : ?>
                     <div class="overflow-x-auto">
                         <table id="datatable" class="table table-sm table-zebra w-full">
@@ -69,7 +69,7 @@
                     data: 'id',
                     name: 'id_keys',
                     render: function(data, type, row, meta) {
-                        return `<span class="text-sm">${data}</span>`
+                        return `<span class="text-sm mono opacity-70">${data}</span>`
                     }
                 },
                 {
@@ -83,7 +83,7 @@
                     render: function(data, type, row, meta) {
                         const is_valid = (row.status == 'Active') ? "text-success" : "text-error";
                         const key = row.user_key ?? '&mdash;';
-                        return `<span class="text-sm opacity-70 ${is_valid}" data-key="${key}">${key}</span> `;
+                        return `<span class="text-sm mono opacity-70 ${is_valid}" data-key="${key}">${key}</span> `;
                     }
                 },
                 {

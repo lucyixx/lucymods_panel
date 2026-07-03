@@ -4,9 +4,9 @@
     <div class="w-full lg:w-1/3">
         <div class="mx-auto">
             <?= $this->include('Layout/msgStatus') ?>
-            <div class="card shadow mb-12">
-                <div class="border-b px-4 py-3 font-semibold">Login</div>
-                <div class="card-body">
+            <div class="panel shadow mb-12">
+                <div class="panel-head"><span class="panel-head-title">Login</span></div>
+                <div class="panel-body">
                     <?= form_open() ?>
                     <div class="flex flex-col gap-3 my-3">
                         <div>
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="mt-3 text-right">
-                        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-box-arrow-in-right"></i> Log in</button>
+                        <button type="submit" class="btn btn-sm btn-primary btn-hud"><i class="bi bi-box-arrow-in-right"></i> Log in</button>
                     </div>
                     <?= form_close() ?>
                 </div>

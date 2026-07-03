@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="light" lang="en">
+<html data-theme="hackerdark" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -23,28 +23,28 @@
     <?= script_tag("https://cdn.datatables.net/2.0.0/js/dataTables.js") ?>
 </head>
 
-<body class="min-h-screen flex flex-col" data-theme="light">
+<body class="min-h-screen flex flex-col" data-theme="hackerdark">
     <?= $this->include('Layout/preloader') ?>
     <div class="flex min-h-screen flex-col">
         <?= $this->include('Layout/Header') ?>
         <main class="content">
             <div class="max-w-5xl mx-auto w-full p-3 sm:px-0"><?= $this->renderSection('content') ?></div>
         </main>
-        <footer class="border-t app-header-bg py-3 pt-3">
+        <footer class="border-t border-base-300 py-3 pt-3">
             <div class="max-w-5xl mx-auto w-full pt-2 px-3 sm:px-0">
                 <div class="flex items-center mb-3">
-                    <span class="border-t block grow" style="margin-right: 1rem;"></span>
+                    <span class="border-t border-base-300 block grow" style="margin-right: 1rem;"></span>
                     <div class="flex grow justify-center">
-                        <a href="#" target="_blank" class="social-icon"><i class="bi bi-facebook" style="color:royalblue;"></i></a>
-                        <a href="#" target="_blank" class="social-icon"><i class="bi bi-youtube" style="color:red"></i></a>
-                        <a href="https://t.me/zygames" target="_blank" class="social-icon"><i class="bi bi-telegram" style="color:cornflowerblue"></i></a>
+                        <a href="#" target="_blank" class="social-icon"><i class="bi bi-facebook"></i></a>
+                        <a href="#" target="_blank" class="social-icon"><i class="bi bi-youtube"></i></a>
+                        <a href="https://t.me/zygames" target="_blank" class="social-icon"><i class="bi bi-telegram"></i></a>
                     </div>
-                    <span class="border-t block grow" style="margin-left: 1rem;"></span>
+                    <span class="border-t border-base-300 block grow" style="margin-left: 1rem;"></span>
                 </div>
-                <div class="text-sm text-center flex pt-2">
+                <div class="text-sm text-center flex pt-2 opacity-60 font-mono">
                     <div class="w-full">
                         <p>
-                            <em>&copy; Copyright 2018 - <?= date('Y') ?> <?= BASE_NAME ?></em>
+                            &copy; <?= date('Y') ?> ZY // GAMES
                         </p>
                     </div>
                 </div>
@@ -87,17 +87,11 @@
 
 
 <!-- Thong bao luu cookie tren trinh duyet -->
-<div id="cookieNotice" class="display-right card shadow-lg" style="display: none;">
-    <div id="closeIcon" style="display: none;">
-    </div>
-    <h2 class="text-base font-bold">Save Cookie content</h2>
-    <div>
-        <div>
-            <p>This website uses cookies, or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to the <a href="#">Privacy Policy</a></p>
-            <div>
-                <button class="btn btn-success w-full shadow-sm" onclick="acceptCookieConsent();">Accept</button>
-            </div>
-        </div>
+<div id="cookieNotice" class="display-right panel shadow-lg" style="display: none;">
+    <div class="panel-body">
+        <h2 class="font-display text-base font-semibold mb-2">Save Cookie content</h2>
+        <p class="text-sm opacity-70">This website uses cookies, or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to the <a href="#" class="text-primary">Privacy Policy</a></p>
+        <button class="btn btn-success btn-hud btn-sm w-full mt-2" onclick="acceptCookieConsent();">Accept</button>
     </div>
 </div>
 

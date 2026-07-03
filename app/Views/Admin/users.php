@@ -7,9 +7,9 @@
         <div class="alert alert-info" role="alert">
             INFO&middot; <small>Search specify user by their (username, fullname, saldo or uplink).</small>
         </div>
-        <div class="card mb-3">
-            <div class="border-b px-4 py-3 font-semibold">Manage <?= $title ?></div>
-            <div class="card-body">
+        <div class="panel mb-3">
+            <div class="panel-head"><span class="panel-head-title">Manage <?= $title ?></span></div>
+            <div class="panel-body">
                 <div class="overflow-x-auto">
                     <table id="datatable" class="table table-sm table-zebra" style="width:100%">
                         <thead>

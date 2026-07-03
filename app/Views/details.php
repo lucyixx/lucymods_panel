@@ -21,8 +21,8 @@
 <?= $this->include('Layout/preloader') ?>
 <div class="flex justify-center">
     <div style="max-width: 880px; width: 100%;">
-        <div class="card shadow-sm border-0 p-0 my-3">
-            <div class="card-body">
+        <div class="panel shadow-sm border-0 p-0 my-3">
+            <div class="panel-body">
                 <div class="relative rounded overflow-hidden mb-3">
                     <img class="w-full" id="app_featureGraphic"></img>
                     <div class="absolute w-full h-3/4" style="left: 0; bottom: 0; background-image: linear-gradient(to top, #000d, #0000)"></div>
@@ -31,7 +31,7 @@
                             <img loading="lazy" class="rounded" width="68" id="app_icon" itemprop="image">
                         </div>
                         <div class="grid content-center">
-                            <h2 class="text-lg app_name text-white m-0"></h2>
+                            <h2 class="font-display text-lg app_name text-white m-0"></h2>
                             <span class="text-success app_developer text-sm"></span>
                             <span class="app_age" style="font-size: 0.64rem; color: #ffffff88"></span>
                         </div>
@@ -101,7 +101,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <h4>About this <span class="app_type"></span></h4>
+                        <h4 class="font-display">About this <span class="app_type"></span></h4>
                         <span class="opacity-70 text-sm app_description"></span>
                     </div>
 
@@ -128,8 +128,8 @@
                 </div>
             </div>
         </div>
-        <div class="card shadow-sm border-0 my-3">
-            <div class="card-body">
+        <div class="panel shadow-sm border-0 my-3">
+            <div class="panel-body">
                 <div class="mb-4"><span class="text-base">Reviews</span></div>
                 <div class="mb-3" id="reviewer-list"></div>
             </div>

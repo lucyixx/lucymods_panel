@@ -1,17 +1,14 @@
 <header>
-    <nav class="navbar app-header-bg shadow-sm border-b px-3 max-w-5xl mx-auto w-full">
+    <nav class="navbar border-b border-base-300 px-3 max-w-5xl mx-auto w-full">
         <div class="flex-1">
             <a class="flex items-center p-0 gap-2 text-inherit" href="<?= site_url(!session()->has('userid') ? '' : 'dashboard') ?>">
-                <i class="bi bi-controller"></i>
-                <div class="flex flex-col leading-tight">
-                    <span><?= BASE_NAME ?></span>
-                    <span class="opacity-60" style="font-size: 0.6rem;">World of game mods</span>
-                </div>
+                <span class="status-dot"></span>
+                <span class="font-display font-bold text-lg tracking-wide">ZY<span class="text-primary">//</span>GAMES</span>
             </a>
         </div>
 
         <button class="btn btn-ghost btn-circle" id="bd-theme" title="Toggle theme">
-            <i class="bi bi-eyedropper"></i>
+            <i class="bi bi-cpu"></i>
         </button>
 
         <!-- Mobile menu toggle (replaces Bootstrap's navbar-toggler/collapse) -->
@@ -20,16 +17,16 @@
         </button>
 
         <!-- Desktop nav -->
-        <div class="hidden md:flex items-center gap-1" id="navbarDesktop">
+        <div class="hidden md:flex items-center gap-1 font-mono text-xs uppercase tracking-wider" id="navbarDesktop">
             <?php if (session()->has('userid') && isset($user)) : ?>
                 <a class="btn btn-ghost btn-sm" href="<?= site_url('keys') ?>">Keys</a>
                 <a class="btn btn-ghost btn-sm" href="<?= site_url('keys/generate') ?>">Generate</a>
 
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
-                        <i class="bi bi-person-circle text-error"></i><?= $user ? getName($user) : "Friend" ?>
+                        <i class="bi bi-person-circle text-primary"></i><?= $user ? getName($user) : "Friend" ?>
                     </div>
-                    <ul tabindex="0" class="dropdown-content menu app-header-bg rounded-box z-[1] w-56 p-2 shadow-lg border border-base-300/20">
+                    <ul tabindex="0" class="dropdown-content menu bg-base-200 rounded-box z-[1] w-56 p-2 shadow-lg border border-base-300 normal-case">
                         <li><a href="<?= site_url('settings') ?>"><i class="bi bi-gear"></i>Settings</a></li>
                         <li><hr class="my-1 opacity-20"></li>
                         <?php if ($user->level == 1) : ?>
@@ -51,7 +48,7 @@
     </nav>
 
     <!-- Mobile nav (shown/hidden via #navToggle) -->
-    <div class="hidden md:hidden flex-col app-header-bg border-b px-3 pb-3" id="navbarSupportedContent">
+    <div class="hidden md:hidden flex-col border-b border-base-300 px-3 pb-3 font-mono text-xs uppercase tracking-wider" id="navbarSupportedContent">
         <?php if (session()->has('userid') && isset($user)) : ?>
             <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('keys') ?>">Keys</a>
             <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('keys/generate') ?>">Generate</a>
@@ -81,12 +78,12 @@
         this.setAttribute('aria-expanded', String(!expanded));
     });
 
-    // Theme toggle (DaisyUI uses data-theme instead of Bootstrap's data-bs-theme)
+    // Theme toggle between the two custom daisyUI themes (hackerdark / hackerlight)
     document.getElementById('bd-theme').addEventListener('click', function() {
         var htmlElement = document.querySelector('html');
         var bodyElement = document.querySelector('body');
         var currentTheme = htmlElement.getAttribute('data-theme');
-        var newTheme = (currentTheme === 'dark') ? 'light' : 'dark';
+        var newTheme = (currentTheme === 'hackerdark') ? 'hackerlight' : 'hackerdark';
         localStorage.setItem('selectedTheme', newTheme);
         htmlElement.setAttribute('data-theme', newTheme);
         bodyElement.setAttribute('data-theme', newTheme);

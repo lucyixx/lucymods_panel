@@ -6,13 +6,15 @@
         height: 100%;
         left: 0;
         top: 0;
-        /* background-color: #ffffff; */
-        background-color: var(--app-body-bg, #f0f2f5);
+        background-color: var(--color-base-100, #0e131a);
         -webkit-transition: all .3s ease;
         -o-transition: all .3s ease;
         transition: all .3s ease;
         opacity: 1;
-        visibility: visible
+        visibility: visible;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .body__preloader.loaded {
@@ -22,80 +24,49 @@
     }
 
     #loading {
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--color-base-content, #c9d1d9);
+        text-align: center;
+        font-size: 0.8rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    #loading .boot-bar {
+        margin: 0.75rem auto 0;
+        width: 180px;
+        height: 3px;
+        background: var(--color-base-300, #222);
+        overflow: hidden;
+        border-radius: 2px;
+    }
+
+    #loading .boot-bar span {
         display: block;
-        position: relative;
-        z-index: 1001;
-        left: 50%;
-        top: 50%;
-        width: 150px;
-        height: 150px;
-        margin: -75px 0 0 -75px;
-        border-radius: 50%;
-        border: 3px solid transparent;
-        border-top-color: #3498db;
-        -webkit-animation: spin 2s linear infinite;
-        animation: spin 2s linear infinite
+        width: 40%;
+        height: 100%;
+        background: var(--color-primary, #c6ff3d);
+        animation: bootSweep 1.1s ease-in-out infinite;
     }
 
-    #loading:before {
-        content: "";
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        right: 5px;
-        bottom: 5px;
-        border-radius: 50%;
-        border: 3px solid transparent;
-        border-top-color: #e74c3c;
-        -webkit-animation: spin 3s linear infinite;
-        animation: spin 3s linear infinite
-    }
-
-    #loading:after {
-        content: "";
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        right: 15px;
-        bottom: 15px;
-        border-radius: 50%;
-        border: 3px solid transparent;
-        border-top-color: #f9c922;
-        -webkit-animation: spin 1.5s linear infinite;
-        animation: spin 1.5s linear infinite
-    }
-
-    @-webkit-keyframes spin {
+    @keyframes bootSweep {
         0% {
-            -webkit-transform: rotate(0deg);
-            -ms-transform: rotate(0deg);
-            transform: rotate(0deg)
+            transform: translateX(-100%);
         }
 
         100% {
-            -webkit-transform: rotate(360deg);
-            -ms-transform: rotate(360deg);
-            transform: rotate(360deg)
-        }
-    }
-
-    @keyframes spin {
-        0% {
-            -webkit-transform: rotate(0deg);
-            -ms-transform: rotate(0deg);
-            transform: rotate(0deg)
-        }
-
-        100% {
-            -webkit-transform: rotate(360deg);
-            -ms-transform: rotate(360deg);
-            transform: rotate(360deg)
+            transform: translateX(250%);
         }
     }
 </style>
 
 <div class='body__preloader'>
-    <div id="loading"></div>
+    <div id="loading">
+        <span class="status-dot"></span> Booting ZY//GAMES
+        <div class="boot-bar">
+            <span></span>
+        </div>
+    </div>
 </div>
 
 <script>

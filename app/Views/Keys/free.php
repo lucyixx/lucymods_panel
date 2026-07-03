@@ -78,7 +78,7 @@ $chart->options($options);
                             <img class="rounded-lg" id="game_img" width="96" height="96" aria-hidden="true" alt="Icon image" itemprop="image" data-atf="true">
                         </div>
                         <div style="min-width: 0;">
-                            <h2 class="text-base" id="game_name" style="margin-bottom: 2px;"></h2>
+                            <h2 class="font-display text-base" id="game_name" style="margin-bottom: 2px;"></h2>
                             <div class="text-sm truncate">
                                 <span id="game_dev" class="text-success"></span>
                             </div>
@@ -90,15 +90,15 @@ $chart->options($options);
                 </div>
             </div>
 
-            <div class="card mb-3">
-                <div class="flex items-center justify-between border-b px-4 py-3">
-                    <span class="font-semibold"><span>Create License</span></span>
+            <div class="panel mb-3">
+                <div class="panel-head">
+                    <span class="panel-head-title">Create License</span>
                     <div class="opacity-70">
                         <i class="bi bi-pass"></i>
                         <span class="text-sm"><?= $link_total ?> links</span>
                     </div>
                 </div>
-                <div class="card-body my-3">
+                <div class="panel-body my-3">
 
                     <?= form_open() ?>
                     <div class="my-0">
@@ -132,7 +132,7 @@ $chart->options($options);
                         <div id="validationResult"></div>
                     </div>
                     <div class="mt-3 text-right">
-                        <button type="submit" class="btn btn-sm btn-primary" id="btn_submit"><i class="bi bi-box-arrow-in-right"></i> Generate</button>
+                        <button type="submit" class="btn btn-sm btn-primary btn-hud" id="btn_submit"><i class="bi bi-box-arrow-in-right"></i> Generate</button>
                     </div>
                     <?= form_close() ?>
                 </div>
@@ -142,9 +142,9 @@ $chart->options($options);
             <?= $chart->toHtml('my_chart'); ?>
         </div>
         <div class="w-full mb-3">
-            <div class="card">
-                <div class="border-b px-4 py-3 font-semibold">Minimum Seller Price</div>
-                <div class="card-body text-center">
+            <div class="panel">
+                <div class="panel-head"><span class="panel-head-title">Minimum Seller Price</span></div>
+                <div class="panel-body text-center">
                     <table class="table table-zebra">
                         <thead>
                             <tr>

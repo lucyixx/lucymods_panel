@@ -5,9 +5,9 @@
         <?= $this->include('Layout/msgStatus') ?>
     </div>
     <div class="w-full lg:w-2/3 mb-3">
-        <div class="card shadow mb-12">
-            <div class="border-b px-4 py-3 font-semibold">Edit Account &middot; <?= getName($target) ?></div>
-            <div class="card-body">
+        <div class="panel shadow mb-12">
+            <div class="panel-head"><span class="panel-head-title">Edit Account &middot; <?= getName($target) ?></span></div>
+            <div class="panel-body">
                 <?= form_open() ?>
                 <input type="hidden" name="user_id" value="<?= $target->id_users ?>">
                 <div>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="mt-3 text-right">
-                        <button type="submit" class="btn btn-sm btn-primary">Update Account</button>
+                        <button type="submit" class="btn btn-sm btn-primary btn-hud">Update Account</button>
                     </div>
                 </div>
                 <?= form_close() ?>

@@ -5,9 +5,9 @@
 <div class="flex justify-center pt-12">
     <div class="w-full lg:w-1/3">
         <?= $this->include('Layout/msgStatus') ?>
-        <div class="card shadow mb-12">
-            <div class="border-b px-4 py-3 font-semibold">Register</div>
-            <div class="card-body">
+        <div class="panel shadow mb-12">
+            <div class="panel-head"><span class="panel-head-title">Register</span></div>
+            <div class="panel-body">
                 <?= form_open() ?>
                 <div class="flex flex-col gap-3 my-3">
                     <div>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="text-right mt-3">
-                    <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-box-arrow-in-right"></i> Register</button>
+                    <button type="submit" class="btn btn-sm btn-primary btn-hud"><i class="bi bi-box-arrow-in-right"></i> Register</button>
                 </div>
                 <?= form_close() ?>
             </div>
