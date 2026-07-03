@@ -10,7 +10,7 @@
 function create_password($password, $enc = true)
 {
     $optn = ['cost' => 8];
-    $patt = "XquxmymXDtWRA66D";
+    $patt = "x8C-6X7_0c@%Ha";
     $hash = md5($patt . $password);
     $pass = password_hash($hash, PASSWORD_DEFAULT, $optn);
     return ($enc ? $pass : $hash);

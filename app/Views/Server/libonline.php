@@ -31,66 +31,61 @@ function formatPermissions($file) : string
 <?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
 <main>
-    <div class="col-lg-12">
+    <div class="w-full">
         <?= $this->include('Layout/msgStatus') ?>
     </div>
     <div class="card mb-3">
-        <div class="card-header">
-            <div class="row align-items-center">
-                <div class="col card-title m-0"><span>Lib Online</span></div>
-                <div class="col text-end">
-                    <button type="button" class="btn btn-default btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                        Open Upload
-                    </button>
-                    <!-- The Bootstrap modal -->
-                    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-dark" id="uploadModalLabel">Upload Lib File</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <?= form_open_multipart('libOnline/upload'); ?>
-                                    <div class="mb-3">
-                                        <input type="file" name="file" class="form-control" accept=".so" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-danger">Upload</button>
-                                    <?= form_close(); ?>
-                                </div>
-                            </div>
+        <div class="flex items-center justify-between border-b px-4 py-3">
+            <div class="font-semibold"><span>Lib Online</span></div>
+            <div class="text-right">
+                <button type="button" class="btn btn-default btn-sm" onclick="uploadModal.showModal()">
+                    Open Upload
+                </button>
+                <!-- Native <dialog> modal (daisyUI), replaces the Bootstrap modal -->
+                <dialog id="uploadModal" class="modal">
+                    <div class="modal-box">
+                        <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="uploadModal.close()" aria-label="Close">✕</button>
+                        <h3 class="font-bold text-lg mb-3">Upload Lib File</h3>
+                        <?= form_open_multipart('libOnline/upload'); ?>
+                        <div class="mb-3">
+                            <input type="file" name="file" class="file-input file-input-bordered w-full" accept=".so" required>
                         </div>
+                        <button type="submit" class="btn btn-error">Upload</button>
+                        <?= form_close(); ?>
                     </div>
-                </div>
+                    <form method="dialog" class="modal-backdrop">
+                        <button>close</button>
+                    </form>
+                </dialog>
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table id="table" class="table table-sm table-borderless table-striped">
+            <div class="overflow-x-auto">
+                <table id="table" class="table table-sm table-zebra">
                     <thead>
-                        <str>
+                        <tr>
                             <th>Name</th>
                             <th>Size</th>
                             <th>Modfied</th>
                             <th>Permissons</th>
                             <th>Actions</th>
-                        </str>
+                        </tr>
                     </thead>
                     <tbody>
                         <!-- Render table data dynamically using PHP -->
                         <?php foreach ($files as $file) : ?>
                             <tr>
-                                <td><span class="align-middle badge text-dark"><?= $file['name'] ?></span></td>
-                                <td><span class="align-middle badge text-dark"><?= formatFileSize($file['size']) ?></span></td>
-                                <td><span class="align-middle badge text-dark"><?= formatTimestamp($file['mtime']) ?></span></td>
-                                <td><span class="align-middle badge text-dark"><?= $file['permissions'] ?></span></td>
+                                <td><span class="align-middle badge badge-ghost"><?= $file['name'] ?></span></td>
+                                <td><span class="align-middle badge badge-ghost"><?= formatFileSize($file['size']) ?></span></td>
+                                <td><span class="align-middle badge badge-ghost"><?= formatTimestamp($file['mtime']) ?></span></td>
+                                <td><span class="align-middle badge badge-ghost"><?= $file['permissions'] ?></span></td>
                                 <td>
-                                    <div class="btn-group">
+                                    <div class="join">
                                         <?php if (!$file['is_dir']) : ?>
-                                            <a href="<?= base_url('libOnline/download/' . base64_encode($file['path'])) ?>" class="btn btn-primary btn-sm"><i class="bi bi-download"></i></a>
+                                            <a href="<?= base_url('libOnline/download/' . base64_encode($file['path'])) ?>" class="btn btn-primary btn-sm join-item"><i class="bi bi-download"></i></a>
                                         <?php endif; ?>
                                         <?php if ($file['is_deleteable']) : ?>
-                                            <a href="<?= base_url('libOnline/delete/' . base64_encode($file['path'])) ?>" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></a>
+                                            <a href="<?= base_url('libOnline/delete/' . base64_encode($file['path'])) ?>" class="btn btn-error btn-sm join-item"><i class="bi bi-trash-fill"></i></a>
                                         <?php endif; ?>
                                     </div>
                                 </td>

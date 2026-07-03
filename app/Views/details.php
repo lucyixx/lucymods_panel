@@ -6,49 +6,59 @@
         margin-right: 0.5rem !important;
         font-weight: bolder !important;
     }
+
+    .carousel-inner {
+        display: flex;
+        transition: transform 0.35s ease;
+    }
+
+    .carousel-item {
+        flex: 0 0 100%;
+        width: 100%;
+    }
 </style>
 
 <?= $this->include('Layout/preloader') ?>
-<div class="row justify-content-center">
-    <div style="max-width: 880px;">
+<div class="flex justify-center">
+    <div style="max-width: 880px; width: 100%;">
         <div class="card shadow-sm border-0 p-0 my-3">
             <div class="card-body">
-                <div class="position-relative rounded overflow-hidden mb-3">
-                    <img class="w-100" id="app_featureGraphic"></img>
-                    <div class="position-absolute w-100 h-75" style="left: 0; bottom: 0; background-image: linear-gradient(to top, #000d, #0000)"></div>
-                    <div class="d-flex m-3 position-absolute" style="left: 0; bottom: 0;">
-                        <div class="flex-shrink-0 me-3">
+                <div class="relative rounded overflow-hidden mb-3">
+                    <img class="w-full" id="app_featureGraphic"></img>
+                    <div class="absolute w-full h-3/4" style="left: 0; bottom: 0; background-image: linear-gradient(to top, #000d, #0000)"></div>
+                    <div class="flex m-3 absolute" style="left: 0; bottom: 0;">
+                        <div class="shrink-0 me-3">
                             <img loading="lazy" class="rounded" width="68" id="app_icon" itemprop="image">
                         </div>
-                        <div class="d-grid align-content-center">
-                            <h2 class="h4 app_name text-white m-0"></h2>
-                            <span class="text-success app_developer small"></span>
+                        <div class="grid content-center">
+                            <h2 class="text-lg app_name text-white m-0"></h2>
+                            <span class="text-success app_developer text-sm"></span>
                             <span class="app_age" style="font-size: 0.64rem; color: #ffffff88"></span>
                         </div>
                     </div>
                 </div>
-                <div class="px-0 px-md-3">
+                <div class="px-0 md:px-3">
                     <div class="mb-3">
-                        <table class="table table-striped table-borderless">
+                        <table class="table table-zebra">
                             <tbody style="font-size: 0.9rem;">
                                 <tr>
-                                    <th class="fw-normal"><i class="bi bi-android text-danger"></i>Name</th>
-                                    <td class="text-muted app_name"></td>
+                                    <th class="font-normal"><i class="bi bi-android text-error"></i>Name</th>
+                                    <td class="opacity-70 app_name"></td>
                                 </tr>
                                 <tr>
-                                    <th class="fw-normal"><i class="bi bi-tools text-danger"></i>Developer</th>
+                                    <th class="font-normal"><i class="bi bi-tools text-error"></i>Developer</th>
                                     <td class="app_developer text-success"></td>
                                 </tr>
                                 <tr>
-                                    <th class="fw-normal"><i class="bi bi-list-task text-danger"></i>Type</th>
-                                    <td class="text-muted app_type"></td>
+                                    <th class="font-normal"><i class="bi bi-list-task text-error"></i>Type</th>
+                                    <td class="opacity-70 app_type"></td>
                                 </tr>
                                 <tr>
-                                    <th class="fw-normal"><i class="bi bi-screwdriver text-danger"></i>Version</th>
-                                    <td class="text-muted app_version"></td>
+                                    <th class="font-normal"><i class="bi bi-screwdriver text-error"></i>Version</th>
+                                    <td class="opacity-70 app_version"></td>
                                 </tr>
                                 <tr>
-                                    <th class="fw-normal"><i class="bi bi-boxes text-danger"></i>Package</th>
+                                    <th class="font-normal"><i class="bi bi-boxes text-error"></i>Package</th>
                                     <td><a class="app_packageName" target="_blank" href="https://play.google.com/store/apps/details?id=<?= $_GET['id'] ?>"></a></td>
                                 </tr>
                             </tbody>
@@ -56,75 +66,71 @@
                     </div>
 
                     <div class="mb-3">
-                        <div class="rounded border">
-                            <div class="rounded d-flex align-items-center">
-                                <button class="btn btn-default btn-sm border-0 w-100" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    MOD Info
-                                </button>
+                        <!-- Native <details>/<summary> accordion, replaces Bootstrap's collapse -->
+                        <details class="collapse collapse-arrow border rounded">
+                            <summary class="collapse-title btn btn-default btn-sm border-0 w-full text-left">
+                                MOD Info
+                            </summary>
+                            <div class="collapse-content">
+                                <ul class="text-sm">
+                                    <li><em>Draw Esp</em></li>
+                                    <li><em>Chams hack</em></li>
+                                    <li><em>[more..]</em></li>
+                                </ul>
                             </div>
-                            <div id="collapseOne" class="collapse">
-                                <div class="pt-3 px-3">
-                                    <div>
-                                        <ul class="small">
-                                            <li><em>Draw Esp</em></li>
-                                            <li><em>Chams hack</em></li>
-                                            <li><em>[more..]</em></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </details>
                     </div>
 
                     <div class="mb-3">
-                        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner w-100"></div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
+                        <!-- Minimal vanilla-JS carousel, replaces Bootstrap's carousel -->
+                        <div id="carouselExample" class="relative rounded overflow-hidden" data-idx="0">
+                            <div class="carousel-inner w-full"></div>
+                            <button class="btn btn-circle btn-sm absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', -1)">
+                                <i class="bi bi-chevron-left"></i>
+                                <span class="sr-only">Previous</span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
+                            <button class="btn btn-circle btn-sm absolute right-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', 1)">
+                                <i class="bi bi-chevron-right"></i>
+                                <span class="sr-only">Next</span>
                             </button>
                         </div>
                     </div>
 
                     <div class="mb-3 text-center">
-                        <small class="text-muted"><em class="app_summary"></em></small>
+                        <small class="opacity-70"><em class="app_summary"></em></small>
                     </div>
 
                     <div class="mb-3">
                         <h4>About this <span class="app_type"></span></h4>
-                        <span class="text-muted small app_description"></span>
+                        <span class="opacity-70 text-sm app_description"></span>
                     </div>
 
                     <div class="mb-3">
                         <div>Last updated</div>
-                        <div class="text-muted small app_lastUpdated"></div>
+                        <div class="opacity-70 text-sm app_lastUpdated"></div>
                     </div>
 
                     <div class="mb-3">
-                        <button class="btn btn-danger w-100">Download Now</button>
+                        <button class="btn btn-error w-full">Download Now</button>
                     </div>
 
                     <div class="mb-3">
-                        <div class="border-top w-100"></div>
+                        <div class="border-t w-full"></div>
                         <div class="my-3">
-                            <div class="d-flex justify-content-center text-muted small">
+                            <div class="flex justify-center opacity-70 text-sm">
                                 <span class="app_installs"></span>
-                                <span class="mx-2 border-end"></span>
+                                <span class="mx-2 border-r"></span>
                                 <span class="app_rating"></span>
                             </div>
                         </div>
-                        <div class="border-bottom w-100"></div>
+                        <div class="border-b w-full"></div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card shadow-sm border-0 my-3">
             <div class="card-body">
-                <div class="mb-4"><span class="h6">Reviews</span></div>
+                <div class="mb-4"><span class="text-base">Reviews</span></div>
                 <div class="mb-3" id="reviewer-list"></div>
             </div>
         </div>
@@ -160,32 +166,30 @@
 
                     var images = null;
                     response.images.forEach(function(element) {
-                        if (images)
-                            images += `<div class="carousel-item"><img loading="lazy" class="d-block" src="${element}"></div>`
-                        else
-                            images = `<div class="carousel-item active"><img loading="lazy" class="d-block" src="${element}"></div>`
+                        images = (images ?? '') + `<div class="carousel-item"><img loading="lazy" class="block w-full" src="${element}"></div>`;
                     });
                     $('.carousel-inner').html(images);
+                    $('#carouselExample').attr('data-idx', 0);
+                    $('#carouselExample .carousel-inner').css('transform', 'translateX(0)');
 
                     var reviews = ``;
                     response.reviews.forEach(function(element) {
                         const formattedDate = getReviewerDate(element.review_date);
                         var stars = ``;
-                        for (let i = 0; i < 5; i++) stars += `<i class="bi bi-star-fill text-${element.stars > i ? 'success' : 'body-tertiary'}"></i>`;
+                        for (let i = 0; i < 5; i++) stars += `<i class="bi bi-star-fill text-${element.stars > i ? 'success' : 'base-content/30'}"></i>`;
                         reviews += `
                             <div class="mb-4">
-                                <div class="d-flex mb-2 justify-content-between">
+                                <div class="flex mb-2 justify-between">
                                     <div>
-                                        <img class="rounded-5 me-1" width="32" aria-hidden="true" loading="lazy" src="${element.reviewer.avatar}" alt="">
-                                        <span class="small">${element.reviewer.name}</span>
+                                        <img class="rounded-full me-1" width="32" aria-hidden="true" loading="lazy" src="${element.reviewer.avatar}" alt="">
+                                        <span class="text-sm">${element.reviewer.name}</span>
                                     </div>
-                                    <div class="text-muted d-grid" style="font-size: 0.8rem;">
-                                        <small class="ms-1">${formattedDate}</small>
-                                        <small class="text-end">${stars}</small>
+                                    <div class="opacity-70 grid" style="font-size: 0.8rem;">
+                                        <small class="text-right">${stars}</small>
                                     </div>
                                 </div>
-                                <div class="mb-3 p-2 mt-1 rounded bg-body-tertiary">
-                                    <small class="text-muted" style="font-size: 0.8rem;">${element.review_text}</small>
+                                <div class="mb-3 p-2 mt-1 rounded app-workflow-bg">
+                                    <small class="opacity-70" style="font-size: 0.8rem;">${element.review_text}</small>
                                 </div>
                             </div>
                         `

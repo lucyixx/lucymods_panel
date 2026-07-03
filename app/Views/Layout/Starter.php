@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="auto" lang="en">
+<html data-theme="light" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,42 +7,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?= link_tag('favicon.ico', "shortcut icon", "image/x-icon") ?>
     <title><?= BASE_NAME ?> - <?= isset($title) ? $title : 'Panel' ?></title>
-    <?= link_tag('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css') ?>
-    <?= link_tag("https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap5.css") ?>
+
+    <!-- DaisyUI + Tailwind CSS (CDN, no build step needed on Serv00) -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- DataTables base skin (Bootstrap-free) -->
+    <?= link_tag("https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css") ?>
+
     <?= link_tag('assets/css/style.css') ?>
     <?= $this->renderSection('css') ?>
 
     <?= script_tag('https://code.jquery.com/jquery-3.6.0.js') ?>
     <?= script_tag("https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.0/sweetalert2.all.min.js") ?>
-    <?= script_tag('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js') ?>
     <?= script_tag("https://cdn.datatables.net/2.0.0/js/dataTables.js") ?>
-    <?= script_tag("https://cdn.datatables.net/2.0.0/js/dataTables.bootstrap5.js") ?>
 </head>
 
-<body>
-  <?= $this->include('Layout/preloader') ?>
-    <div class="d-flex min-vh-100 flex-column">
+<body class="min-h-screen flex flex-col" data-theme="light">
+    <?= $this->include('Layout/preloader') ?>
+    <div class="flex min-h-screen flex-col">
         <?= $this->include('Layout/Header') ?>
         <main class="content">
-            <div class="container p-3 px-sm-0"><?= $this->renderSection('content') ?></div>
+            <div class="max-w-5xl mx-auto w-full p-3 sm:px-0"><?= $this->renderSection('content') ?></div>
         </main>
-        <footer class="border-top py-3 pt-3" style="background-color: var(--bs-header-bg);">
-            <div class="container pt-2">
-                <div class="d-flex align-content-center align-items-center mb-3">
-                    <span class="border-top d-block flex-grow-1" style="margin-right: 1rem;"></span>
-                    <div class="d-flex flex-grow justify-content-center">
-                        <a href="#" target="_blank"><i class="bi bi-facebook" style="color:royalblue;"></i></a>
-                        <a href="#" target="_blank"><i class="bi bi-youtube" style="color:red"></i></a>
-                        <a href="https://t.me/zygames" target="_blank"><i class="bi bi-telegram" style="color:cornflowerblue"></i></a>
+        <footer class="border-t app-header-bg py-3 pt-3">
+            <div class="max-w-5xl mx-auto w-full pt-2 px-3 sm:px-0">
+                <div class="flex items-center mb-3">
+                    <span class="border-t block grow" style="margin-right: 1rem;"></span>
+                    <div class="flex grow justify-center">
+                        <a href="#" target="_blank" class="social-icon"><i class="bi bi-facebook" style="color:royalblue;"></i></a>
+                        <a href="#" target="_blank" class="social-icon"><i class="bi bi-youtube" style="color:red"></i></a>
+                        <a href="https://t.me/zygames" target="_blank" class="social-icon"><i class="bi bi-telegram" style="color:cornflowerblue"></i></a>
                     </div>
-                    <span class="border-top d-block flex-grow-1" style="margin-left: 1rem;"></span>
+                    <span class="border-t block grow" style="margin-left: 1rem;"></span>
                 </div>
-            </div>
-            <div class="small text-center text-body d-flex pt-2">
-                <div class="container">
-                    <p>
-                        <em>&copy; Copyright 2018 - <?= date('Y') ?> <?= BASE_NAME ?></em>
-                    </p>
+                <div class="text-sm text-center flex pt-2">
+                    <div class="w-full">
+                        <p>
+                            <em>&copy; Copyright 2018 - <?= date('Y') ?> <?= BASE_NAME ?></em>
+                        </p>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -83,15 +87,15 @@
 
 
 <!-- Thong bao luu cookie tren trinh duyet -->
-<div id="cookieNotice" class="display-right card shadow" style="display: none;">
+<div id="cookieNotice" class="display-right card shadow-lg" style="display: none;">
     <div id="closeIcon" style="display: none;">
     </div>
-    <h2 class="h5 fw-bold">Save Cookie content</h2>
+    <h2 class="text-base font-bold">Save Cookie content</h2>
     <div>
         <div>
             <p>This website uses cookies, or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to the <a href="#">Privacy Policy</a></p>
             <div>
-                <button class="btn btn-success w-100 shadow-sm" onclick="acceptCookieConsent();">Accept</button>
+                <button class="btn btn-success w-full shadow-sm" onclick="acceptCookieConsent();">Accept</button>
             </div>
         </div>
     </div>

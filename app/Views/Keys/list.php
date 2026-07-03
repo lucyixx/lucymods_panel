@@ -6,32 +6,30 @@
 <?= $this->extend('Layout/Starter') ?>
 
 <?= $this->section('content') ?>
-<div class="row justify-content-center">
-    <div class="col-lg-12">
+<div class="flex flex-wrap justify-center gap-4">
+    <div class="w-full">
         <?= $this->include('Layout/msgStatus') ?>
     </div>
-    <div class="col-lg-12">
+    <div class="w-full">
         <div class="card mb-3">
-            <div class="card-header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="">
-                        <div class="card-title m-0"><span>Keys Registered</span></div>
-                    </div>
-                    <div class="text-end">
-                        <a class="btn btn-default btn-sm" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
-                        <a class="btn btn-default btn-sm" href="<?= site_url('keys/download/all') ?>"><i class="bi bi-download"></i></a>
-                        <a class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><span class="me-1"><i class=" bi bi-trash"></i></span></a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="<?= site_url('keys/start')  ?>">Keys Not Use</a></li>
-                            <li><a class="dropdown-item" href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
+            <div class="flex items-center justify-between border-b px-4 py-3">
+                <div class="font-semibold"><span>Keys Registered</span></div>
+                <div class="text-right flex items-center gap-1">
+                    <a class="btn btn-default btn-sm" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
+                    <a class="btn btn-default btn-sm" href="<?= site_url('keys/download/all') ?>"><i class="bi bi-download"></i></a>
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-default btn-sm"><i class="bi bi-trash"></i></div>
+                        <ul tabindex="0" class="dropdown-content menu app-header-bg rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300/20">
+                            <li><a href="<?= site_url('keys/start')  ?>">Keys Not Use</a></li>
+                            <li><a href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="card-body">
                 <?php if ($keylist) : ?>
-                    <div class="table-responsive">
-                        <table id="datatable" class="table table-borderless table-sm table-hover table-striped w-100">
+                    <div class="overflow-x-auto">
+                        <table id="datatable" class="table table-sm table-zebra w-full">
                             <thead>
                                 <tr class="border-0">
                                     <th>ID</th>
@@ -68,21 +66,21 @@
                     data: 'id',
                     name: 'id_keys',
                     render: function(data, type, row, meta) {
-                        return `<span class="small">${data}</span>`
+                        return `<span class="text-sm">${data}</span>`
                     }
                 },
                 {
                     data: 'game',
                     render: function(data, type, row, meta) {
-                        return `<span class="small">${data}</span>`;
+                        return `<span class="text-sm">${data}</span>`;
                     }
                 },
                 {
                     data: 'user_key',
                     render: function(data, type, row, meta) {
-                        const is_valid = (row.status == 'Active') ? "text-success" : "text-danger";
+                        const is_valid = (row.status == 'Active') ? "text-success" : "text-error";
                         const key = row.user_key ?? '&mdash;';
-                        return `<span class="small text-muted ${is_valid}" data-key="${key}">${key}</span> `;
+                        return `<span class="text-sm opacity-70 ${is_valid}" data-key="${key}">${key}</span> `;
                     }
                 },
                 {
@@ -90,18 +88,18 @@
                     render: function(data, type, row, meta) {
                         const totalDevice = (row.devices ? row.devices : 0);
                         if (row.key_level == 1) {
-                            return `<span class="small badge text-success" id="devMax-${row.user_key}">Free ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="text-sm badge badge-outline text-success" id="devMax-${row.user_key}">Free ${totalDevice}/${row.max_devices}</span>`;
                         } else if (row.key_level == 2) {
-                            return `<span class="small badge text-warning" id="devMax-${row.user_key}">Vip ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="text-sm badge badge-outline text-warning" id="devMax-${row.user_key}">Vip ${totalDevice}/${row.max_devices}</span>`;
                         } else if (row.key_level == 3) {
-                            return `<span class="small badge text-primary" id="devMax-${row.user_key}">Test ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="text-sm badge badge-outline text-primary" id="devMax-${row.user_key}">Test ${totalDevice}/${row.max_devices}</span>`;
                         }
                     }
                 },
                 {
                     data: 'duration',
                     render: function(data, type, row, meta) {
-                        return `<span class="small">${data}</span>`;
+                        return `<span class="text-sm">${data}</span>`;
                     }
                 },
                 {
@@ -110,17 +108,17 @@
                     render: function(data, type, row, meta) {
                         const currentDate = new Date();
                         const expirationDate = new Date(data + 'Z');
-                        return `<span class="small text-nowrap ${row.expired && expirationDate <= currentDate ? 'text-danger' : ''}">${row.expired ? data : '(not started yet)'}</span>`;
+                        return `<span class="text-sm text-nowrap ${row.expired && expirationDate <= currentDate ? 'text-error' : ''}">${row.expired ? data : '(not started yet)'}</span>`;
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, row, meta) {
                         console.log(row);
-                        const btnReset = `<button class="btn text-warning" onclick="resetUserKey('${row.user_key}')"><i class="bi bi-bootstrap-reboot"></i></button>`;
-                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-sm"><i class="bi bi-gear"></i></a>`;
-                        const btnDelete = `<button class="btn text-danger btn-sm" onclick="deleteKeys('${row.user_key}')"><i class="bi bi-trash"></i></button>`;
-                        return `<div class="btn-group btn-group-sm">${btnReset} ${btnEdits} ${btnDelete}</div>`;
+                        const btnReset = `<button class="btn btn-ghost btn-sm text-warning" onclick="resetUserKey('${row.user_key}')"><i class="bi bi-bootstrap-reboot"></i></button>`;
+                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-ghost btn-sm"><i class="bi bi-gear"></i></a>`;
+                        const btnDelete = `<button class="btn btn-ghost btn-sm text-error" onclick="deleteKeys('${row.user_key}')"><i class="bi bi-trash"></i></button>`;
+                        return `<div class="join">${btnReset} ${btnEdits} ${btnDelete}</div>`;
                     }
                 }
             ]

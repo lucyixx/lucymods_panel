@@ -2,18 +2,16 @@
 
 <?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="alert alert-primary" role="alert">
+<div class="flex flex-col gap-3">
+    <div class="w-full">
+        <div class="alert alert-info" role="alert">
             INFO&middot; <small>Search specify user by their (username, fullname, saldo or uplink).</small>
         </div>
         <div class="card mb-3">
-            <div class="card-header">
-               <div class="card-title m-0"><span>Manage <?= $title ?></span></div>
-            </div>
+            <div class="border-b px-4 py-3 font-semibold">Manage <?= $title ?></div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table id="datatable" class="table table-borderless table-hover table-sm table-striped" style="width:100%">
+                <div class="overflow-x-auto">
+                    <table id="datatable" class="table table-sm table-zebra" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="row">#</th>
@@ -35,26 +33,26 @@
                                     <td><?= $user['level']; ?></td>
                                     <td>
                                         <?php
-                                            $textc = (getLevel($user['level']) === 'Admin') ? 'primary' : 'dark';
+                                            $textc = (getLevel($user['level']) === 'Admin') ? 'badge-primary badge-outline' : 'badge-neutral badge-outline';
                                             $saldo = (getLevel($user['level']) === 'Admin') ? '&mstpos;' : $user['saldo'];
-                                            echo "<span class='badge text-$textc'>$saldo</span>";
+                                            echo "<span class='badge $textc'>$saldo</span>";
                                         ?>
                                     </td>
                                     <td>
                                         <?php
                                             $status = ($user['status'] == 1) ? 'Active' : 'Banned';
-                                            $text_color = ($user['status'] == 1) ? 'success' : 'danger';
-                                            echo "<span class='text-$text_color'>$status</span>";
+                                            $text_color = ($user['status'] == 1) ? 'text-success' : 'text-error';
+                                            echo "<span class='$text_color'>$status</span>";
                                         ?>
                                     </td>
                                     <td><?= $user['uplink']; ?></td>
                                     <td>
-                                        <div class="btn-group">
-                                            <a href="<?= base_url('admin/user') . '/' . $user['id_users']; ?>" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="left" title="Edit key information?">
+                                        <div class="join">
+                                            <a href="<?= base_url('admin/user') . '/' . $user['id_users']; ?>" class="btn btn-warning btn-sm join-item tooltip tooltip-left" data-tip="Edit key information?">
                                                 <i class="bi bi-gear"></i>
                                             </a>
                                             <?php if (getLevel($user['level']) !== 'Admin') : ?>
-                                            <a href="<?= base_url('admin/user/singledelete') . '/' . $user['id_users']; ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="left" title="Delete User?">
+                                            <a href="<?= base_url('admin/user/singledelete') . '/' . $user['id_users']; ?>" class="btn btn-error btn-sm join-item tooltip tooltip-left" data-tip="Delete User?">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                             <?php endif; ?>

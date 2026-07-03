@@ -1,50 +1,46 @@
 <?= $this->extend('Layout/Starter') ?>
 
 <?= $this->section('content') ?>
-<div class="row">
-    <div class="col-lg-12">
+<div class="flex flex-wrap gap-4">
+    <div class="w-full">
         <?= $this->include('Layout/msgStatus') ?>
     </div>
-    <div class="col-lg-4 mb-3">
+    <div class="w-full lg:w-1/3 mb-3">
         <div class="card">
-            <div class="card-header">
-                <div class="card-title m-0"><span>Generate <?= $title ?></span></div>
-            </div>
+            <div class="border-b px-4 py-3 font-semibold">Generate <?= $title ?></div>
             <div class="card-body">
                 <?= form_open() ?>
-                <div class="form-group mb-3">
-                    <label for="saldo">You can set with multiple saldo</label>
-                    <div class="input-group mt-2">
-                        <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
-                        <input type="number" class="form-control" name="saldo" id="saldo" minlength="1" maxlength="11" value="5">
-                    </div>
+                <div class="mb-3">
+                    <label for="saldo" class="label"><span class="label-text">You can set with multiple saldo</span></label>
+                    <label class="input input-bordered flex items-center gap-2 w-full mt-2">
+                        <i class="bi bi-currency-dollar opacity-60"></i>
+                        <input type="number" class="grow" name="saldo" id="saldo" minlength="1" maxlength="11" value="5">
+                    </label>
                     <?php if ($validation->hasError('saldo')) : ?>
-                        <small id="help-saldo" class="text-danger"><?= $validation->getError('saldo') ?></small>
+                        <small id="help-saldo" class="text-error"><?= $validation->getError('saldo') ?></small>
                     <?php endif; ?>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="level">Account Level</label>
-                    <div class="input-group mt-2">
-                        <span class="input-group-text"><i class="bi bi-person"></i></span>
-                        <?= form_dropdown(['class' => 'form-select', 'name' => 'level', 'id' => 'level'], getLevelArray(), 2) ?>
+                <div class="mb-3">
+                    <label for="level" class="label"><span class="label-text">Account Level</span></label>
+                    <div class="join w-full mt-2">
+                        <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-person"></i></span>
+                        <?= form_dropdown(['class' => 'select select-bordered join-item grow', 'name' => 'level', 'id' => 'level'], getLevelArray(), 2) ?>
                     </div>
                 </div>
-                <div class="form-group text-end">
+                <div class="text-right">
                     <button type="submit" class="btn btn-sm btn-primary">Create Code</button>
                 </div>
                 <?= form_close() ?>
             </div>
         </div>
     </div>
-    <div class="col-lg-8">
+    <div class="w-full lg:w-2/3">
         <?php if ($code) : ?>
             <div class="card mb-3">
-                <div class="card-header">
-                    <div class="card-title m-0"><span>History Generate - Total <?= $total_code ?></span></div>
-                </div>
+                <div class="border-b px-4 py-3 font-semibold">History Generate - Total <?= $total_code ?></div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-sm table-borderless table-striped" style="width:100%">
+                    <div class="overflow-x-auto">
+                        <table class="table table-sm table-zebra" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>ID</th>

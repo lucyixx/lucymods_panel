@@ -1,119 +1,112 @@
 <?= $this->extend('Layout/Starter') ?>
 
 <?= $this->section('content') ?>
-<div class="justify-content-center">
-    <?= $this->include('Layout/msgStatus') ?>
-    <div class="row">
-        <div class="col-lg-8">
-            <?php if (session()->getFlashdata('user_key')) : ?>
-                <div class="alert alert-success" role="alert">
-                    Game : <?= session()->getFlashdata('game') ?> / <?= session()->getFlashdata('duration') ?> Days<br>
-                    License : <?= session()->getFlashdata('user_key') ?><br>
-                    Available for <?= session()->getFlashdata('max_devices') ?> Devices<br>
-                    <small>
-                        <i>Duration will start when license login.</i><br>
-                        <i class="bi bi-download"></i><a href="<?= site_url('keys/download/new') ?>"> Download New Keys Hare</a><br>
-                        <i class="bi bi-wallet"></i> Saldo Reduce :
-                        <span class="text-danger">-<?= session()->getFlashdata('fees') ?></span>
-                        (Total left <?= $user->saldo ?>$)
-                    </small>
-                </div>
-            <?php endif; ?>
-            <div class="card mb-3">
-                <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <div class="card-title m-0"><span>Create License</span></div>
-                        </div>
-                        <div class="col text-end">
-                            <a class="btn btn-sm btn-default" href="<?= site_url('keys') ?>"><i class="bi bi-people"></i></a>
-                        </div>
+<div class="flex justify-center">
+    <div class="w-full">
+        <?= $this->include('Layout/msgStatus') ?>
+        <div class="flex flex-wrap gap-4">
+            <div class="w-full lg:w-2/3">
+                <?php if (session()->getFlashdata('user_key')) : ?>
+                    <div class="alert alert-success mb-3" role="alert">
+                        Game : <?= session()->getFlashdata('game') ?> / <?= session()->getFlashdata('duration') ?> Days<br>
+                        License : <?= session()->getFlashdata('user_key') ?><br>
+                        Available for <?= session()->getFlashdata('max_devices') ?> Devices<br>
+                        <small>
+                            <i>Duration will start when license login.</i><br>
+                            <i class="bi bi-download"></i><a href="<?= site_url('keys/download/new') ?>"> Download New Keys Hare</a><br>
+                            <i class="bi bi-wallet"></i> Saldo Reduce :
+                            <span class="text-error">-<?= session()->getFlashdata('fees') ?></span>
+                            (Total left <?= $user->saldo ?>$)
+                        </small>
                     </div>
-                </div>
-                <div class="card-body">
-                    <?= form_open() ?>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="input-group">
-                                <label for="game" class="input-group-text"><i class="bi bi-controller"></i></label>
-                                <?= form_dropdown('game', $game, old('game'), 'class="form-select" id="game" required') ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="input-group">
-                                <label for="max_devices" class="input-group-text"><i class="bi bi-phone"></i></label>
-                                <input type="number" name="max_devices" id="max_devices" class="form-control" placeholder="max device" value="<?= old('max_devices') ?: 1 ?>" min="1" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="input-group">
-                                <label for="user_key" class="input-group-text"><i class="bi bi-key"></i></label>
-                                <input type="text" name="user_key" id="user_key" class="form-control" placeholder="key name" value="<?= old('user_key') ?>" required>
-                                <button class="input-group-text" type="button" id="random_key"><i class="bi bi-shuffle"></i></button>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="input-group">
-                                <label for="duration" class="input-group-text"><i class="bi bi-calendar-day"></i></label>
-                                <?= form_dropdown('duration', $duration, old('duration'), 'class="form-select" id="duration" required') ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="input-group">
-                                <label for="key_level" class="input-group-text"><i class="bi bi-gem"></i></label>
-                                <?= form_dropdown('key_level', $levels, old('key_level'), 'id="key_level" class="form-select" required') ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="input-group">
-                                <label for="estimation" class="input-group-text"><i class="bi bi-battery-charging"></i></label>
-                                <input type="text" id="estimation" class="form-control" disabled>
-                            </div>
-                        </div>
+                <?php endif; ?>
+                <div class="card mb-3">
+                    <div class="flex items-center justify-between border-b px-4 py-3">
+                        <div class="font-semibold"><span>Create License</span></div>
+                        <a class="btn btn-sm btn-default" href="<?= site_url('keys') ?>"><i class="bi bi-people"></i></a>
                     </div>
-                    <div class="mt-3 text-end">
-                        <button type="submit" class="btn btn-sm btn-primary">Generate</button>
+                    <div class="card-body">
+                        <?= form_open() ?>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="w-full md:w-1/2 mb-3">
+                                <div class="join w-full">
+                                    <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-controller"></i></span>
+                                    <?= form_dropdown('game', $game, old('game'), 'class="select select-bordered join-item grow" id="game" required') ?>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/2 mb-3">
+                                <div class="join w-full">
+                                    <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-phone"></i></span>
+                                    <input type="number" name="max_devices" id="max_devices" class="input input-bordered join-item grow" placeholder="max device" value="<?= old('max_devices') ?: 1 ?>" min="1" required>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/2 mb-3">
+                                <div class="join w-full">
+                                    <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-key"></i></span>
+                                    <input type="text" name="user_key" id="user_key" class="input input-bordered join-item grow" placeholder="key name" value="<?= old('user_key') ?>" required>
+                                    <button class="join-item btn btn-default" type="button" id="random_key"><i class="bi bi-shuffle"></i></button>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/2 mb-3">
+                                <div class="join w-full">
+                                    <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-calendar-day"></i></span>
+                                    <?= form_dropdown('duration', $duration, old('duration'), 'class="select select-bordered join-item grow" id="duration" required') ?>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/2 mb-3">
+                                <div class="join w-full">
+                                    <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-gem"></i></span>
+                                    <?= form_dropdown('key_level', $levels, old('key_level'), 'id="key_level" class="select select-bordered join-item grow" required') ?>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/2 mb-3">
+                                <div class="join w-full">
+                                    <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-battery-charging"></i></span>
+                                    <input type="text" id="estimation" class="input input-bordered join-item grow" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <button type="submit" class="btn btn-sm btn-primary">Generate</button>
+                        </div>
+                        <?= form_close() ?>
                     </div>
-                    <?= form_close() ?>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <div class="card-title m-0"><span>Minimum Seller Price</span></div>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Number Of Days</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>3 days</td>
-                                <td>25K Or 3$</td>
-                            <tr>
-                                <td>7 days</td>
-                                <td>50K Or 5$</td>
-                            </tr>
-                            <tr>
-                                <td>30 days</td>
-                                <td>100K Or 10$</td>
-                            </tr>
-                            <tr>
-                                <td>60 days</td>
-                                <td>150K Or 17$</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="w-full lg:w-1/3">
+                <div class="card mb-3">
+                    <div class="border-b px-4 py-3 font-semibold">Minimum Seller Price</div>
+                    <div class="card-body">
+                        <table class="table table-zebra">
+                            <thead>
+                                <tr>
+                                    <th>Number Of Days</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>3 days</td>
+                                    <td>25K Or 3$</td>
+                                <tr>
+                                    <td>7 days</td>
+                                    <td>50K Or 5$</td>
+                                </tr>
+                                <tr>
+                                    <td>30 days</td>
+                                    <td>100K Or 10$</td>
+                                </tr>
+                                <tr>
+                                    <td>60 days</td>
+                                    <td>150K Or 17$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <?= $this->endSection() ?>
 

@@ -2,47 +2,47 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.0/sweetalert2.min.css');
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
 
+/*
+ * Bootstrap Icons (bi bi-*) is only an icon font, it does NOT depend on the
+ * Bootstrap 5 CSS/JS framework, so it is kept here purely as an icon set.
+ * All layout / component styling below is DaisyUI + Tailwind CSS only.
+ */
+
 * {
     outline: none !important;
-    text-decoration: none !important;
     box-sizing: border-box;
 }
 
+a {
+    text-decoration: none !important;
+}
+
 body {
-    font-family: 'Poppins', sans-serif !important;    
+    font-family: 'Poppins', sans-serif !important;
 }
 
-[data-bs-theme="light"] {
-    --bs-body-bg: #f0f2f5;
-    --bs-border-color-rgb: 33, 37, 61;
-    --bs-border-color: rgba(var(--bs-border-color-rgb), 0.2);
-    --bs-border-color-translucent: var(--bs-border-color);
-    --bs-header-bg: #fff;
-    --bs-workflow-bg: #f6f8fa;
-    --bs-body-color-rgb: 33,37,61;
-    .card {
-        --bs-card-bg: var(--bs-header-bg);
-    }
+/* ---- App-level theme tokens (independent from daisyUI's own tokens) ---- */
+[data-theme="light"] {
+    --app-body-bg: #f0f2f5;
+    --app-header-bg: #ffffff;
+    --app-workflow-bg: #f6f8fa;
+    --app-border-rgb: 33, 37, 61;
+    --app-icon-color: #212529;
 }
 
-[data-bs-theme="dark"] {
-    --bs-body-bg: #010409;
-    --bs-border-color-rgb: 108, 121, 158;
-    --bs-border-color: rgba(var(--bs-border-color-rgb), 0.2);
-    --bs-border-color-translucent: var(--bs-border-color);
-    --bs-header-bg: #0d1117;
-    --bs-workflow-bg: #161b22;
-    --bs-emphasis-color-rgb: 230, 237, 243;
-    --bs-emphasis-color: rgb(var(--bs-emphasis-color-rgb));
-    .card {
-        --bs-card-bg: var(--bs-header-bg);
-    }
+[data-theme="dark"] {
+    --app-body-bg: #010409;
+    --app-header-bg: #0d1117;
+    --app-workflow-bg: #161b22;
+    --app-border-rgb: 108, 121, 158;
+    --app-icon-color: #e6edf3;
 }
 
-body,
-html {
+html,
+body {
     height: 100%;
     margin: 0;
+    background-color: var(--app-body-bg);
 }
 
 img {
@@ -50,15 +50,9 @@ img {
     height: auto;
 }
 
-a {
-    -webkit-transition: all 0.3s ease 0s;
-    -moz-transition: all 0.3s ease 0s;
-    transition: all 0.3s ease 0s;
-}
-
-a.text-body:hover,
-a.text-body:focus {
-    color: var(--bs-primary) !important;
+a.link-body:hover,
+a.link-body:focus {
+    color: var(--color-primary, #eb144c) !important;
 }
 
 .border-dashed {
@@ -66,43 +60,61 @@ a.text-body:focus {
 }
 
 .svg-4 {
-	width: 1.5rem;
-	height: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
 }
+
 .svg-5 {
-	width: 1.25rem;
-	height: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
 }
+
 .svg-6 {
-	width: 1rem;
-	height: 1rem;
+    width: 1rem;
+    height: 1rem;
 }
+
 .svg-primary {
-	fill: #EB144C;
+    fill: #EB144C;
 }
+
 .svg-muted {
-	fill: #999;
+    fill: #999;
 }
 
 .note {
     min-height: 17px;
     margin: 4px 0 2px;
     font-size: 12px;
-    color: var(--fgColor-muted, var(--color-fg-muted));
+    opacity: 0.65;
 }
 
-.btn.btn-default {
-    --bs-btn-color: rgba(var(--bs-body-color-rgb), 0.8);
-    --bs-btn-bg: rgba(var(--bs-body-color-rgb), 0.04);
-    --bs-btn-border-color: var(--bs-border-color);
-    --bs-btn-hover-bg: rgba(var(--bs-body-color-rgb), 0.05);
-    --bs-btn-hover-border-color: rgba(var(--bs-border-color-rgb), 0.3);
-    --bs-btn-active-bg: rgba(var(--bs-body-color-rgb), 0.08);
-    --bs-btn-active-border-color: rgba(var(--bs-border-color-rgb), 0.3);
+/* App background surfaces (header, cards, "workflow" panels) */
+.app-header-bg {
+    background-color: var(--app-header-bg);
 }
 
-.card .card-title > span {
-    color: rgb(var(--bs-border-color-rgb));
+.app-workflow-bg {
+    background-color: var(--app-workflow-bg);
+}
+
+/* daisyUI cards use the theme's base-100 surface by default; align them
+   with our custom header/card background so light & dark mode keep the
+   original GitHub-like look */
+.card {
+    background-color: var(--app-header-bg);
+}
+
+/* Custom "default" (neutral/ghost) button variant, used across the panel
+   in place of the old Bootstrap `.btn-default` */
+.btn-default {
+    background-color: color-mix(in srgb, var(--app-header-bg) 92%, black 8%);
+    border-color: rgba(var(--app-border-rgb), 0.3);
+    color: inherit;
+}
+
+.btn-default:hover {
+    background-color: color-mix(in srgb, var(--app-header-bg) 85%, black 15%);
 }
 
 .content {
@@ -113,28 +125,60 @@ a.text-body:focus {
     filter: blur(3px);
 }
 
-footer a {
+footer a.social-icon {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #99999922;
-    border-radius: 50%;
+    border-radius: 9999px;
     width: 2.5rem;
     height: 2.5rem;
-    transition: opacity border 0.3s ease;
+    transition: opacity 0.3s ease;
 }
 
-footer a:hover {
+footer a.social-icon:hover {
     opacity: 0.8;
 }
 
-footer a+a {
-    margin-left: 0.5rem;
+footer a.social-icon i {
+    color: var(--app-icon-color);
+    font-size: 1.4em;
 }
 
-footer a i {
-    color: #212529;
-    transition: all 0.3s ease 0s;
-    overflow: hidden;
-    font-size: 1.4em;
+/* ---- DataTables: base (non-Bootstrap) skin re-themed for DaisyUI ---- */
+table.dataTable {
+    width: 100% !important;
+}
+
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+    background-color: var(--app-header-bg);
+    border: 1px solid rgba(var(--app-border-rgb), 0.3);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    color: inherit;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border-radius: 0.375rem !important;
+    padding: 0.25rem 0.65rem !important;
+    margin-left: 2px;
+    border: 1px solid rgba(var(--app-border-rgb), 0.25) !important;
+    background: transparent !important;
+    color: inherit !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: var(--color-primary, #eb144c) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    opacity: 0.4;
+}
+
+.dataTables_wrapper .dataTables_info {
+    opacity: 0.7;
 }

@@ -7,7 +7,7 @@
         left: 0;
         top: 0;
         /* background-color: #ffffff; */
-        background-color: var(--bs-body-bg);
+        background-color: var(--app-body-bg, #f0f2f5);
         -webkit-transition: all .3s ease;
         -o-transition: all .3s ease;
         transition: all .3s ease;
