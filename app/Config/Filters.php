@@ -39,7 +39,12 @@ class Filters extends BaseConfig
     public array $globals = [
         'before' => [
 			'csrf' => [
-				'except' => 'connect',
+				// keys/api is a read-only (SELECT-only) listing endpoint used by
+				// DataTables server-side processing. It is switched to POST in
+				// app/Views/Keys/list.php to avoid some hosts' WAF/nginx blocking
+				// long bracket-style query strings (e.g. columns[0][data]=...),
+				// so it is exempted from CSRF like any other safe, idempotent read.
+				'except' => ['connect', 'keys/api'],
 			],
 			'auth' => [
 				'except' => [

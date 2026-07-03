@@ -61,7 +61,10 @@
             order: [
                 [0, "desc"]
             ],
-            ajax: "<?= site_url('keys/api') ?>",
+            ajax: {
+                url: "<?= site_url('keys/api') ?>",
+                type: "POST"
+            },
             columns: [{
                     data: 'id',
                     name: 'id_keys',
