@@ -8,100 +8,107 @@
             <div class="w-full lg:w-2/3">
                 <?php if (session()->getFlashdata('user_key')) : ?>
                     <div class="alert alert-success mb-3" role="alert">
-                        Game : <?= session()->getFlashdata('game') ?> / <?= session()->getFlashdata('duration') ?> Days<br>
-                        License : <?= session()->getFlashdata('user_key') ?><br>
-                        Available for <?= session()->getFlashdata('max_devices') ?> Devices<br>
-                        <small>
-                            <i>Duration will start when license login.</i><br>
-                            <i class="bi bi-download"></i><a href="<?= site_url('keys/download/new') ?>"> Download New Keys Hare</a><br>
-                            <i class="bi bi-wallet"></i> Saldo Reduce :
-                            <span class="text-error">-<?= session()->getFlashdata('fees') ?></span>
-                            (Total left <?= $user->saldo ?>$)
-                        </small>
+                        <div>
+                            Game: <?= session()->getFlashdata('game') ?> / <?= session()->getFlashdata('duration') ?> Days<br>
+                            License: <span class="font-mono"><?= session()->getFlashdata('user_key') ?></span><br>
+                            Available for <?= session()->getFlashdata('max_devices') ?> Devices<br>
+                            <small>
+                                <i>Duration will start when license login.</i><br>
+                                <i class="bi bi-download"></i><a href="<?= site_url('keys/download/new') ?>" class="link"> Download New Keys Here</a><br>
+                                <i class="bi bi-wallet"></i> Saldo reduce:
+                                <span class="text-error">-<?= session()->getFlashdata('fees') ?></span>
+                                (total left <?= $user->saldo ?>$)
+                            </small>
+                        </div>
                     </div>
                 <?php endif; ?>
-                <div class="panel mb-3">
-                    <div class="panel-head">
-                        <span class="panel-head-title">Create License</span>
-                        <a class="btn btn-sm btn-default" href="<?= site_url('keys') ?>"><i class="bi bi-people"></i></a>
-                    </div>
-                    <div class="panel-body">
+                <div class="card card-border bg-base-200 border-base-300 mb-3">
+                    <div class="card-body">
+                        <div class="flex items-center justify-between mb-1">
+                            <h1 class="card-title text-base">Create license</h1>
+                            <a class="btn btn-sm" href="<?= site_url('keys') ?>"><i class="bi bi-people"></i></a>
+                        </div>
                         <?= form_open() ?>
-                        <div class="flex flex-wrap gap-4">
-                            <div class="w-full md:w-1/2 mb-3">
+                        <div class="flex flex-wrap gap-4 mt-2">
+                            <div class="w-full md:w-1/2">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-controller"></i></span>
-                                    <?= form_dropdown('game', $game, old('game'), 'class="select select-bordered join-item grow" id="game" required') ?>
+                                    <?= form_dropdown('game', $game, old('game'), 'class="select join-item grow" id="game" required') ?>
                                 </div>
                             </div>
-                            <div class="w-full md:w-1/2 mb-3">
+                            <div class="w-full md:w-1/2">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-phone"></i></span>
-                                    <input type="number" name="max_devices" id="max_devices" class="input input-bordered join-item grow" placeholder="max device" value="<?= old('max_devices') ?: 1 ?>" min="1" required>
+                                    <input type="number" name="max_devices" id="max_devices" class="input join-item grow validator" placeholder="Max devices" value="<?= old('max_devices') ?: 1 ?>" min="1" required>
                                 </div>
                             </div>
-                            <div class="w-full md:w-1/2 mb-3">
+                            <div class="w-full md:w-1/2">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-key"></i></span>
-                                    <input type="text" name="user_key" id="user_key" class="input input-bordered join-item grow" placeholder="key name" value="<?= old('user_key') ?>" required>
-                                    <button class="join-item btn btn-default" type="button" id="random_key"><i class="bi bi-shuffle"></i></button>
+                                    <input type="text" name="user_key" id="user_key" class="input join-item grow validator" placeholder="Key name" value="<?= old('user_key') ?>" required>
+                                    <button class="join-item btn" type="button" id="random_key" aria-label="Randomize"><i class="bi bi-shuffle"></i></button>
                                 </div>
                             </div>
-                            <div class="w-full md:w-1/2 mb-3">
+                            <div class="w-full md:w-1/2">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-calendar-day"></i></span>
-                                    <?= form_dropdown('duration', $duration, old('duration'), 'class="select select-bordered join-item grow" id="duration" required') ?>
+                                    <?= form_dropdown('duration', $duration, old('duration'), 'class="select join-item grow" id="duration" required') ?>
                                 </div>
                             </div>
-                            <div class="w-full md:w-1/2 mb-3">
+                            <div class="w-full md:w-1/2">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-gem"></i></span>
-                                    <?= form_dropdown('key_level', $levels, old('key_level'), 'id="key_level" class="select select-bordered join-item grow" required') ?>
+                                    <?= form_dropdown('key_level', $levels, old('key_level'), 'id="key_level" class="select join-item grow" required') ?>
                                 </div>
                             </div>
-                            <div class="w-full md:w-1/2 mb-3">
+                            <div class="w-full md:w-1/2">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-battery-charging"></i></span>
-                                    <input type="text" id="estimation" class="input input-bordered join-item grow" disabled>
+                                    <input type="text" id="estimation" class="input join-item grow" disabled>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-3 text-right">
-                            <button type="submit" class="btn btn-sm btn-primary btn-hud">Generate</button>
+                        <div class="mt-4 text-right">
+                            <button type="submit" class="btn btn-sm btn-primary">Generate</button>
                         </div>
                         <?= form_close() ?>
                     </div>
                 </div>
             </div>
             <div class="w-full lg:w-1/3">
-                <div class="panel mb-3">
-                    <div class="panel-head"><span class="panel-head-title">Minimum Seller Price</span></div>
-                    <div class="panel-body">
-                        <table class="table table-zebra">
-                            <thead>
-                                <tr>
-                                    <th>Number Of Days</th>
-                                    <th>Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>3 days</td>
-                                    <td>25K Or 3$</td>
-                                <tr>
-                                    <td>7 days</td>
-                                    <td>50K Or 5$</td>
-                                </tr>
-                                <tr>
-                                    <td>30 days</td>
-                                    <td>100K Or 10$</td>
-                                </tr>
-                                <tr>
-                                    <td>60 days</td>
-                                    <td>150K Or 17$</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="card card-border bg-base-200 border-base-300">
+                    <div class="card-body p-0">
+                        <div class="px-4 py-3 border-b border-base-300">
+                            <h2 class="card-title text-base">Minimum seller price</h2>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra">
+                                <thead>
+                                    <tr>
+                                        <th>Days</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>3 days</td>
+                                        <td>25K or 3$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7 days</td>
+                                        <td>50K or 5$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>30 days</td>
+                                        <td>100K or 10$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>60 days</td>
+                                        <td>150K or 17$</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

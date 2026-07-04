@@ -72,13 +72,13 @@ $chart->options($options);
             </div>
 
             <div id="game_view" class="mb-3" hidden>
-                <div class="app-workflow-bg text-inherit border rounded overflow-hidden block h-full relative">
+                <div class="bg-base-300 text-inherit border border-base-300 rounded overflow-hidden block h-full relative">
                     <div class="flex" style="padding: 0.5rem;">
                         <div class="shrink-0 me-2" style="width: 3.75rem;">
                             <img class="rounded-lg" id="game_img" width="96" height="96" aria-hidden="true" alt="Icon image" itemprop="image" data-atf="true">
                         </div>
                         <div style="min-width: 0;">
-                            <h2 class="font-display text-base" id="game_name" style="margin-bottom: 2px;"></h2>
+                            <h2 class="text-base" id="game_name" style="margin-bottom: 2px;"></h2>
                             <div class="text-sm truncate">
                                 <span id="game_dev" class="text-success"></span>
                             </div>
@@ -90,15 +90,15 @@ $chart->options($options);
                 </div>
             </div>
 
-            <div class="panel mb-3">
-                <div class="panel-head">
-                    <span class="panel-head-title">Create License</span>
+            <div class="card card-border bg-base-200 border-base-300 mb-3">
+                <div class="flex items-center justify-between px-4 py-3 border-b border-base-300">
+                    <h2 class="card-title text-base">Create license</h2>
                     <div class="opacity-70">
                         <i class="bi bi-pass"></i>
                         <span class="text-sm"><?= $link_total ?> links</span>
                     </div>
                 </div>
-                <div class="panel-body my-3">
+                <div class="card-body">
 
                     <?= form_open() ?>
                     <div class="my-0">
@@ -106,33 +106,33 @@ $chart->options($options);
                             <div class="w-full lg:w-1/2 mb-3">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-controller"></i></span>
-                                    <?= form_dropdown('game', ['FREE' => 'All Games'], 'ALL', 'id="game" class="select select-bordered join-item grow" disabled') ?>
+                                    <?= form_dropdown('game', ['FREE' => 'All Games'], 'ALL', 'id="game" class="select join-item grow" disabled') ?>
                                 </div>
                             </div>
                             <div class="w-full lg:w-1/2 mb-3">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-phone"></i></span>
-                                    <input type="number" name="max_devices" id="max_devices" class="input input-bordered join-item grow" value="1" disabled>
+                                    <input type="number" name="max_devices" id="max_devices" class="input join-item grow" value="1" disabled>
                                     <span class="join-item btn btn-ghost pointer-events-none px-3">device</span>
                                 </div>
                             </div>
                             <div class="w-full lg:w-1/2 mb-3">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-calendar-day"></i></span>
-                                    <?= form_dropdown('duration', ['1' => '1 Days'], '1', 'class="select select-bordered join-item grow" disabled') ?>
+                                    <?= form_dropdown('duration', ['1' => '1 Days'], '1', 'class="select join-item grow" disabled') ?>
                                 </div>
                             </div>
                             <div class="w-full lg:w-1/2 mb-3">
                                 <div class="join w-full">
                                     <span class="join-item btn btn-ghost pointer-events-none px-3"><i class="bi bi-gem"></i></span>
-                                    <?= form_dropdown('vip_key', ['1' => 'FREE'], '1', 'class="select select-bordered join-item grow" disabled') ?>
+                                    <?= form_dropdown('vip_key', ['1' => 'FREE'], '1', 'class="select join-item grow" disabled') ?>
                                 </div>
                             </div>
                         </div>
                         <div id="validationResult"></div>
                     </div>
                     <div class="mt-3 text-right">
-                        <button type="submit" class="btn btn-sm btn-primary btn-hud" id="btn_submit"><i class="bi bi-box-arrow-in-right"></i> Generate</button>
+                        <button type="submit" class="btn btn-sm btn-primary" id="btn_submit"><i class="bi bi-box-arrow-in-right"></i> Generate</button>
                     </div>
                     <?= form_close() ?>
                 </div>
@@ -142,9 +142,9 @@ $chart->options($options);
             <?= $chart->toHtml('my_chart'); ?>
         </div>
         <div class="w-full mb-3">
-            <div class="panel">
-                <div class="panel-head"><span class="panel-head-title">Minimum Seller Price</span></div>
-                <div class="panel-body text-center">
+            <div class="card card-border bg-base-200 border-base-300">
+                <div class="flex items-center justify-between px-4 py-3 border-b border-base-300"><h2 class="card-title text-base">Minimum seller price</h2></div>
+                <div class="card-body text-center">
                     <table class="table table-zebra">
                         <thead>
                             <tr>

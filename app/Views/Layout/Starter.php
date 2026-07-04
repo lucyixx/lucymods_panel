@@ -24,7 +24,7 @@
     <?= script_tag("https://cdn.datatables.net/2.0.0/js/dataTables.js") ?>
 </head>
 
-<body class="min-h-screen flex flex-col" data-theme="<?= $currentTheme ?>">
+<body class="min-h-screen flex flex-col">
     <?= $this->include('Layout/preloader') ?>
     <div class="flex min-h-screen flex-col">
         <?= $this->include('Layout/Header') ?>
@@ -33,14 +33,14 @@
         </main>
         <footer class="border-t border-base-300 py-3 pt-3">
             <div class="max-w-5xl mx-auto w-full pt-2 px-3 sm:px-0">
-                <div class="flex items-center mb-3">
-                    <span class="border-t border-base-300 block grow" style="margin-right: 1rem;"></span>
-                    <div class="flex grow justify-center">
-                        <a href="#" target="_blank" class="social-icon"><i class="bi bi-facebook"></i></a>
-                        <a href="#" target="_blank" class="social-icon"><i class="bi bi-youtube"></i></a>
-                        <a href="https://t.me/zygames" target="_blank" class="social-icon"><i class="bi bi-telegram"></i></a>
+                <div class="flex items-center mb-3 gap-4">
+                    <span class="border-t border-base-300 block grow"></span>
+                    <div class="flex items-center gap-2">
+                        <a href="#" target="_blank" class="btn btn-circle btn-ghost btn-sm" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" target="_blank" class="btn btn-circle btn-ghost btn-sm" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="https://t.me/zygames" target="_blank" class="btn btn-circle btn-ghost btn-sm" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
                     </div>
-                    <span class="border-t border-base-300 block grow" style="margin-left: 1rem;"></span>
+                    <span class="border-t border-base-300 block grow"></span>
                 </div>
                 <div class="text-sm text-center flex pt-2 opacity-60">
                     <div class="w-full">

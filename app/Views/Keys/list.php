@@ -11,14 +11,14 @@
         <?= $this->include('Layout/msgStatus') ?>
     </div>
     <div class="w-full">
-        <div class="panel mb-3">
-            <div class="panel-head">
-                <span class="panel-head-title">Keys Registered</span>
+        <div class="card card-border bg-base-200 border-base-300 mb-3">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-base-300">
+                <h1 class="card-title text-base">Keys registered</h1>
                 <div class="text-right flex items-center gap-1">
-                    <a class="btn btn-default btn-sm" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
-                    <a class="btn btn-default btn-sm" href="<?= site_url('keys/download/all') ?>"><i class="bi bi-download"></i></a>
+                    <a class="btn btn-sm" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
+                    <a class="btn btn-sm" href="<?= site_url('keys/download/all') ?>"><i class="bi bi-download"></i></a>
                     <div class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="btn btn-default btn-sm"><i class="bi bi-trash"></i></div>
+                        <div tabindex="0" role="button" class="btn btn-sm"><i class="bi bi-trash"></i></div>
                         <ul tabindex="0" class="dropdown-content menu bg-base-200 rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300/20">
                             <li><a href="<?= site_url('keys/start')  ?>">Keys Not Use</a></li>
                             <li><a href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <?php if ($keylist) : ?>
                     <div class="overflow-x-auto">
                         <table id="datatable" class="table table-sm table-zebra w-full">

@@ -34,11 +34,11 @@ function formatPermissions($file) : string
     <div class="w-full">
         <?= $this->include('Layout/msgStatus') ?>
     </div>
-    <div class="panel mb-3">
-        <div class="panel-head">
-            <span class="panel-head-title">Lib Online</span>
+    <div class="card card-border bg-base-200 border-base-300 mb-3">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-base-300">
+            <h1 class="card-title text-base">Lib Online</h1>
             <div class="text-right">
-                <button type="button" class="btn btn-default btn-sm" onclick="uploadModal.showModal()">
+                <button type="button" class="btn btn-sm" onclick="uploadModal.showModal()">
                     Open Upload
                 </button>
                 <!-- Native <dialog> modal (daisyUI), replaces the Bootstrap modal -->
@@ -48,7 +48,7 @@ function formatPermissions($file) : string
                         <h3 class="font-bold text-lg mb-3">Upload Lib File</h3>
                         <?= form_open_multipart('libOnline/upload'); ?>
                         <div class="mb-3">
-                            <input type="file" name="file" class="file-input file-input-bordered w-full" accept=".so" required>
+                            <input type="file" name="file" class="file-input w-full" accept=".so" required>
                         </div>
                         <button type="submit" class="btn btn-error">Upload</button>
                         <?= form_close(); ?>
@@ -59,7 +59,7 @@ function formatPermissions($file) : string
                 </dialog>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="overflow-x-auto">
                 <table id="table" class="table table-sm table-zebra">
                     <thead>
