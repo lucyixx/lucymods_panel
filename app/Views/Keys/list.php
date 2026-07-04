@@ -69,7 +69,7 @@
                     data: 'id',
                     name: 'id_keys',
                     render: function(data, type, row, meta) {
-                        return `<span class="text-sm mono opacity-70">${data}</span>`
+                        return `<span class="text-sm font-mono opacity-70">${data}</span>`
                     }
                 },
                 {
@@ -83,7 +83,7 @@
                     render: function(data, type, row, meta) {
                         const is_valid = (row.status == 'Active') ? "text-success" : "text-error";
                         const key = row.user_key ?? '&mdash;';
-                        return `<span class="text-sm mono opacity-70 ${is_valid}" data-key="${key}">${key}</span> `;
+                        return `<span class="text-sm font-mono opacity-70 ${is_valid}" data-key="${key}">${key}</span> `;
                     }
                 },
                 {
