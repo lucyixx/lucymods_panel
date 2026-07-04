@@ -1,5 +1,6 @@
+<?php $currentTheme = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'zygame-light') ? 'zygame-light' : 'zygame'; ?>
 <!DOCTYPE html>
-<html data-theme="hackerdark" lang="en">
+<html data-theme="<?= $currentTheme ?>" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -23,7 +24,7 @@
     <?= script_tag("https://cdn.datatables.net/2.0.0/js/dataTables.js") ?>
 </head>
 
-<body class="min-h-screen flex flex-col" data-theme="hackerdark">
+<body class="min-h-screen flex flex-col" data-theme="<?= $currentTheme ?>">
     <?= $this->include('Layout/preloader') ?>
     <div class="flex min-h-screen flex-col">
         <?= $this->include('Layout/Header') ?>
@@ -41,10 +42,10 @@
                     </div>
                     <span class="border-t border-base-300 block grow" style="margin-left: 1rem;"></span>
                 </div>
-                <div class="text-sm text-center flex pt-2 opacity-60 font-mono">
+                <div class="text-sm text-center flex pt-2 opacity-60">
                     <div class="w-full">
                         <p>
-                            &copy; <?= date('Y') ?> ZY // GAMES
+                            &copy; <?= date('Y') ?> ZyGames
                         </p>
                     </div>
                 </div>
@@ -87,11 +88,11 @@
 
 
 <!-- Thong bao luu cookie tren trinh duyet -->
-<div id="cookieNotice" class="display-right panel shadow-lg" style="display: none;">
-    <div class="panel-body">
-        <h2 class="font-display text-base font-semibold mb-2">Save Cookie content</h2>
-        <p class="text-sm opacity-70">This website uses cookies, or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to the <a href="#" class="text-primary">Privacy Policy</a></p>
-        <button class="btn btn-success btn-hud btn-sm w-full mt-2" onclick="acceptCookieConsent();">Accept</button>
+<div id="cookieNotice" class="display-right card card-border bg-base-200 border-base-300 shadow-lg" style="display: none;">
+    <div class="card-body">
+        <h2 class="card-title text-base">Cookie notice</h2>
+        <p class="text-sm opacity-70">This website uses cookies, or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to the <a href="#" class="link text-primary">Privacy Policy</a></p>
+        <button class="btn btn-primary btn-sm w-full mt-2" onclick="acceptCookieConsent();">Accept</button>
     </div>
 </div>
 

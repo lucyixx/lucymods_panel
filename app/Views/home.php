@@ -86,104 +86,79 @@ $games = [
 
 <?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
-<div class="flex flex-wrap justify-center gap-4">
-    <aside class="w-full lg:w-1/4 mb-3 lg:mb-0">
-        <section class="panel pt-3 px-3">
-            <div class="">
-                <div class="mb-3 flex items-center">
-                    <div class="mb-1">
-                        <img class="rounded-full p-1 border" loading="lazy" src="https://avatars.githubusercontent.com/u/41960847?v=4" width="90" alt="">
+
+<!-- Hero: the one thesis moment on the page, built from the actual featured
+     game rather than a generic stock banner -->
+<section class="hero relative overflow-hidden rounded-box mb-4" style="min-height: 280px;">
+    <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+        <source src="https://www.callofduty.com/cdn/codm/videos/home/codm-hero-video-desktop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay bg-black/65"></div>
+    <div class="hero-content text-center text-white relative">
+        <div class="max-w-xl">
+            <p class="text-xs uppercase tracking-widest opacity-70 mb-2">Featured this week</p>
+            <h1 class="text-3xl md:text-4xl font-medium mb-2">Call of Duty <span class="text-primary">Mobile</span></h1>
+            <p class="opacity-80 mb-5">ESP, aimbot and bullet-track licenses, ready in seconds.</p>
+            <a href="<?= site_url('keys/free') ?>" class="btn btn-primary">Get a free key</a>
+        </div>
+    </div>
+</section>
+
+<div class="flex flex-wrap gap-4">
+    <aside class="w-full lg:w-1/4">
+        <div class="card card-border bg-base-200 border-base-300">
+            <div class="card-body">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="avatar">
+                        <div class="w-14 rounded-full">
+                            <img src="https://avatars.githubusercontent.com/u/41960847?v=4" alt="">
+                        </div>
                     </div>
-                    <div class="ml-2 flex flex-col">
-                        <span class="font-semibold">Tis Nquyen</span>
-                        <span class="text-sm opacity-70">Website developer</span>
+                    <div>
+                        <p class="font-medium">Tis Nquyen</p>
+                        <p class="text-sm opacity-60">Website developer</p>
                     </div>
                 </div>
-                <div class="mb-3 flex flex-col" style="font-size: 0.9rem;">
-                    <div class="opacity-70"><i class="bi bi-link-45deg"></i><a href="https://t.me/tis_nquyen" class="text-sm link-body" target="_blank">Telegram user</a></div>
-                    <div class="opacity-70"><i class="bi bi-link-45deg"></i><a href="https://t.me/zygames" class="text-sm link-body" target="_blank">Telegram channel</a></div>
-                    <div class="opacity-70"><i class="bi bi-download"></i><span class="text-sm">Download module <a href="#" class="link-body" target="_blank">Drive</a></span></div>
-                </div>
-                <div class="mb-3 text-center" style="white-space: nowrap;">
-                    <div class="join">
-                        <a class="btn btn-default join-item px-3 rounded-l-full" href="#">
-                            <span>VIP KEY</span>
-                        </a>
-                        <a class="btn btn-default join-item px-3 rounded-r-full" href="<?= site_url('keys/free') ?>">
-                            <span>FREE KEY</span>
-                        </a>
-                    </div>
+                <ul class="text-sm mb-4">
+                    <li class="flex items-center gap-2 py-1 opacity-80"><i class="bi bi-link-45deg opacity-60"></i><a href="https://t.me/tis_nquyen" class="link-body" target="_blank">Telegram user</a></li>
+                    <li class="flex items-center gap-2 py-1 opacity-80"><i class="bi bi-link-45deg opacity-60"></i><a href="https://t.me/zygames" class="link-body" target="_blank">Telegram channel</a></li>
+                    <li class="flex items-center gap-2 py-1 opacity-80"><i class="bi bi-download opacity-60"></i>Download module <a href="#" class="link-body ml-1" target="_blank">Drive</a></li>
+                </ul>
+                <div class="join w-full mb-4">
+                    <a class="btn btn-outline join-item flex-1" href="#">VIP Key</a>
+                    <a class="btn btn-outline join-item flex-1" href="<?= site_url('keys/free') ?>">Free Key</a>
                 </div>
                 <div>
-                    <h2 class="font-display text-base mt-4 md:mt-4">Recent activity</h2>
-                    <div class="mt-2 mb-4">
-                        <div class="border border-dashed rounded p-3 mt-2">
-                            <p class="note mt-0 text-sm">
-                                When you take actions across ZyGames, we’ll provide links to that activity here.
-                            </p>
-                        </div>
+                    <h2 class="text-sm uppercase tracking-wide opacity-60 mb-2">Recent activity</h2>
+                    <div class="border border-dashed border-base-300 rounded-box p-3">
+                        <p class="note text-sm opacity-60 m-0">
+                            When you take actions across ZyGames, we'll show links to that activity here.
+                        </p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </aside>
-    <main class="w-full lg:w-3/4">
-        <section class="panel overflow-hidden p-0 mb-3">
-            <div class="relative">
-                <video class="w-full h-auto object-cover block" autoplay loop muted>
-                    <source src="https://www.callofduty.com/cdn/codm/videos/home/codm-hero-video-desktop.mp4" type="video/mp4">
-                </video>
-                <div class="absolute inset-0" style="background: linear-gradient(0deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.15) 55%, rgba(0,0,0,.35) 100%);"></div>
-                <div class="absolute left-0 bottom-0 p-4 md:p-6 w-full">
-                    <div class="font-mono text-xs uppercase tracking-widest text-primary mb-1">// Featured Target</div>
-                    <h1 class="font-display text-2xl md:text-4xl text-white font-semibold leading-tight">Call of Duty <span class="text-primary">Mobile</span></h1>
-                    <p class="text-sm md:text-base text-white/70 mt-1 mb-3">ESP &middot; Aimbot &middot; Bullet Track — live license keys, ready to deploy.</p>
-                    <a href="<?= site_url('keys/free') ?>" class="btn btn-primary btn-hud btn-sm">Get Free Key</a>
-                </div>
-            </div>
-        </section>
-        <!--
-            <section class="panel border rounded pt-3 px-2 md:px-3 mb-3">
-                <header class="flex justify-between mb-3">
-                    <div class="flex">
-                        <h2 class="text-base ms-1"><a href="#" class="link-body">Game Mods</a></h2>
-                    </div>
-                    <span class="ms-auto text-sm"><a href="#">View More</a></span>
-                </header>
-                <div class="flex flex-wrap gap-4">
-                    <?php foreach ($games as $index => $game) { ?>
-                        <div class="w-full md:w-1/2 xl:w-1/3 mb-3">
-                            <a class="link-body app-workflow-bg border rounded overflow-hidden block h-full relative" href="<?= site_url('details?id='.$game->id) ?>">
-                                <div class="flex" style="padding: 0.5rem;">
-                                    <div class="shrink-0 me-2" style="width: 3.75rem;">
-                                        <img src="<?= $game->image_url ?>" loading="lazy" class="rounded-lg" width="96" height="96" aria-hidden="true" alt="Icon image" itemprop="image" data-atf="true">
-                                    </div>
-                                    <div style="min-width: 0;">
-                                        <h2 class="text-base truncate" style="margin-bottom: 2px;"><?= $game->name ?></h2>
-                                        <div class="text-sm truncate opacity-70">
-                                            <svg class="me-1" style="width: 1rem; fill: #999;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                                <path d="M567.938 243.908L462.25 85.374A48.003 48.003 0 0 0 422.311 64H153.689a48 48 0 0 0-39.938 21.374L8.062 243.908A47.994 47.994 0 0 0 0 270.533V400c0 26.51 21.49 48 48 48h480c26.51 0 48-21.49 48-48V270.533a47.994 47.994 0 0 0-8.062-26.625zM162.252 128h251.497l85.333 128H376l-32 64H232l-32-64H76.918l85.334-128z"></path>
-                                            </svg>
-                                            <span class="text-sm"><?= implode(' + ', $game->modes) ?></span>
-                                        </div>
-                                        <div class="text-sm opacity-70 truncate">
-                                            <svg class="me-1" style="width: 1rem; fill: #999;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                <path d="M501.1 395.7L384 278.6c-23.1-23.1-57.6-27.6-85.4-13.9L192 158.1V96L64 0 0 64l96 128h62.1l106.6 106.6c-13.6 27.8-9.2 62.3 13.9 85.4l117.1 117.1c14.6 14.6 38.2 14.6 52.7 0l52.7-52.7c14.5-14.6 14.5-38.2 0-52.7zM331.7 225c28.3 0 54.9 11 74.9 31l19.4 19.4c15.8-6.9 30.8-16.5 43.8-29.5 37.1-37.1 49.7-89.3 37.9-136.7-2.2-9-13.5-12.1-20.1-5.5l-74.4 74.4-67.9-11.3L334 98.9l74.4-74.4c6.6-6.6 3.4-17.9-5.7-20.2-47.4-11.7-99.6.9-136.6 37.9-28.5 28.5-41.9 66.1-41.2 103.6l82.1 82.1c8.1-1.9 16.5-2.9 24.7-2.9zm-103.9 82l-56.7-56.7L18.7 402.8c-25 25-25 65.5 0 90.5s65.5 25 90.5 0l123.6-123.6c-7.6-19.9-9.9-41.6-5-62.7zM64 472c-13.2 0-24-10.8-24-24 0-13.3 10.7-24 24-24s24 10.7 24 24c0 13.2-10.7 24-24 24z"></path>
-                                            </svg>
-                                            <span class="text-sm"><?= implode(', ', $game->features) ?></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
+
+    <main class="w-full lg:flex-1">
+        <h2 class="text-sm uppercase tracking-wide opacity-60 mb-2">Supported games</h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+            <?php foreach ($games as $game) : ?>
+                <a href="<?= site_url('details?id=' . $game->id) ?>" class="card card-border bg-base-200 border-base-300 hover:border-primary/50 transition-colors">
+                    <div class="card-body p-3 flex-row items-center gap-3">
+                        <img src="<?= $game->image_url ?>" loading="lazy" class="rounded-lg w-16 h-16 object-cover shrink-0" alt="<?= esc($game->name) ?>">
+                        <div class="min-w-0">
+                            <p class="font-medium text-sm truncate"><?= $game->name ?></p>
+                            <p class="text-xs opacity-60 truncate"><i class="bi bi-boxes"></i> <?= implode(' + ', $game->modes) ?></p>
+                            <p class="text-xs opacity-60 truncate"><i class="bi bi-stars"></i> <?= implode(', ', $game->features) ?></p>
                         </div>
-                    <?php } ?>
-                </div>
-            </section>
-            -->
-
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
     </main>
-
 </div>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
