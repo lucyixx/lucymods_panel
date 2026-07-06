@@ -17,7 +17,7 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
 
 <section class="relative rounded-box bg-base-200 border border-base-300 px-6 md:px-10 py-12 md:py-16 mb-10">
     <div class="absolute inset-0 overflow-hidden rounded-box pointer-events-none">
-        <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full opacity-20" style="background: radial-gradient(circle, var(--color-primary), transparent 70%);"></div>
+        <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full opacity-60" style="background: radial-gradient(circle, var(--hero-glow), transparent 70%);"></div>
     </div>
     <div class="relative grid lg:grid-cols-2 gap-10 items-center">
         <div>
@@ -53,7 +53,7 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
                 <div id="card-gold" class="absolute inset-0 rounded-2xl p-6 text-white overflow-hidden transition-transform duration-300 ease-out cursor-pointer"
                      data-back-transform="translate(18px, 22px) rotateY(-6deg) rotateX(4deg) rotate(3deg)"
                      data-front-transform="rotateY(-10deg) rotateX(6deg)"
-                     style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-primary) 95%, white 5%), color-mix(in oklch, var(--color-primary) 60%, black 40%) 60%, color-mix(in oklch, var(--color-primary) 35%, black 65%)); box-shadow: 0 25px 50px -12px rgba(0,0,0,.55); transform: rotateY(-10deg) rotateX(6deg); z-index: 2;">
+                     style="background: linear-gradient(135deg, #f6dc8e, #d4a628 55%, #93701b); box-shadow: 0 25px 50px -12px rgba(0,0,0,.55); transform: rotateY(-10deg) rotateX(6deg); z-index: 2;">
                     <div class="absolute -right-8 -bottom-10 opacity-15" style="transform: rotate(-12deg);"><svg class="icon" style="width:9rem;height:9rem"><use href="#i-gamepad" /></svg></div>
                     <div class="absolute inset-0 opacity-20" style="background-image: repeating-linear-gradient(115deg, transparent 0 8px, rgba(255,255,255,.3) 8px 9px);"></div>
                     <div class="absolute inset-0 opacity-30" style="background: linear-gradient(115deg, transparent 40%, white 50%, transparent 60%);"></div>

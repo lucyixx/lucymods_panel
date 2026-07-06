@@ -24,50 +24,59 @@
     <?= $this->include('Layout/icons') ?>
     <?= $this->include('Layout/preloader') ?>
 
-    <!-- Guest / marketing top navbar. The mobile dropdown panel lives INSIDE
-         this same sticky wrapper so it always appears directly under the
-         navbar, even if the page was scrolled before it was opened. -->
-    <div class="sticky top-0 z-30">
-        <div class="navbar bg-base-200/80 backdrop-blur border-b border-base-300 px-4">
-            <div class="max-w-5xl mx-auto w-full flex items-center">
-                <div class="flex-1 flex items-center gap-1">
-                    <a class="btn btn-ghost text-lg px-2 gap-2" href="<?= site_url(!session()->has('userid') ? '' : 'dashboard') ?>">
-                        <svg class="icon"><use href="#i-key" /></svg>ZyGames
-                    </a>
-                </div>
-                <div class="flex-none flex items-center gap-1">
-                    <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm" aria-label="Toggle theme">
-                        <input type="checkbox" id="themeToggle" <?= ($currentTheme === 'zygame-light') ? 'checked' : '' ?> />
-                        <svg class="icon swap-on"><use href="#i-sun" /></svg>
-                        <svg class="icon swap-off"><use href="#i-moon" /></svg>
-                    </label>
-                    <div class="hidden md:flex items-center gap-1">
-                        <?php if (session()->has('userid') && isset($user)) : ?>
-                            <a class="btn btn-ghost btn-sm" href="<?= site_url('dashboard') ?>">Dashboard</a>
-                        <?php else : ?>
-                            <a class="btn btn-ghost btn-sm" href="<?= site_url('keys/free') ?>">Key Free</a>
-                            <a class="btn btn-ghost btn-sm" href="<?= site_url('login') ?>">Login</a>
-                        <?php endif; ?>
-                    </div>
-                    <button class="btn btn-ghost btn-square md:hidden" id="navToggle" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Guest / marketing top navbar — DaisyUI's own "Responsive navbar"
+         pattern: dropdown menu on small screens, centered menu on large
+         screens. The dropdown is native daisyUI (CSS + tabindex focus),
+         so it always opens attached to the toggle button, regardless of
+         scroll position. -->
+    <div class="navbar bg-base-200/80 backdrop-blur border-b border-base-300 px-4 sticky top-0 z-30">
+        <div class="max-w-5xl mx-auto w-full navbar p-0">
+            <div class="navbar-start">
+                <div class="dropdown">
+                    <div tabindex="0" role="button" class="btn btn-ghost lg:hidden" aria-label="Toggle navigation">
                         <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
-                    </button>
+                    </div>
+                    <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-10 mt-3 w-52 p-2 shadow">
+                        <li><a href="<?= site_url('') ?>">Home</a></li>
+                        <li><a href="<?= site_url('games') ?>">Supported games</a></li>
+                        <?php if (session()->has('userid') && isset($user)) : ?>
+                            <li><a href="<?= site_url('dashboard') ?>">Dashboard</a></li>
+                        <?php else : ?>
+                            <li><a href="<?= site_url('keys/free') ?>">Key Free</a></li>
+                            <li><a href="<?= site_url('login') ?>">Login</a></li>
+                        <?php endif; ?>
+                    </ul>
                 </div>
+                <a class="btn btn-ghost text-lg px-2 gap-2" href="<?= site_url(!session()->has('userid') ? '' : 'dashboard') ?>">
+                    <svg class="icon"><use href="#i-key" /></svg>ZyGames
+                </a>
             </div>
-        </div>
-        <div class="hidden md:hidden flex-col border-b border-base-300 bg-base-200 px-4 pb-3" id="navbarSupportedContent">
-            <?php if (session()->has('userid') && isset($user)) : ?>
-                <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('dashboard') ?>">Dashboard</a>
-            <?php else : ?>
-                <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('keys/free') ?>">Key Free</a>
-                <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('login') ?>">Login</a>
-            <?php endif; ?>
+            <div class="navbar-center hidden lg:flex">
+                <ul class="menu menu-horizontal px-1">
+                    <li><a href="<?= site_url('') ?>">Home</a></li>
+                    <li><a href="<?= site_url('games') ?>">Supported games</a></li>
+                </ul>
+            </div>
+            <div class="navbar-end gap-1">
+                <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm" aria-label="Toggle theme">
+                    <input type="checkbox" id="themeToggle" <?= ($currentTheme === 'zygame-light') ? 'checked' : '' ?> />
+                    <svg class="icon swap-on"><use href="#i-sun" /></svg>
+                    <svg class="icon swap-off"><use href="#i-moon" /></svg>
+                </label>
+                <?php if (session()->has('userid') && isset($user)) : ?>
+                    <a class="btn btn-primary btn-sm hidden sm:inline-flex" href="<?= site_url('dashboard') ?>">Dashboard</a>
+                <?php else : ?>
+                    <a class="btn btn-ghost btn-sm hidden sm:inline-flex" href="<?= site_url('keys/free') ?>">Key Free</a>
+                    <a class="btn btn-primary btn-sm" href="<?= site_url('login') ?>">Login</a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 
     <main class="content">
         <div class="max-w-5xl mx-auto w-full p-4"><?= $this->renderSection('content') ?></div>
     </main>
+
 
     <?= $this->renderSection('footer') ?>
 
@@ -87,14 +96,6 @@
 <?= $this->renderSection('js') ?>
 
 <script>
-    document.getElementById('navToggle').addEventListener('click', function() {
-        const menu = document.getElementById('navbarSupportedContent');
-        const expanded = menu.classList.contains('flex');
-        menu.classList.toggle('flex');
-        menu.classList.toggle('hidden');
-        this.setAttribute('aria-expanded', String(!expanded));
-    });
-
     // Theme toggle: plain JS, sets data-theme directly on <html> and
     // persists the choice in a cookie. Deliberately not relying on
     // daisyUI's CSS-only theme-controller mechanism, so the switch always
