@@ -1,61 +1,68 @@
-<?php
-
-
-
-?>
-<?= $this->extend('Layout/Starter') ?>
-
+<?= $this->extend('Layout/AppShell') ?>
 <?= $this->section('content') ?>
-<div class="flex flex-wrap justify-center gap-4">
-    <div class="w-full">
-        <?= $this->include('Layout/msgStatus') ?>
-    </div>
-    <div class="w-full">
-        <div class="card card-border bg-base-200 border-base-300 mb-3">
-            <div class="flex items-center justify-between px-4 py-3 border-b border-base-300">
-                <h1 class="card-title text-base">Keys registered</h1>
-                <div class="text-right flex items-center gap-1">
-                    <a class="btn btn-sm" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
-                    <a class="btn btn-sm" href="<?= site_url('keys/download/all') ?>"><i class="bi bi-download"></i></a>
-                    <div class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="btn btn-sm"><i class="bi bi-trash"></i></div>
-                        <ul tabindex="0" class="dropdown-content menu bg-base-200 rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300/20">
-                            <li><a href="<?= site_url('keys/start')  ?>">Keys Not Use</a></li>
-                            <li><a href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <?php if ($keylist) : ?>
-                    <div class="overflow-x-auto">
-                        <table id="datatable" class="table table-sm table-zebra w-full">
-                            <thead>
-                                <tr class="border-0">
-                                    <th>ID</th>
-                                    <th>Game</th>
-                                    <th>User Keys</th>
-                                    <th>Devices</th>
-                                    <th>Duration</th>
-                                    <th>Expired</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                <?php else : ?>
-                    <p class="text-center">Nothing keys to show</p>
-                <?php endif; ?>
-            </div>
+
+<?= $this->include('Layout/msgStatus') ?>
+
+<div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+    <p class="text-sm opacity-60"><?= $keylist ? 'Your registered license keys' : 'Nothing keys to show' ?></p>
+    <div class="flex gap-1">
+        <a class="btn btn-sm" href="<?= site_url('keys/download/all') ?>" aria-label="Download all"><svg class="icon"><use href="#i-download" /></svg></a>
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-sm" aria-label="Bulk delete"><svg class="icon"><use href="#i-trash" /></svg></div>
+            <ul tabindex="0" class="dropdown-content menu bg-base-200 border border-base-300 rounded-box z-10 w-48 p-2 shadow-lg mt-2">
+                <li><a href="<?= site_url('keys/start') ?>">Keys not used</a></li>
+                <li><a href="<?= site_url('keys/delExp') ?>">Expired keys</a></li>
+            </ul>
         </div>
+        <a class="btn btn-primary btn-sm" href="<?= site_url('keys/generate') ?>"><svg class="icon"><use href="#i-plus" /></svg> Generate license</a>
     </div>
 </div>
+
+<?php if ($keylist) : ?>
+    <form class="filter mb-3" id="key-filter">
+        <input class="btn btn-sm filter-reset" type="radio" name="key_tier" aria-label="All" checked onclick="filterKeyTier('')" />
+        <input class="btn btn-sm" type="radio" name="key_tier" aria-label="Free" onclick="filterKeyTier('Free')" />
+        <input class="btn btn-sm" type="radio" name="key_tier" aria-label="Vip" onclick="filterKeyTier('Vip')" />
+        <input class="btn btn-sm" type="radio" name="key_tier" aria-label="Test" onclick="filterKeyTier('Test')" />
+    </form>
+    <div class="overflow-x-auto border border-base-300 rounded-box">
+        <table id="datatable" class="table table-sm w-full">
+            <thead>
+                <tr class="text-xs uppercase opacity-60">
+                    <th>ID</th>
+                    <th>Game</th>
+                    <th>License key</th>
+                    <th>Devices</th>
+                    <th>Duration</th>
+                    <th>Expired</th>
+                    <th class="text-right">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+<?php else : ?>
+    <div class="border border-dashed border-base-300 rounded-box">
+        <div class="flex flex-col items-center text-center py-12">
+            <svg class="icon opacity-40 mb-2" style="width:2.5rem;height:2.5rem"><use href="#i-inbox" /></svg>
+            <p class="font-medium">No keys yet</p>
+            <p class="text-sm opacity-60 mb-3">Generate your first license to see it listed here.</p>
+            <a href="<?= site_url('keys/generate') ?>" class="btn btn-primary btn-sm"><svg class="icon"><use href="#i-plus" /></svg> Generate license</a>
+        </div>
+    </div>
+<?php endif; ?>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
 <script type="text/javascript">
+    let keysTable;
+
+    function filterKeyTier(tier) {
+        keysTable.column(3).search(tier, true, false).draw();
+    }
+
     $(document).ready(function() {
-        const table = $('#datatable').DataTable({
+        keysTable = $('#datatable').DataTable({
             processing: true,
             serverSide: true,
             order: [
@@ -117,11 +124,10 @@
                 {
                     data: null,
                     render: function(data, type, row, meta) {
-                        console.log(row);
-                        const btnReset = `<button class="btn btn-ghost btn-sm text-warning" onclick="resetUserKey('${row.user_key}')"><i class="bi bi-bootstrap-reboot"></i></button>`;
-                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-ghost btn-sm"><i class="bi bi-gear"></i></a>`;
-                        const btnDelete = `<button class="btn btn-ghost btn-sm text-error" onclick="deleteKeys('${row.user_key}')"><i class="bi bi-trash"></i></button>`;
-                        return `<div class="join">${btnReset} ${btnEdits} ${btnDelete}</div>`;
+                        const btnReset = `<button class="btn btn-ghost btn-xs join-item text-warning" onclick="resetUserKey('${row.user_key}')" aria-label="Reset"><svg class="icon"><use href="#i-refresh" /></svg></button>`;
+                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-ghost btn-xs join-item" aria-label="Edit"><svg class="icon"><use href="#i-gear" /></svg></a>`;
+                        const btnDelete = `<button class="btn btn-ghost btn-xs join-item text-error" onclick="deleteKeys('${row.user_key}')" aria-label="Delete"><svg class="icon"><use href="#i-trash" /></svg></button>`;
+                        return `<div class="join justify-end w-full">${btnReset} ${btnEdits} ${btnDelete}</div>`;
                     }
                 }
             ]
@@ -163,8 +169,7 @@
                                     Swal.fire(
                                         'Failed!',
                                         data.devices_total ? "You don't have any access to this user." : "Only Admin can delete the user.",
-                                        data.devices_total ? 'error' : 'error'
-
+                                        'error'
                                     )
                                 }
                             } else {
@@ -217,7 +222,6 @@
                                         'Failed!',
                                         data.devices_total ? "You don't have any access to this user." : "User key devices already reset.",
                                         data.devices_total ? 'error' : 'warning'
-
                                     )
                                 }
                             } else {
@@ -234,5 +238,4 @@
         });
     }
 </script>
-
 <?= $this->endSection() ?>

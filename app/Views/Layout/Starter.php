@@ -24,33 +24,60 @@
     <?= script_tag("https://cdn.datatables.net/2.0.0/js/dataTables.js") ?>
 </head>
 
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-base-100 text-base-content">
+    <?= $this->include('Layout/icons') ?>
     <?= $this->include('Layout/preloader') ?>
-    <div class="flex min-h-screen flex-col">
-        <?= $this->include('Layout/Header') ?>
-        <main class="content">
-            <div class="max-w-5xl mx-auto w-full p-3 sm:px-0"><?= $this->renderSection('content') ?></div>
-        </main>
-        <footer class="border-t border-base-300 py-3 pt-3">
-            <div class="max-w-5xl mx-auto w-full pt-2 px-3 sm:px-0">
-                <div class="flex items-center mb-3 gap-4">
-                    <span class="border-t border-base-300 block grow"></span>
-                    <div class="flex items-center gap-2">
-                        <a href="#" target="_blank" class="btn btn-circle btn-ghost btn-sm" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="#" target="_blank" class="btn btn-circle btn-ghost btn-sm" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
-                        <a href="https://t.me/zygames" target="_blank" class="btn btn-circle btn-ghost btn-sm" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
-                    </div>
-                    <span class="border-t border-base-300 block grow"></span>
-                </div>
-                <div class="text-sm text-center flex pt-2 opacity-60">
-                    <div class="w-full">
-                        <p>
-                            &copy; <?= date('Y') ?> ZyGames
-                        </p>
-                    </div>
-                </div>
+
+    <!-- Guest / marketing top navbar -->
+    <div class="navbar bg-base-200/80 backdrop-blur border-b border-base-300 px-4 sticky top-0 z-30">
+        <div class="max-w-5xl mx-auto w-full flex items-center">
+            <div class="flex-1 flex items-center gap-1">
+                <a class="btn btn-ghost text-lg px-2 gap-2" href="<?= site_url(!session()->has('userid') ? '' : 'dashboard') ?>">
+                    <svg class="icon"><use href="#i-key" /></svg>ZyGames
+                </a>
             </div>
-        </footer>
+            <div class="flex-none flex items-center gap-1">
+                <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm" aria-label="Toggle theme">
+                    <input type="checkbox" class="theme-controller" value="zygame-light" <?= ($currentTheme === 'zygame-light') ? 'checked' : '' ?> onchange="document.cookie='theme='+(this.checked?'zygame-light':'zygame')+';path=/;max-age=31536000'" />
+                    <svg class="icon swap-on"><use href="#i-sun" /></svg>
+                    <svg class="icon swap-off"><use href="#i-moon" /></svg>
+                </label>
+                <div class="hidden md:flex items-center gap-1">
+                    <?php if (session()->has('userid') && isset($user)) : ?>
+                        <a class="btn btn-ghost btn-sm" href="<?= site_url('dashboard') ?>">Dashboard</a>
+                    <?php else : ?>
+                        <a class="btn btn-ghost btn-sm" href="<?= site_url('keys/free') ?>">Key Free</a>
+                        <a class="btn btn-ghost btn-sm" href="<?= site_url('login') ?>">Login</a>
+                    <?php endif; ?>
+                </div>
+                <button class="btn btn-ghost btn-square md:hidden" id="navToggle" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="hidden md:hidden flex-col border-b border-base-300 bg-base-200 px-4 pb-3" id="navbarSupportedContent">
+        <?php if (session()->has('userid') && isset($user)) : ?>
+            <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('dashboard') ?>">Dashboard</a>
+        <?php else : ?>
+            <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('keys/free') ?>">Key Free</a>
+            <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('login') ?>">Login</a>
+        <?php endif; ?>
+    </div>
+
+    <main class="content">
+        <div class="max-w-5xl mx-auto w-full p-4"><?= $this->renderSection('content') ?></div>
+    </main>
+
+    <?= $this->renderSection('footer') ?>
+
+    <!-- Cookie consent notice -->
+    <div id="cookieNotice" class="card card-border bg-base-200 border-base-300 shadow-lg fixed z-50" style="right: 10px; bottom: 10px; max-width: 380px; display: none;">
+        <div class="card-body">
+            <h2 class="card-title text-base">Cookie notice</h2>
+            <p class="text-sm opacity-70">This website uses cookies, or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to the <a href="#" class="link text-primary">Privacy Policy</a></p>
+            <button class="btn btn-primary btn-sm w-full mt-2" onclick="acceptCookieConsent();">Accept</button>
+        </div>
     </div>
 </body>
 
@@ -60,101 +87,46 @@
 <?= $this->renderSection('js') ?>
 
 <script>
-    function adjustBottomPadding() {
-        const fixedTop = document.querySelector('.fixed-top');
-        const fixedBottom = document.querySelector('.fixed-bottom');
-        const content = document.querySelector('.content');
-
-        if (fixedBottom && content) {
-            const fixedBottomHeight = fixedBottom.clientHeight;
-            content.style.paddingBottom = fixedBottomHeight + 'px';
-        }
-
-        if (fixedTop && content) {
-            const fixedTopHeight = fixedTop.clientHeight;
-            content.style.paddingTop = fixedTopHeight + 'px';
-        }
-    }
-
-    window.addEventListener('load', adjustBottomPadding);
-    window.addEventListener('resize', adjustBottomPadding);
-
-    $(document).ready(function() {
-        $('.dataTables_paginate ul.pagination').addClass('pagination-sm pt-2');
+    document.getElementById('navToggle').addEventListener('click', function() {
+        const menu = document.getElementById('navbarSupportedContent');
+        const expanded = menu.classList.contains('flex');
+        menu.classList.toggle('flex');
+        menu.classList.toggle('hidden');
+        this.setAttribute('aria-expanded', String(!expanded));
     });
-</script>
 
-
-
-
-<!-- Thong bao luu cookie tren trinh duyet -->
-<div id="cookieNotice" class="display-right card card-border bg-base-200 border-base-300 shadow-lg" style="display: none;">
-    <div class="card-body">
-        <h2 class="card-title text-base">Cookie notice</h2>
-        <p class="text-sm opacity-70">This website uses cookies, or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to the <a href="#" class="link text-primary">Privacy Policy</a></p>
-        <button class="btn btn-primary btn-sm w-full mt-2" onclick="acceptCookieConsent();">Accept</button>
-    </div>
-</div>
-
-
-<script>
-    // Create cookie
+    // Cookie consent
     function setCookie(cname, cvalue, exdays) {
         const d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-        let expires = "expires=" + d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        document.cookie = cname + "=" + cvalue + ";expires=" + d.toUTCString() + ";path=/";
     }
 
-    // Delete cookie
     function deleteCookie(cname) {
         const d = new Date();
         d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
-        let expires = "expires=" + d.toUTCString();
-        document.cookie = cname + "=;" + expires + ";path=/";
+        document.cookie = cname + "=;expires=" + d.toUTCString() + ";path=/";
     }
 
-    // Read cookie
     function getCookie(cname) {
         let name = cname + "=";
         let decodedCookie = decodeURIComponent(document.cookie);
         let ca = decodedCookie.split(';');
         for (let i = 0; i < ca.length; i++) {
             let c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
+            while (c.charAt(0) == ' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
         }
         return "";
     }
 
-    // Set cookie consent
     function acceptCookieConsent() {
         deleteCookie('user_cookie_consent');
         setCookie('user_cookie_consent', 1, 30);
         document.getElementById("cookieNotice").style.display = "none";
     }
-    let cookie_consent = getCookie("user_cookie_consent");
-    if (cookie_consent != "") {
-        document.getElementById("cookieNotice").style.display = "none";
-    } else {
+
+    if (getCookie("user_cookie_consent") == "") {
         document.getElementById("cookieNotice").style.display = "block";
     }
 </script>
-<style>
-    #cookieNotice.display-right {
-        right: 10px;
-        bottom: 10px;
-        max-width: 395px;
-    }
-
-    #cookieNotice {
-        position: fixed;
-        padding: 20px;
-        border-radius: 10px;
-        z-index: 999997;
-    }
-</style>

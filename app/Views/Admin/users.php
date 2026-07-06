@@ -1,72 +1,63 @@
-<!-- app/Views/user.php -->
-
-<?= $this->extend('Layout/Starter') ?>
+<?= $this->extend('Layout/AppShell') ?>
 <?= $this->section('content') ?>
-<div class="flex flex-col gap-3">
-    <div class="w-full">
-        <div class="alert alert-info" role="alert">
-            INFO&middot; <small>Search specify user by their (username, fullname, saldo or uplink).</small>
-        </div>
-        <div class="card card-border bg-base-200 border-base-300 mb-3">
-            <div class="px-4 py-3 border-b border-base-300"><h1 class="card-title text-base">Manage <?= $title ?></h1></div>
-            <div class="card-body">
-                <div class="overflow-x-auto">
-                    <table id="datatable" class="table table-sm table-zebra" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th scope="row">#</th>
-                                <th>Username</th>
-                                <th>Fullname</th>
-                                <th>Level</th>
-                                <th>Asset</th>
-                                <th>Status</th>
-                                <th>Uplink</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($user_list as $user) : ?>
-                                <tr>
-                                    <td><?= $user['id_users']; ?></td>
-                                    <td><?= $user['username']; ?></td>
-                                    <td><?= $user['fullname'] ? $user['fullname'] : '~'; ?></td>
-                                    <td><?= $user['level']; ?></td>
-                                    <td>
-                                        <?php
-                                            $textc = (getLevel($user['level']) === 'Admin') ? 'badge-primary badge-outline' : 'badge-neutral badge-outline';
-                                            $saldo = (getLevel($user['level']) === 'Admin') ? '&mstpos;' : $user['saldo'];
-                                            echo "<span class='badge $textc'>$saldo</span>";
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                            $status = ($user['status'] == 1) ? 'Active' : 'Banned';
-                                            $text_color = ($user['status'] == 1) ? 'text-success' : 'text-error';
-                                            echo "<span class='$text_color'>$status</span>";
-                                        ?>
-                                    </td>
-                                    <td><?= $user['uplink']; ?></td>
-                                    <td>
-                                        <div class="join">
-                                            <a href="<?= base_url('admin/user') . '/' . $user['id_users']; ?>" class="btn btn-warning btn-sm join-item tooltip tooltip-left" data-tip="Edit key information?">
-                                                <i class="bi bi-gear"></i>
-                                            </a>
-                                            <?php if (getLevel($user['level']) !== 'Admin') : ?>
-                                            <a href="<?= base_url('admin/user/singledelete') . '/' . $user['id_users']; ?>" class="btn btn-error btn-sm join-item tooltip tooltip-left" data-tip="Delete User?">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
-                                            <?php endif; ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
 
-            </div>
-        </div>
-    </div>
+<div class="alert alert-info mb-4" role="alert">
+    <svg class="icon"><use href="#i-shield" /></svg>
+    <span>Search specify user by their (username, fullname, saldo or uplink).</span>
+</div>
+
+<div class="overflow-x-auto border border-base-300 rounded-box">
+    <table id="datatable" class="table table-sm" style="width:100%">
+        <thead>
+            <tr class="text-xs uppercase opacity-60">
+                <th scope="row">#</th>
+                <th>Username</th>
+                <th>Fullname</th>
+                <th>Level</th>
+                <th>Asset</th>
+                <th>Status</th>
+                <th>Uplink</th>
+                <th class="text-right">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($user_list as $user) : ?>
+                <tr>
+                    <td><?= $user['id_users']; ?></td>
+                    <td><?= $user['username']; ?></td>
+                    <td><?= $user['fullname'] ? $user['fullname'] : '~'; ?></td>
+                    <td><?= $user['level']; ?></td>
+                    <td>
+                        <?php
+                            $textc = (getLevel($user['level']) === 'Admin') ? 'badge-primary badge-outline' : 'badge-neutral badge-outline';
+                            $saldo = (getLevel($user['level']) === 'Admin') ? '&mstpos;' : $user['saldo'];
+                            echo "<span class='badge $textc'>$saldo</span>";
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            $status = ($user['status'] == 1) ? 'Active' : 'Banned';
+                            $text_color = ($user['status'] == 1) ? 'text-success' : 'text-error';
+                            echo "<span class='$text_color text-sm'>$status</span>";
+                        ?>
+                    </td>
+                    <td><?= $user['uplink']; ?></td>
+                    <td class="text-right">
+                        <div class="join">
+                            <a href="<?= base_url('admin/user') . '/' . $user['id_users']; ?>" class="btn btn-warning btn-xs join-item tooltip tooltip-left" data-tip="Edit key information?" aria-label="Edit">
+                                <svg class="icon"><use href="#i-gear" /></svg>
+                            </a>
+                            <?php if (getLevel($user['level']) !== 'Admin') : ?>
+                                <a href="<?= base_url('admin/user/singledelete') . '/' . $user['id_users']; ?>" class="btn btn-error btn-xs join-item tooltip tooltip-left" data-tip="Delete User?" aria-label="Delete">
+                                    <svg class="icon"><use href="#i-trash" /></svg>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
 <?= $this->endSection() ?>
 

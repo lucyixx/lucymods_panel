@@ -2,11 +2,6 @@
 <?= $this->section('content') ?>
 
 <style>
-    table.table>tbody>tr>th>i.bi::before {
-        margin-right: 0.5rem !important;
-        font-weight: bolder !important;
-    }
-
     .carousel-inner {
         display: flex;
         transition: transform 0.35s ease;
@@ -20,149 +15,101 @@
 
 <?= $this->include('Layout/preloader') ?>
 <div class="flex justify-center">
-    <div style="max-width: 880px; width: 100%;">
+    <div style="max-width: 720px; width: 100%;">
         <div class="card card-border bg-base-200 border-base-300 my-3">
             <div class="card-body">
-                <div class="relative rounded overflow-hidden mb-3">
-                    <img class="w-full" id="app_featureGraphic"></img>
+                <div class="relative rounded-box overflow-hidden mb-4">
+                    <img class="w-full" id="app_featureGraphic">
                     <div class="absolute w-full h-3/4" style="left: 0; bottom: 0; background-image: linear-gradient(to top, #000d, #0000)"></div>
-                    <div class="flex m-3 absolute" style="left: 0; bottom: 0;">
-                        <div class="shrink-0 me-3">
-                            <img loading="lazy" class="rounded" width="68" id="app_icon" itemprop="image">
-                        </div>
-                        <div class="grid content-center">
-                            <h2 class="text-lg app_name text-white m-0"></h2>
-                            <span class="text-success app_developer text-sm"></span>
-                            <span class="app_age" style="font-size: 0.64rem; color: #ffffff88"></span>
+                    <div class="flex m-3 absolute items-center gap-3" style="left: 0; bottom: 0;">
+                        <img loading="lazy" class="rounded-lg w-14 h-14 object-cover shrink-0" id="app_icon" itemprop="image">
+                        <div>
+                            <h1 class="text-lg app_name text-white m-0"></h1>
+                            <p class="text-success app_developer text-sm m-0"></p>
                         </div>
                     </div>
                 </div>
-                <div class="px-0 md:px-3">
-                    <div class="mb-3">
-                        <table class="table table-zebra">
-                            <tbody style="font-size: 0.9rem;">
-                                <tr>
-                                    <th class="font-normal"><i class="bi bi-android text-error"></i>Name</th>
-                                    <td class="opacity-70 app_name"></td>
-                                </tr>
-                                <tr>
-                                    <th class="font-normal"><i class="bi bi-tools text-error"></i>Developer</th>
-                                    <td class="app_developer text-success"></td>
-                                </tr>
-                                <tr>
-                                    <th class="font-normal"><i class="bi bi-list-task text-error"></i>Type</th>
-                                    <td class="opacity-70 app_type"></td>
-                                </tr>
-                                <tr>
-                                    <th class="font-normal"><i class="bi bi-screwdriver text-error"></i>Version</th>
-                                    <td class="opacity-70 app_version"></td>
-                                </tr>
-                                <tr>
-                                    <th class="font-normal"><i class="bi bi-boxes text-error"></i>Package</th>
-                                    <td><a class="app_packageName" target="_blank" href="https://play.google.com/store/apps/details?id=<?= $_GET['id'] ?>"></a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
 
-                    <div class="mb-3">
-                        <!-- Native <details>/<summary> accordion, replaces Bootstrap's collapse -->
-                        <details class="collapse collapse-arrow border rounded">
-                            <summary class="collapse-title">
-                                MOD Info
-                            </summary>
-                            <div class="collapse-content">
-                                <ul class="text-sm">
-                                    <li><em>Draw Esp</em></li>
-                                    <li><em>Chams hack</em></li>
-                                    <li><em>[more..]</em></li>
-                                </ul>
-                            </div>
-                        </details>
-                    </div>
+                <table class="table table-zebra mb-4">
+                    <tbody class="text-sm">
+                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-gamepad" /></svg> Name</th><td class="opacity-70 app_name"></td></tr>
+                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-gear" /></svg> Developer</th><td class="text-success app_developer"></td></tr>
+                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-diagram" /></svg> Type</th><td class="opacity-70 app_type"></td></tr>
+                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-shield" /></svg> Version</th><td class="opacity-70 app_version"></td></tr>
+                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-key" /></svg> Package</th><td><a class="app_packageName link" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '') ?>"></a></td></tr>
+                    </tbody>
+                </table>
 
-                    <div class="mb-3">
-                        <!-- Minimal vanilla-JS carousel, replaces Bootstrap's carousel -->
-                        <div id="carouselExample" class="relative rounded overflow-hidden" data-idx="0">
-                            <div class="carousel-inner w-full"></div>
-                            <button class="btn btn-circle btn-sm absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', -1)">
-                                <i class="bi bi-chevron-left"></i>
-                                <span class="sr-only">Previous</span>
-                            </button>
-                            <button class="btn btn-circle btn-sm absolute right-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', 1)">
-                                <i class="bi bi-chevron-right"></i>
-                                <span class="sr-only">Next</span>
-                            </button>
-                        </div>
-                    </div>
+                <details class="collapse collapse-arrow border border-base-300 rounded-box mb-4">
+                    <summary class="collapse-title">MOD Info</summary>
+                    <div class="collapse-content"><ul class="text-sm"><li>Draw Esp</li><li>Chams hack</li><li>[more..]</li></ul></div>
+                </details>
 
-                    <div class="mb-3 text-center">
-                        <small class="opacity-70"><em class="app_summary"></em></small>
+                <div class="mb-4">
+                    <div id="carouselExample" class="relative rounded-box overflow-hidden" data-idx="0">
+                        <div class="carousel-inner w-full"></div>
+                        <button class="btn btn-circle btn-sm absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', -1)" aria-label="Previous">
+                            <svg class="icon"><use href="#i-chev-l" /></svg>
+                        </button>
+                        <button class="btn btn-circle btn-sm absolute right-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', 1)" aria-label="Next">
+                            <svg class="icon"><use href="#i-chev-r" /></svg>
+                        </button>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <h4>About this <span class="app_type"></span></h4>
-                        <span class="opacity-70 text-sm app_description"></span>
-                    </div>
+                <p class="text-center text-sm opacity-70 mb-4"><em class="app_summary"></em></p>
 
-                    <div class="mb-3">
-                        <div>Last updated</div>
-                        <div class="opacity-70 text-sm app_lastUpdated"></div>
-                    </div>
+                <div class="mb-4">
+                    <h2 class="text-base font-medium mb-1">About this <span class="app_type"></span></h2>
+                    <p class="opacity-70 text-sm app_description"></p>
+                </div>
 
-                    <div class="mb-3">
-                        <button class="btn btn-error w-full">Download Now</button>
-                    </div>
+                <div class="mb-4">
+                    <p class="text-sm">Last updated</p>
+                    <p class="opacity-70 text-sm app_lastUpdated"></p>
+                </div>
 
-                    <div class="mb-3">
-                        <div class="border-t w-full"></div>
-                        <div class="my-3">
-                            <div class="flex justify-center opacity-70 text-sm">
-                                <span class="app_installs"></span>
-                                <span class="mx-2 border-r"></span>
-                                <span class="app_rating"></span>
-                            </div>
-                        </div>
-                        <div class="border-b w-full"></div>
-                    </div>
+                <button class="btn btn-error w-full mb-4">Download Now</button>
+
+                <div class="flex items-center justify-center gap-3 border-t border-base-300 pt-4 text-sm opacity-70">
+                    <span class="app_installs"></span>
+                    <span class="border-r border-base-300 h-4"></span>
+                    <span class="app_rating"></span>
                 </div>
             </div>
         </div>
+
         <div class="card card-border bg-base-200 border-base-300 my-3">
             <div class="card-body">
-                <div class="mb-4"><span class="text-base">Reviews</span></div>
-                <div class="mb-3" id="reviewer-list"></div>
+                <h2 class="text-base font-medium mb-3">Reviews</h2>
+                <div id="reviewer-list"></div>
             </div>
         </div>
     </div>
-
 </div>
-
 
 <script>
     $(document).ready(function() {
         $.ajax({
-            url: "<?= site_url('proxy.php?id=') . $_GET['id'] ?>",
+            url: "<?= site_url('proxy.php?id=') . esc($_GET['id'] ?? '') ?>",
             type: "GET",
             dataType: "json",
             success: function(response) {
                 if (response.success) {
-                    console.log(response);
                     $('.body__preloader').addClass("loaded");
 
                     $('#app_featureGraphic').attr('src', response.featureGraphic);
                     $('#app_icon').attr('src', response.icon);
                     $('.app_name').text(response.name);
                     $('.app_developer').text(response.developer);
-                    $('.app_age').text(response.iap ? 'In-app purchases' : response.ads ? 'Contains advertising' : '');
                     $('.app_type').text(response.type);
                     $('.app_version').text(response.versionName);
                     $('.app_description').html(response.description);
                     $('.app_lastUpdated').text(response.lastUpdated);
                     $('.app_packageName').text(response.packageName);
                     $('.app_summary').html(response.summary);
-                    $('.app_installs').html('<i class="bi bi-download me-1"></i>' + response.installs);
-                    $('.app_rating').html('<i class="bi bi-star me-1"></i>' + parseFloat(response.rating).toFixed(1));
+                    $('.app_installs').html('<svg class="icon"><use href="#i-download" /></svg> ' + response.installs);
+                    $('.app_rating').html('<svg class="icon text-warning"><use href="#i-check" /></svg> ' + parseFloat(response.rating).toFixed(1));
 
                     var images = null;
                     response.images.forEach(function(element) {
@@ -174,22 +121,19 @@
 
                     var reviews = ``;
                     response.reviews.forEach(function(element) {
-                        const formattedDate = getReviewerDate(element.review_date);
                         var stars = ``;
-                        for (let i = 0; i < 5; i++) stars += `<i class="bi bi-star-fill text-${element.stars > i ? 'success' : 'base-content/30'}"></i>`;
+                        for (let i = 0; i < 5; i++) stars += `<svg class="icon ${element.stars > i ? 'text-warning' : 'opacity-20'}"><use href="#i-check-circle" /></svg>`;
                         reviews += `
                             <div class="mb-4">
-                                <div class="flex mb-2 justify-between">
-                                    <div>
-                                        <img class="rounded-full me-1" width="32" aria-hidden="true" loading="lazy" src="${element.reviewer.avatar}" alt="">
+                                <div class="flex mb-2 justify-between items-center">
+                                    <div class="flex items-center gap-2">
+                                        <img class="rounded-full w-8 h-8" aria-hidden="true" loading="lazy" src="${element.reviewer.avatar}" alt="">
                                         <span class="text-sm">${element.reviewer.name}</span>
                                     </div>
-                                    <div class="opacity-70 grid" style="font-size: 0.8rem;">
-                                        <small class="text-right">${stars}</small>
-                                    </div>
+                                    <div class="opacity-70 flex gap-0.5">${stars}</div>
                                 </div>
-                                <div class="mb-3 p-2 mt-1 rounded bg-base-300">
-                                    <small class="opacity-70" style="font-size: 0.8rem;">${element.review_text}</small>
+                                <div class="p-2 rounded bg-base-300">
+                                    <p class="text-sm opacity-70 m-0">${element.review_text}</p>
                                 </div>
                             </div>
                         `
@@ -203,26 +147,6 @@
                 console.error(`Error making request to the server`);
             }
         });
-
-        function getReviewerDate(d) {
-            // Unix timestamp: 1541407297
-            const timestamp = d * 1000; // Convert to milliseconds
-
-            // Create a new Date object using the timestamp
-            const date = new Date(timestamp);
-
-            // Define the options for formatting the date
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-
-            // Format the date
-            const formattedDate = date.toLocaleDateString('en-US', options);
-
-            return formattedDate;
-        }
     });
 </script>
 

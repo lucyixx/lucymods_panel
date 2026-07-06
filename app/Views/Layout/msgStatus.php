@@ -25,7 +25,7 @@
         <div class="alert alert-info mb-3" role="alert" id="welcomeAlert">
             <span>Welcome <?= !isset($user) ? "Friend" : getName($user) ?></span>
             <button type="button" class="btn btn-ghost btn-xs btn-circle ml-auto" aria-label="Close" onclick="this.closest('#welcomeAlert').remove();">
-                <i class="bi bi-x-lg"></i>
+                <svg class="icon"><use href="#i-x" /></svg>
             </button>
         </div>
     <?php endif; ?>

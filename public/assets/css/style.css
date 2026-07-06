@@ -1,25 +1,24 @@
-/* ZY Games — daisyUI custom themes + small, necessary overrides only.
-   Per daisyUI usage rules: prefer existing component/utility classes over
-   custom CSS; this file stays intentionally short. */
+/* ZyGames — daisyUI v5 custom themes ("zygame" dark / "zygame-light" light).
+   Icons are inline SVG (Layout/icons.php sprite) — no icon-font dependency,
+   so nothing here needs to load an external font. Kept intentionally short:
+   per daisyUI's own guidance, prefer real components/utilities over custom
+   CSS wherever possible. */
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.0/sweetalert2.min.css');
-@import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css");
-/* Bootstrap Icons is only an icon font, it has no dependency on the
-   Bootstrap 5 CSS/JS framework. */
 
 [data-theme="zygame"] {
     color-scheme: dark;
-    --color-base-100: oklch(21% 0.004 80);
-    --color-base-200: oklch(25% 0.005 80);
-    --color-base-300: oklch(31% 0.006 80);
-    --color-base-content: oklch(89% 0.004 80);
-    --color-primary: oklch(78% 0.13 85);
-    --color-primary-content: oklch(20% 0.03 85);
-    --color-secondary: oklch(55% 0.01 80);
+    --color-base-100: oklch(20% 0.004 80);
+    --color-base-200: oklch(24% 0.005 80);
+    --color-base-300: oklch(30% 0.007 80);
+    --color-base-content: oklch(90% 0.004 80);
+    --color-primary: oklch(80% 0.14 88);
+    --color-primary-content: oklch(20% 0.03 88);
+    --color-secondary: oklch(56% 0.01 80);
     --color-secondary-content: oklch(97% 0.004 80);
-    --color-accent: oklch(70% 0.14 25);
+    --color-accent: oklch(70% 0.15 25);
     --color-accent-content: oklch(97% 0.01 25);
-    --color-neutral: oklch(28% 0.005 80);
+    --color-neutral: oklch(27% 0.005 80);
     --color-neutral-content: oklch(92% 0.004 80);
     --color-info: oklch(68% 0.11 230);
     --color-info-content: oklch(15% 0.02 230);
@@ -29,23 +28,23 @@
     --color-warning-content: oklch(18% 0.03 55);
     --color-error: oklch(64% 0.2 25);
     --color-error-content: oklch(97% 0.01 25);
-    --radius-selector: 0.375rem;
-    --radius-field: 0.375rem;
-    --radius-box: 0.5rem;
+    --radius-selector: 0.5rem;
+    --radius-field: 0.5rem;
+    --radius-box: 0.75rem;
     --border: 1px;
 }
 
 [data-theme="zygame-light"] {
     color-scheme: light;
-    --color-base-100: oklch(97% 0.003 80);
-    --color-base-200: oklch(94% 0.004 80);
-    --color-base-300: oklch(88% 0.005 80);
-    --color-base-content: oklch(27% 0.008 80);
-    --color-primary: oklch(52% 0.13 85);
-    --color-primary-content: oklch(98% 0.004 85);
+    --color-base-100: oklch(98% 0.003 80);
+    --color-base-200: oklch(95% 0.004 80);
+    --color-base-300: oklch(89% 0.006 80);
+    --color-base-content: oklch(26% 0.008 80);
+    --color-primary: oklch(53% 0.13 88);
+    --color-primary-content: oklch(98% 0.004 88);
     --color-secondary: oklch(45% 0.01 80);
     --color-secondary-content: oklch(98% 0.004 80);
-    --color-accent: oklch(52% 0.15 25);
+    --color-accent: oklch(52% 0.16 25);
     --color-accent-content: oklch(98% 0.01 25);
     --color-neutral: oklch(30% 0.006 80);
     --color-neutral-content: oklch(96% 0.004 80);
@@ -57,9 +56,9 @@
     --color-warning-content: oklch(18% 0.03 55);
     --color-error: oklch(52% 0.19 25);
     --color-error-content: oklch(98% 0.004 25);
-    --radius-selector: 0.375rem;
-    --radius-field: 0.375rem;
-    --radius-box: 0.5rem;
+    --radius-selector: 0.5rem;
+    --radius-field: 0.5rem;
+    --radius-box: 0.75rem;
     --border: 1px;
 }
 
@@ -90,6 +89,19 @@ a {
 
 .content {
     flex: 1;
+}
+
+/* Inline SVG icon sizing (Layout/icons.php sprite via <svg class="icon"><use .../></svg>) */
+svg.icon {
+    width: 1em;
+    height: 1em;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    display: inline-block;
+    vertical-align: -0.15em;
 }
 
 /* ---- DataTables: base (non-Bootstrap) skin re-themed to match daisyUI --- */
