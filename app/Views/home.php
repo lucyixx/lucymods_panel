@@ -1,59 +1,5 @@
 <?php
-
-class GameData
-{
-    public string $name;
-    public string $image_url;
-    public string $id;
-    public array $modes;
-    public array $features;
-    public function __construct(string $name, string $image_url, string $id, array $modes, array $features)
-    {
-        $this->name = $name;
-        $this->image_url = $image_url;
-        $this->id = $id;
-        $this->modes = $modes;
-        $this->features = $features;
-    }
-}
-
-$games = [
-    new GameData(
-        "Call of Duty: Mobile",
-        "https://play-lh.googleusercontent.com/zX7jmUbnCkH1LlhGFIffDv76OgJjIy3zZvzC6DPO-Cl-BPXfNVluTCDHTX6YSpvxKUrd=w240-h480-rw",
-        "com.activision.callofduty.shooter",
-        ["Zygisk Module", "Inject"],
-        ["Draw Esp (Line, Name, Box, Head...)", "AimBot", "Bullet Track"]
-    ),
-    new GameData(
-        "Free Fire Max",
-        "https://play-lh.googleusercontent.com/La2XvLnJqNI5JyshQ5RfxM18zHduji9KPgNge93Ibwpjc7znBZVYuuwJ4ycGk6T-DQ=w240-h480-rw",
-        "com.dts.freefiremax",
-        ["Zygisk Module", "Inject"],
-        ["Draw Esp", "Aimbot"]
-    ),
-    new GameData(
-        "Garena Liên Quân Mobile",
-        "https://play-lh.googleusercontent.com/S3GPwY1-mc5876ZnMk65-VrG3Xlh1R8zgK-Q_LlnbjZ7llyyv0ZGWIlNnBM7LckMMzYy=w240-h480-rw",
-        "com.garena.game.kgvn",
-        ["Zygisk Module", "Inject"],
-        ["Hack Map", "Show Icon Info"]
-    ),
-    new GameData(
-        "Arena of Valor",
-        "https://play-lh.googleusercontent.com/3Qs6i05oAAUtjzwZCi0AJ9FpxT85w5BWCedIXCrsVKLTGOCcnP2B5yOVoheGSBZpj8z9=w240-h480-rw",
-        "com.ngame.allstar.eu",
-        ["Zygisk Module", "Inject"],
-        ["Hack Map", "Show Icon Info"]
-    ),
-    new GameData(
-        "Free Fire",
-        "https://play-lh.googleusercontent.com/QjALB_Hon-W8P8OdoGrZ3DESdm7q4Lx8_pPyqckrIvHop3BKpD1bsc2wubwJ2yfCJyI=w240-h480-rw",
-        "com.dts.freefireth",
-        ["Zygisk Module", "Inject"],
-        ["Draw Esp", "Aimbot"]
-    ),
-];
+$games = array_slice(getSupportedGames(), 0, 5);
 
 // Gradient accents cycle per card so the rail doesn't look monotone (see style.css theme vars)
 $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
@@ -128,6 +74,7 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
 
 <div class="flex items-center justify-between mb-4" id="games">
     <h2 class="text-sm uppercase tracking-wide opacity-60">Supported games</h2>
+    <a href="<?= site_url('games') ?>" class="text-sm link opacity-70 flex items-center gap-1">View more <svg class="icon"><use href="#i-arrow-right" /></svg></a>
 </div>
 <div class="flex gap-4 overflow-x-auto pb-3 -mx-4 px-4 snap-x">
     <?php foreach ($games as $i => $game) : ?>
@@ -252,29 +199,6 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
 
 <?= $this->section('js') ?>
 <script>
-    window.onload = function() {
-        loadAudio();
-    };
-    const loadAudio = function() {
-        const audioCls = new Audio("<?= base_url('assets/audio/m.mp3') ?>");
-        audioCls.autoplay = true;
-        audioCls.loop = true;
-
-        document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
-                audioCls.pause();
-            } else {
-                audioCls.play();
-            }
-        });
-
-        setInterval(() => {
-            try {
-                if (!document.hidden) audioCls.play();
-            } catch (e) {}
-        }, 1000);
-    }
-
     // ---- License card stack: click to bring a card to front ----
     (function() {
         const gold = document.getElementById('card-gold');

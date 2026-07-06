@@ -1,68 +1,63 @@
-<?= $this->extend('Layout/AppShell') ?>
+<?php
+
+
+
+?>
+<?= $this->extend('Layout/BootstrapLayout') ?>
+
 <?= $this->section('content') ?>
-
-<?= $this->include('Layout/msgStatus') ?>
-
-<div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-    <p class="text-sm opacity-60"><?= $keylist ? 'Your registered license keys' : 'Nothing keys to show' ?></p>
-    <div class="flex gap-1">
-        <a class="btn btn-sm" href="<?= site_url('keys/download/all') ?>" aria-label="Download all"><svg class="icon"><use href="#i-download" /></svg></a>
-        <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-sm" aria-label="Bulk delete"><svg class="icon"><use href="#i-trash" /></svg></div>
-            <ul tabindex="0" class="dropdown-content menu bg-base-200 border border-base-300 rounded-box z-10 w-48 p-2 shadow-lg mt-2">
-                <li><a href="<?= site_url('keys/start') ?>">Keys not used</a></li>
-                <li><a href="<?= site_url('keys/delExp') ?>">Expired keys</a></li>
-            </ul>
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <?= $this->include('Layout/BootstrapMsgStatus') ?>
+    </div>
+    <div class="col-lg-12">
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="">
+                        <div class="card-title m-0"><span>Keys Registered</span></div>
+                    </div>
+                    <div class="text-end">
+                        <a class="btn btn-default btn-sm" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
+                        <a class="btn btn-default btn-sm" href="<?= site_url('keys/download/all') ?>"><i class="bi bi-download"></i></a>
+                        <a class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><span class="me-1"><i class=" bi bi-trash"></i></span></a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="<?= site_url('keys/start')  ?>">Keys Not Use</a></li>
+                            <li><a class="dropdown-item" href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <?php if ($keylist) : ?>
+                    <div class="table-responsive">
+                        <table id="datatable" class="table table-borderless table-sm table-hover table-striped w-100">
+                            <thead>
+                                <tr class="border-0">
+                                    <th>ID</th>
+                                    <th>Game</th>
+                                    <th>User Keys</th>
+                                    <th>Devices</th>
+                                    <th>Duration</th>
+                                    <th>Expired</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                <?php else : ?>
+                    <p class="text-center">Nothing keys to show</p>
+                <?php endif; ?>
+            </div>
         </div>
-        <a class="btn btn-primary btn-sm" href="<?= site_url('keys/generate') ?>"><svg class="icon"><use href="#i-plus" /></svg> Generate license</a>
     </div>
 </div>
-
-<?php if ($keylist) : ?>
-    <form class="filter mb-3" id="key-filter">
-        <input class="btn btn-sm filter-reset" type="radio" name="key_tier" aria-label="All" checked onclick="filterKeyTier('')" />
-        <input class="btn btn-sm" type="radio" name="key_tier" aria-label="Free" onclick="filterKeyTier('Free')" />
-        <input class="btn btn-sm" type="radio" name="key_tier" aria-label="Vip" onclick="filterKeyTier('Vip')" />
-        <input class="btn btn-sm" type="radio" name="key_tier" aria-label="Test" onclick="filterKeyTier('Test')" />
-    </form>
-    <div class="overflow-x-auto border border-base-300 rounded-box">
-        <table id="datatable" class="table table-sm w-full">
-            <thead>
-                <tr class="text-xs uppercase opacity-60">
-                    <th>ID</th>
-                    <th>Game</th>
-                    <th>License key</th>
-                    <th>Devices</th>
-                    <th>Duration</th>
-                    <th>Expired</th>
-                    <th class="text-right">Action</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-<?php else : ?>
-    <div class="border border-dashed border-base-300 rounded-box">
-        <div class="flex flex-col items-center text-center py-12">
-            <svg class="icon opacity-40 mb-2" style="width:2.5rem;height:2.5rem"><use href="#i-inbox" /></svg>
-            <p class="font-medium">No keys yet</p>
-            <p class="text-sm opacity-60 mb-3">Generate your first license to see it listed here.</p>
-            <a href="<?= site_url('keys/generate') ?>" class="btn btn-primary btn-sm"><svg class="icon"><use href="#i-plus" /></svg> Generate license</a>
-        </div>
-    </div>
-<?php endif; ?>
-
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
 <script type="text/javascript">
-    let keysTable;
-
-    function filterKeyTier(tier) {
-        keysTable.column(3).search(tier, true, false).draw();
-    }
-
     $(document).ready(function() {
-        keysTable = $('#datatable').DataTable({
+        const table = $('#datatable').DataTable({
             processing: true,
             serverSide: true,
             order: [
@@ -76,21 +71,21 @@
                     data: 'id',
                     name: 'id_keys',
                     render: function(data, type, row, meta) {
-                        return `<span class="text-sm font-mono opacity-70">${data}</span>`
+                        return `<span class="small">${data}</span>`
                     }
                 },
                 {
                     data: 'game',
                     render: function(data, type, row, meta) {
-                        return `<span class="text-sm">${data}</span>`;
+                        return `<span class="small">${data}</span>`;
                     }
                 },
                 {
                     data: 'user_key',
                     render: function(data, type, row, meta) {
-                        const is_valid = (row.status == 'Active') ? "text-success" : "text-error";
+                        const is_valid = (row.status == 'Active') ? "text-success" : "text-danger";
                         const key = row.user_key ?? '&mdash;';
-                        return `<span class="text-sm font-mono opacity-70 ${is_valid}" data-key="${key}">${key}</span> `;
+                        return `<span class="small text-muted ${is_valid}" data-key="${key}">${key}</span> `;
                     }
                 },
                 {
@@ -98,18 +93,18 @@
                     render: function(data, type, row, meta) {
                         const totalDevice = (row.devices ? row.devices : 0);
                         if (row.key_level == 1) {
-                            return `<span class="text-sm badge badge-outline text-success" id="devMax-${row.user_key}">Free ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="small badge text-success" id="devMax-${row.user_key}">Free ${totalDevice}/${row.max_devices}</span>`;
                         } else if (row.key_level == 2) {
-                            return `<span class="text-sm badge badge-outline text-warning" id="devMax-${row.user_key}">Vip ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="small badge text-warning" id="devMax-${row.user_key}">Vip ${totalDevice}/${row.max_devices}</span>`;
                         } else if (row.key_level == 3) {
-                            return `<span class="text-sm badge badge-outline text-primary" id="devMax-${row.user_key}">Test ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="small badge text-primary" id="devMax-${row.user_key}">Test ${totalDevice}/${row.max_devices}</span>`;
                         }
                     }
                 },
                 {
                     data: 'duration',
                     render: function(data, type, row, meta) {
-                        return `<span class="text-sm">${data}</span>`;
+                        return `<span class="small">${data}</span>`;
                     }
                 },
                 {
@@ -118,16 +113,17 @@
                     render: function(data, type, row, meta) {
                         const currentDate = new Date();
                         const expirationDate = new Date(data + 'Z');
-                        return `<span class="text-sm text-nowrap ${row.expired && expirationDate <= currentDate ? 'text-error' : ''}">${row.expired ? data : '(not started yet)'}</span>`;
+                        return `<span class="small text-nowrap ${row.expired && expirationDate <= currentDate ? 'text-danger' : ''}">${row.expired ? data : '(not started yet)'}</span>`;
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, row, meta) {
-                        const btnReset = `<button class="btn btn-ghost btn-xs join-item text-warning" onclick="resetUserKey('${row.user_key}')" aria-label="Reset"><svg class="icon"><use href="#i-refresh" /></svg></button>`;
-                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-ghost btn-xs join-item" aria-label="Edit"><svg class="icon"><use href="#i-gear" /></svg></a>`;
-                        const btnDelete = `<button class="btn btn-ghost btn-xs join-item text-error" onclick="deleteKeys('${row.user_key}')" aria-label="Delete"><svg class="icon"><use href="#i-trash" /></svg></button>`;
-                        return `<div class="join justify-end w-full">${btnReset} ${btnEdits} ${btnDelete}</div>`;
+                        console.log(row);
+                        const btnReset = `<button class="btn text-warning" onclick="resetUserKey('${row.user_key}')"><i class="bi bi-bootstrap-reboot"></i></button>`;
+                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-sm"><i class="bi bi-gear"></i></a>`;
+                        const btnDelete = `<button class="btn text-danger btn-sm" onclick="deleteKeys('${row.user_key}')"><i class="bi bi-trash"></i></button>`;
+                        return `<div class="btn-group btn-group-sm">${btnReset} ${btnEdits} ${btnDelete}</div>`;
                     }
                 }
             ]
@@ -169,7 +165,8 @@
                                     Swal.fire(
                                         'Failed!',
                                         data.devices_total ? "You don't have any access to this user." : "Only Admin can delete the user.",
-                                        'error'
+                                        data.devices_total ? 'error' : 'error'
+
                                     )
                                 }
                             } else {
@@ -222,6 +219,7 @@
                                         'Failed!',
                                         data.devices_total ? "You don't have any access to this user." : "User key devices already reset.",
                                         data.devices_total ? 'error' : 'warning'
+
                                     )
                                 }
                             } else {
@@ -238,4 +236,5 @@
         });
     }
 </script>
+
 <?= $this->endSection() ?>

@@ -1,69 +1,119 @@
-<?= $this->extend('Layout/AppShell') ?>
+<?= $this->extend('Layout/BootstrapLayout') ?>
 
 <?= $this->section('content') ?>
-<?= $this->include('Layout/msgStatus') ?>
-
-<?php if (session()->getFlashdata('user_key')) : ?>
-    <div class="alert alert-success mb-4" role="alert">
-        <div>
-            Game: <?= session()->getFlashdata('game') ?> / <?= session()->getFlashdata('duration') ?> Days<br>
-            License: <span class="font-mono"><?= session()->getFlashdata('user_key') ?></span><br>
-            Available for <?= session()->getFlashdata('max_devices') ?> Devices<br>
-            <small>
-                <em>Duration will start when license login.</em><br>
-                <svg class="icon"><use href="#i-download" /></svg> <a href="<?= site_url('keys/download/new') ?>" class="link">Download New Keys Here</a><br>
-                <svg class="icon"><use href="#i-wallet" /></svg> Saldo reduce:
-                <span class="text-error">-<?= session()->getFlashdata('fees') ?></span>
-                (total left <?= $user->saldo ?>$)
-            </small>
+<div class="justify-content-center">
+    <?= $this->include('Layout/BootstrapMsgStatus') ?>
+    <div class="row">
+        <div class="col-lg-8">
+            <?php if (session()->getFlashdata('user_key')) : ?>
+                <div class="alert alert-success" role="alert">
+                    Game : <?= session()->getFlashdata('game') ?> / <?= session()->getFlashdata('duration') ?> Days<br>
+                    License : <?= session()->getFlashdata('user_key') ?><br>
+                    Available for <?= session()->getFlashdata('max_devices') ?> Devices<br>
+                    <small>
+                        <i>Duration will start when license login.</i><br>
+                        <i class="bi bi-download"></i><a href="<?= site_url('keys/download/new') ?>"> Download New Keys Hare</a><br>
+                        <i class="bi bi-wallet"></i> Saldo Reduce :
+                        <span class="text-danger">-<?= session()->getFlashdata('fees') ?></span>
+                        (Total left <?= $user->saldo ?>$)
+                    </small>
+                </div>
+            <?php endif; ?>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <div class="card-title m-0"><span>Create License</span></div>
+                        </div>
+                        <div class="col text-end">
+                            <a class="btn btn-sm btn-default" href="<?= site_url('keys') ?>"><i class="bi bi-people"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <?= form_open() ?>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <label for="game" class="input-group-text"><i class="bi bi-controller"></i></label>
+                                <?= form_dropdown('game', $game, old('game'), 'class="form-select" id="game" required') ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <label for="max_devices" class="input-group-text"><i class="bi bi-phone"></i></label>
+                                <input type="number" name="max_devices" id="max_devices" class="form-control" placeholder="max device" value="<?= old('max_devices') ?: 1 ?>" min="1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <label for="user_key" class="input-group-text"><i class="bi bi-key"></i></label>
+                                <input type="text" name="user_key" id="user_key" class="form-control" placeholder="key name" value="<?= old('user_key') ?>" required>
+                                <button class="input-group-text" type="button" id="random_key"><i class="bi bi-shuffle"></i></button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <label for="duration" class="input-group-text"><i class="bi bi-calendar-day"></i></label>
+                                <?= form_dropdown('duration', $duration, old('duration'), 'class="form-select" id="duration" required') ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <label for="key_level" class="input-group-text"><i class="bi bi-gem"></i></label>
+                                <?= form_dropdown('key_level', $levels, old('key_level'), 'id="key_level" class="form-select" required') ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <label for="estimation" class="input-group-text"><i class="bi bi-battery-charging"></i></label>
+                                <input type="text" id="estimation" class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary">Generate</button>
+                    </div>
+                    <?= form_close() ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="card-title m-0"><span>Minimum Seller Price</span></div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Number Of Days</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>3 days</td>
+                                <td>25K Or 3$</td>
+                            <tr>
+                                <td>7 days</td>
+                                <td>50K Or 5$</td>
+                            </tr>
+                            <tr>
+                                <td>30 days</td>
+                                <td>100K Or 10$</td>
+                            </tr>
+                            <tr>
+                                <td>60 days</td>
+                                <td>150K Or 17$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-<?php endif; ?>
-
-<div class="grid lg:grid-cols-3 gap-6">
-    <div class="lg:col-span-2">
-        <?= form_open() ?>
-        <div class="grid sm:grid-cols-2 gap-3">
-            <label class="select w-full">
-                <svg class="icon opacity-60"><use href="#i-gamepad" /></svg>
-                <?= form_dropdown('game', $game, old('game'), 'id="game" required') ?>
-            </label>
-            <label class="input validator w-full">
-                <svg class="icon opacity-60"><use href="#i-users" /></svg>
-                <input type="number" name="max_devices" id="max_devices" placeholder="Max devices" value="<?= old('max_devices') ?: 1 ?>" min="1" required>
-            </label>
-            <label class="input validator w-full sm:col-span-2">
-                <svg class="icon opacity-60"><use href="#i-key" /></svg>
-                <input type="text" name="user_key" id="user_key" placeholder="Key name" value="<?= old('user_key') ?>" required>
-                <button type="button" class="opacity-60" id="random_key" aria-label="Randomize"><svg class="icon"><use href="#i-shuffle" /></svg></button>
-            </label>
-            <label class="select w-full">
-                <svg class="icon opacity-60"><use href="#i-shield" /></svg>
-                <?= form_dropdown('duration', $duration, old('duration'), 'id="duration" required') ?>
-            </label>
-            <label class="select w-full">
-                <svg class="icon opacity-60"><use href="#i-check-circle" /></svg>
-                <?= form_dropdown('key_level', $levels, old('key_level'), 'id="key_level" required') ?>
-            </label>
-            <label class="input w-full sm:col-span-2 opacity-70">
-                <svg class="icon opacity-60"><use href="#i-wallet" /></svg>
-                <input type="text" id="estimation" placeholder="Estimated price" disabled>
-            </label>
-        </div>
-        <div class="mt-4 text-right">
-            <button type="submit" class="btn btn-sm btn-primary">Generate</button>
-        </div>
-        <?= form_close() ?>
-    </div>
-    <div>
-        <h2 class="text-sm uppercase tracking-wide opacity-60 mb-2">Minimum seller price</h2>
-        <div class="divide-y divide-base-300 border-t border-base-300 text-sm">
-            <div class="flex justify-between py-2"><span>3 days</span><span class="opacity-60">25K or 3$</span></div>
-            <div class="flex justify-between py-2"><span>7 days</span><span class="opacity-60">50K or 5$</span></div>
-            <div class="flex justify-between py-2"><span>30 days</span><span class="opacity-60">100K or 10$</span></div>
-            <div class="flex justify-between py-2"><span>60 days</span><span class="opacity-60">150K or 17$</span></div>
-        </div>
-    </div>
+</div>
 </div>
 <?= $this->endSection() ?>
 
@@ -73,10 +123,12 @@
         const price = JSON.parse('<?= $price ?>');
         getPrice(price);
 
+        // When selected
         $("#max_devices, #duration, #game").change(function() {
             getPrice(price);
-        });
 
+        });
+        // try to get price
         function getPrice(price) {
             const device = $("#max_devices").val();
             const durate = $("#duration").val();
@@ -88,6 +140,7 @@
                 $("#estimation").val('Estimation error');
             }
         }
+
 
         $("#random_key").click(function(a) {
             $("#user_key").val(randomString('alnum', 16));

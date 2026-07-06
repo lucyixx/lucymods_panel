@@ -8,9 +8,11 @@ use Bbsnly\ChartJs\Config\Options;
 $labels = $dataX = $dataY = [];
 for ($i = 0; $i <= 365; $i += round($i / 3) + 1) {
     array_push($labels, round(calculatePrice($i)) . "K");
+    // array_push($labels,$i);
     array_push($dataX, round(calculatePrice($i, true)));
     array_push($dataY, $i);
 }
+
 
 $chart = new Chart;
 $chart->type = 'line';
@@ -45,83 +47,107 @@ $options = new Options([
 $chart->options($options);
 ?>
 
-<?= $this->extend('Layout/Starter') ?>
+
+
+<?= $this->extend('Layout/BootstrapLayout') ?>
 <?= $this->section('content') ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
-<div class="flex justify-center">
-    <div class="flex flex-wrap mb-12 gap-4">
-        <div class="w-full lg:w-1/2 mb-3">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
+<div class="justify-content-center">
+    <div class="row mb-5">
+        <div class="col-lg-6 mb-3 px-0 px-lg-3">
             <div class="mb-3">
-                <?= $this->include('Layout/msgStatus') ?>
+                <?= $this->include('Layout/BootstrapMsgStatus') ?>
                 <?php if (session()->getFlashdata('user_key')) : ?>
                     <div class="alert alert-success" role="alert">
-                        <div>
-                            <strong>Game: </strong><?= esc(session()->getFlashdata('game')) ?> / <?= esc(session()->getFlashdata('duration')) ?> Days<br>
-                            <strong>License: </strong><span class="font-mono"><?= esc(session()->getFlashdata('user_key')) ?></span><br>
-                            Available for <?= esc(session()->getFlashdata('max_devices')) ?> Devices
-                        </div>
+                        <strong>Game: </strong><?= esc(session()->getFlashdata('game')) ?> / <?= esc(session()->getFlashdata('duration')) ?> Days<br>
+                        <strong>License: </strong><?= esc(session()->getFlashdata('user_key')) ?><br>
+                        Available for <?= esc(session()->getFlashdata('max_devices')) ?> Devices<br>
                     </div>
                 <?php endif; ?>
             </div>
 
             <div id="game_view" class="mb-3" hidden>
-                <div class="bg-base-300 border border-base-300 rounded-box overflow-hidden p-3 flex items-center gap-3">
-                    <img class="rounded-lg w-16 h-16 object-cover shrink-0" id="game_img" alt="Icon image" itemprop="image">
-                    <div class="min-w-0">
-                        <h2 class="text-base font-medium truncate" id="game_name"></h2>
-                        <p class="text-sm text-success truncate m-0" id="game_dev"></p>
-                        <p class="text-sm opacity-70 truncate m-0" id="game_i"></p>
+                <div class="text-body border rounded overflow-hidden d-block h-100 position-relative" style="background-color: var(--bs-workflow-bg);">
+                    <div class="d-flex" style="padding: 0.5rem;">
+                        <div class="flex-shrink-0 me-2" style="width: 3.75rem;">
+                            <img class="rounded-3" id="game_img" width="96" height="96" aria-hidden="true" alt="Icon image" itemprop="image" data-atf="true">
+                        </div>
+                        <div style="min-width: 0;">
+                            <h2 class="h6" id="game_name" style="margin-bottom: 2px;"></h2>
+                            <div class="small text-truncate">
+                                <span id="game_dev" class="text-success"></span>
+                            </div>
+                            <div class="small text-muted text-truncate">
+                                <span id="game_i" class="small"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card card-border bg-base-200 border-base-300 mb-3">
-                <div class="flex items-center justify-between px-4 py-3 border-b border-base-300">
-                    <h2 class="card-title text-base">Create license</h2>
-                    <div class="opacity-70 flex items-center gap-1 text-sm">
-                        <svg class="icon"><use href="#i-link" /></svg>
-                        <span><?= $link_total ?> links</span>
+            <div class="card mb-3">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <span class="card-title m-0"><span>Create License</span></span>
+                    <div class="text-secondary">
+                        <i class="bi bi-pass"></i>
+                        <span class="small"><?= $link_total ?> links</span>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body my-3">
+
                     <?= form_open() ?>
-                    <div class="flex flex-wrap gap-4">
-                        <label class="select w-full md:w-[calc(50%-0.5rem)]">
-                            <svg class="icon opacity-60"><use href="#i-gamepad" /></svg>
-                            <?= form_dropdown('game', ['FREE' => 'All Games'], 'ALL', 'id="game" disabled') ?>
-                        </label>
-                        <label class="input w-full md:w-[calc(50%-0.5rem)]">
-                            <svg class="icon opacity-60"><use href="#i-users" /></svg>
-                            <input type="number" name="max_devices" id="max_devices" value="1" disabled>
-                            <span class="opacity-60 text-sm">device</span>
-                        </label>
-                        <label class="select w-full md:w-[calc(50%-0.5rem)]">
-                            <svg class="icon opacity-60"><use href="#i-shield" /></svg>
-                            <?= form_dropdown('duration', ['1' => '1 Days'], '1', 'disabled') ?>
-                        </label>
-                        <label class="select w-full md:w-[calc(50%-0.5rem)]">
-                            <svg class="icon opacity-60"><use href="#i-check-circle" /></svg>
-                            <?= form_dropdown('vip_key', ['1' => 'FREE'], '1', 'disabled') ?>
-                        </label>
+                    <div class="my-0">
+                        <div class="row">
+                            <div class="col-lg-6 mb-3">
+                                <div class="input-group">
+                                    <label for="game" class="input-group-text"><i class="bi bi-controller"></i></label>
+                                    <?= form_dropdown('game', ['FREE' => 'All Games'], 'ALL', 'id="game" class="form-select" disabled') ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <div class="input-group">
+                                    <label for="max_devices" class="input-group-text"><i class="bi bi-phone"></i></label>
+                                    <input type="number" name="max_devices" id="max_devices" class="form-control" value="1" disabled>
+                                    <div class="input-group-text">device</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <div class="input-group">
+                                    <label for="duration" class="input-group-text"><i class="bi bi-calendar-day"></i></label>
+                                    <?= form_dropdown('duration', ['1' => '1 Days'], '1', 'class="form-select" disabled') ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <div class="input-group">
+                                    <label for="vip_key" class="input-group-text"><i class="bi bi-gem"></i></label>
+                                    <?= form_dropdown('vip_key', ['1' => 'FREE'], '1', 'class="form-select" disabled') ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="validationResult"></div>
                     </div>
-                    <div id="validationResult"></div>
-                    <div class="mt-4 text-right">
-                        <button type="submit" class="btn btn-sm btn-primary" id="btn_submit"><svg class="icon"><use href="#i-arrow-right" /></svg> Generate</button>
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary" id="btn_submit"><i class="bi bi-box-arrow-in-right"></i> Generate</button>
                     </div>
                     <?= form_close() ?>
                 </div>
             </div>
         </div>
-        <div class="w-full lg:w-1/2 mb-3">
+        <div class="col-lg-6 mb-3 px-0 px-lg-3">
             <?= $chart->toHtml('my_chart'); ?>
         </div>
-        <div class="w-full mb-3">
-            <div class="card card-border bg-base-200 border-base-300">
-                <div class="px-4 py-3 border-b border-base-300"><h2 class="card-title text-base">Minimum seller price</h2></div>
+        <div class="mb-3 px-0 px-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title m-0"><span>Minimum Seller Price</span></div>
+                </div>
                 <div class="card-body text-center">
-                    <table class="table table-zebra">
+                    <table class="table table-borderless table-striped">
                         <thead>
                             <tr>
                                 <th>Number Of Days</th>
@@ -146,9 +172,12 @@ $chart->options($options);
     </div>
 </div>
 
-<p class="text-center opacity-70 text-sm mt-2">
-    Get key with donate?
-    <a href="https://t.me/tis_nquyen" target="_blank" class="link text-primary">Contact Admin</a>
+<p class="text-center text-muted after-card">
+    <small class="px-auto p-2 rounded">
+        Get key with donate?
+        <a href="https://t.me/tis_nquyen" target="_blank" class="text-primary">Contact Admin</a>
+    </small>
 </p>
+</div>
 
 <?= $this->endSection() ?>

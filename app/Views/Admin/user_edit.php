@@ -1,45 +1,59 @@
-<?= $this->extend('Layout/AppShell') ?>
+<?= $this->extend('Layout/BootstrapLayout') ?>
 <?= $this->section('content') ?>
-
-<?= $this->include('Layout/msgStatus') ?>
-
-<div class="max-w-2xl">
-    <p class="text-sm opacity-60 mb-4">Editing &middot; <?= getName($target) ?></p>
-    <?= form_open() ?>
-    <input type="hidden" name="user_id" value="<?= $target->id_users ?>">
-    <div class="flex flex-wrap gap-4">
-        <label class="input validator w-full md:w-[calc(50%-0.5rem)]">
-            <svg class="icon opacity-60"><use href="#i-user" /></svg>
-            <input type="text" name="username" id="username" placeholder="Username" value="<?= old('username') ?: $target->username ?>" minlength="4" required>
-        </label>
-        <label class="input w-full md:w-[calc(50%-0.5rem)]">
-            <svg class="icon opacity-60"><use href="#i-user" /></svg>
-            <input type="text" name="fullname" id="fullname" placeholder="Fullname" value="<?= old('fullname') ?: $target->fullname ?>" required>
-        </label>
-        <label class="select w-full md:w-[calc(50%-0.5rem)]">
-            <svg class="icon opacity-60"><use href="#i-shield" /></svg>
-            <?= form_dropdown(['name' => 'level', 'id' => 'level'], getLevelArray(), $target->level) ?>
-        </label>
-        <label class="select w-full md:w-[calc(50%-0.5rem)]">
-            <svg class="icon opacity-60"><use href="#i-check-circle" /></svg>
-            <?php $sel_status = ['' => '&mdash; Select Status &mdash;', '0' => 'Banned/Block', '1' => 'Active',]; ?>
-            <?= form_dropdown(['name' => 'status', 'id' => 'status'], $sel_status, $target->status) ?>
-        </label>
-        <label class="input validator w-full md:w-[calc(50%-0.5rem)]">
-            <svg class="icon opacity-60"><use href="#i-wallet" /></svg>
-            <input type="number" name="saldo" id="saldo" placeholder="Saldo" value="<?= old('saldo') ?: $target->saldo ?>" required>
-        </label>
-        <label class="input w-full md:w-[calc(50%-0.5rem)] opacity-60">
-            <svg class="icon opacity-60"><use href="#i-link" /></svg>
-            <input type="text" name="uplink" id="uplink" placeholder="Uplink" value="<?= old('uplink') ?: $target->uplink ?>" disabled>
-        </label>
+<div class="row justify-content-center pt-3">
+    <div class="col-lg-8">
+        <?= $this->include('Layout/BootstrapMsgStatus') ?>
     </div>
-    <div class="mt-4 text-right">
-        <button type="submit" class="btn btn-sm btn-primary">Update account</button>
+    <div class="col-lg-8 mb-3">
+        <div class="card mb-5">
+            <div class="card-header">
+                <div class="card-title m-0"><span>Edit Account &middot; <?= getName($target) ?></span></div>
+            </div>
+            <div class="card-body">
+                <?= form_open() ?>
+                <input type="hidden" name="user_id" value="<?= $target->id_users ?>">
+                <div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" name="username" id="username" class="form-control" value="<?= old('username') ?: $target->username ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fullname" class="form-label">Fullname</label>
+                            <input type="text" name="fullname" id="fullname" class="form-control" value="<?= old('fullname') ?: $target->fullname ?>" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="level" class="form-label">Roles</label>
+                            <?= form_dropdown(['class' => 'form-select', 'name' => 'level', 'id' => 'level'], getLevelArray(), $target->level) ?>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <?php $sel_status = ['' => '&mdash; Select Status &mdash;', '0' => 'Banned/Block', '1' => 'Active',]; ?>
+                            <?= form_dropdown(['class' => 'form-select', 'name' => 'status', 'id' => 'status'], $sel_status, $target->status) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="saldo" class="form-label">Saldo</label>
+                            <input type="number" name="saldo" id="saldo" class="form-control" value="<?= old('saldo') ?: $target->saldo ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="uplink" class="form-label">Uplink</label>
+                            <input type="text" name="uplink" id="uplink" class="form-control" value="<?= old('uplink') ?: $target->uplink ?>" disabled>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary">Update Account</button>
+                    </div>
+                </div>
+                <?= form_close() ?>
+            </div>
+        </div>
+        <p class="text-muted text-center">
+            <a href="<?= site_url('admin/manage-users') ?>" class="py-1 px-2 text-muted"><small><i class="bi bi-arrow-left"></i> Back to Manage users</small></a>
+        </p>
     </div>
-    <?= form_close() ?>
-    <p class="opacity-70 text-sm mt-4">
-        <a href="<?= site_url('admin/manage-users') ?>" class="link">&larr; Back to manage users</a>
-    </p>
 </div>
 <?= $this->endSection() ?>

@@ -4,6 +4,7 @@ use CodeIgniter\Router\RouteCollection;
 
 $routes->get('/', 'Home::index');
 $routes->get('/details', 'Home::details');
+$routes->get('/games', 'Home::games');
 $routes->get('logout', 'Auth::logout');
 $routes->get('dashboard', 'User::index');
 $routes->match(['get', 'post'], 'login', 'Auth::login');

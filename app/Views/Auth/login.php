@@ -1,40 +1,48 @@
-<?= $this->extend('Layout/Starter') ?>
+<?= $this->extend('Layout/BootstrapLayout') ?>
 <?= $this->section('content') ?>
-<div class="flex justify-center pt-8">
-    <div class="w-full max-w-sm">
-        <?= $this->include('Layout/msgStatus') ?>
-        <div class="card card-border bg-base-200 border-base-300">
-            <div class="card-body gap-0">
-                <h1 class="card-title text-base mb-3">Log in</h1>
-                <?= form_open() ?>
-                <div class="mb-2">
-                    <label class="input validator w-full">
-                        <svg class="icon opacity-60"><use href="#i-user" /></svg>
-                        <input type="text" name="username" id="username" placeholder="Username" required minlength="4" maxlength="25" pattern="[a-zA-Z0-9]+" value="<?= old('username') ?>">
-                    </label>
-                    <p class="validator-hint hidden text-xs mt-1 mb-0">4+ characters, letters and numbers only.</p>
+<div class="row justify-content-center pt-5">
+    <div class="col-lg-4">
+        <div class="mx-auto">
+            <?= $this->include('Layout/BootstrapMsgStatus') ?>
+            <div class="card mb-5">
+                <div class="card-header">
+                    <div class="card-title m-0"><span>Login</span></div>
                 </div>
-                <div class="mb-3">
-                    <label class="input validator w-full">
-                        <svg class="icon opacity-60"><use href="#i-lock" /></svg>
-                        <input type="password" name="password" id="password" placeholder="Password" required minlength="6" maxlength="45">
-                        <button type="button" class="opacity-60" onclick="const f=document.getElementById('password');f.type=f.type==='password'?'text':'password';" aria-label="Show password">
-                            <svg class="icon"><use href="#i-eye" /></svg>
-                        </button>
-                    </label>
-                    <p class="validator-hint hidden text-xs mt-1 mb-0">Must be at least 6 characters.</p>
+                <div class="card-body">
+                    <?= form_open() ?>
+                    <div class="row my-3">
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <label for="username" class="input-group-text"><i class="bi bi-person"></i></label>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Your username" required minlength="4">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <label for="password" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Your password" required minlength="6">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="stay_log" id="stay_log" value="yes">
+                                <label class="form-check-label" for="stay_log">Stay login?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-box-arrow-in-right"></i> Log in</button>
+                    </div>
+                    <?= form_close() ?>
                 </div>
-                <label class="label cursor-pointer gap-2 justify-start mb-3">
-                    <input type="checkbox" class="checkbox checkbox-sm" name="stay_log" id="stay_log" value="yes">
-                    <span class="label-text">Stay logged in</span>
-                </label>
-                <button type="submit" class="btn btn-primary w-full">Log in</button>
-                <?= form_close() ?>
             </div>
+            <p class="text-center text-muted after-card">
+                <small class="px-auto p-2 rounded">
+                    Don't have an account yet?
+                    <a href="<?= site_url('register') ?>" class="text-primary">Register here</a>
+                </small>
+            </p>
         </div>
-        <p class="text-center text-sm opacity-70 mt-4">
-            Don't have an account yet? <a href="<?= site_url('register') ?>" class="link text-primary">Register here</a>
-        </p>
     </div>
 </div>
 <?= $this->endSection() ?>

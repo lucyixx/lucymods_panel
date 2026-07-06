@@ -13,56 +13,56 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <!-- DataTables base skin (Bootstrap-free) -->
-    <?= link_tag("https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css") ?>
-
-    <?= link_tag('assets/css/style.css') ?>
+    <?= link_tag('assets/css/daisyui.css') ?>
     <?= $this->renderSection('css') ?>
 
     <?= script_tag('https://code.jquery.com/jquery-3.6.0.js') ?>
     <?= script_tag("https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.0/sweetalert2.all.min.js") ?>
-    <?= script_tag("https://cdn.datatables.net/2.0.0/js/dataTables.js") ?>
 </head>
 
 <body class="min-h-screen flex flex-col bg-base-100 text-base-content">
     <?= $this->include('Layout/icons') ?>
     <?= $this->include('Layout/preloader') ?>
 
-    <!-- Guest / marketing top navbar -->
-    <div class="navbar bg-base-200/80 backdrop-blur border-b border-base-300 px-4 sticky top-0 z-30">
-        <div class="max-w-5xl mx-auto w-full flex items-center">
-            <div class="flex-1 flex items-center gap-1">
-                <a class="btn btn-ghost text-lg px-2 gap-2" href="<?= site_url(!session()->has('userid') ? '' : 'dashboard') ?>">
-                    <svg class="icon"><use href="#i-key" /></svg>ZyGames
-                </a>
-            </div>
-            <div class="flex-none flex items-center gap-1">
-                <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm" aria-label="Toggle theme">
-                    <input type="checkbox" class="theme-controller" value="zygame-light" <?= ($currentTheme === 'zygame-light') ? 'checked' : '' ?> onchange="document.cookie='theme='+(this.checked?'zygame-light':'zygame')+';path=/;max-age=31536000'" />
-                    <svg class="icon swap-on"><use href="#i-sun" /></svg>
-                    <svg class="icon swap-off"><use href="#i-moon" /></svg>
-                </label>
-                <div class="hidden md:flex items-center gap-1">
-                    <?php if (session()->has('userid') && isset($user)) : ?>
-                        <a class="btn btn-ghost btn-sm" href="<?= site_url('dashboard') ?>">Dashboard</a>
-                    <?php else : ?>
-                        <a class="btn btn-ghost btn-sm" href="<?= site_url('keys/free') ?>">Key Free</a>
-                        <a class="btn btn-ghost btn-sm" href="<?= site_url('login') ?>">Login</a>
-                    <?php endif; ?>
+    <!-- Guest / marketing top navbar. The mobile dropdown panel lives INSIDE
+         this same sticky wrapper so it always appears directly under the
+         navbar, even if the page was scrolled before it was opened. -->
+    <div class="sticky top-0 z-30">
+        <div class="navbar bg-base-200/80 backdrop-blur border-b border-base-300 px-4">
+            <div class="max-w-5xl mx-auto w-full flex items-center">
+                <div class="flex-1 flex items-center gap-1">
+                    <a class="btn btn-ghost text-lg px-2 gap-2" href="<?= site_url(!session()->has('userid') ? '' : 'dashboard') ?>">
+                        <svg class="icon"><use href="#i-key" /></svg>ZyGames
+                    </a>
                 </div>
-                <button class="btn btn-ghost btn-square md:hidden" id="navToggle" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
-                </button>
+                <div class="flex-none flex items-center gap-1">
+                    <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm" aria-label="Toggle theme">
+                        <input type="checkbox" id="themeToggle" <?= ($currentTheme === 'zygame-light') ? 'checked' : '' ?> />
+                        <svg class="icon swap-on"><use href="#i-sun" /></svg>
+                        <svg class="icon swap-off"><use href="#i-moon" /></svg>
+                    </label>
+                    <div class="hidden md:flex items-center gap-1">
+                        <?php if (session()->has('userid') && isset($user)) : ?>
+                            <a class="btn btn-ghost btn-sm" href="<?= site_url('dashboard') ?>">Dashboard</a>
+                        <?php else : ?>
+                            <a class="btn btn-ghost btn-sm" href="<?= site_url('keys/free') ?>">Key Free</a>
+                            <a class="btn btn-ghost btn-sm" href="<?= site_url('login') ?>">Login</a>
+                        <?php endif; ?>
+                    </div>
+                    <button class="btn btn-ghost btn-square md:hidden" id="navToggle" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="hidden md:hidden flex-col border-b border-base-300 bg-base-200 px-4 pb-3" id="navbarSupportedContent">
-        <?php if (session()->has('userid') && isset($user)) : ?>
-            <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('dashboard') ?>">Dashboard</a>
-        <?php else : ?>
-            <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('keys/free') ?>">Key Free</a>
-            <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('login') ?>">Login</a>
-        <?php endif; ?>
+        <div class="hidden md:hidden flex-col border-b border-base-300 bg-base-200 px-4 pb-3" id="navbarSupportedContent">
+            <?php if (session()->has('userid') && isset($user)) : ?>
+                <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('dashboard') ?>">Dashboard</a>
+            <?php else : ?>
+                <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('keys/free') ?>">Key Free</a>
+                <a class="btn btn-ghost btn-sm justify-start" href="<?= site_url('login') ?>">Login</a>
+            <?php endif; ?>
+        </div>
     </div>
 
     <main class="content">
@@ -94,6 +94,21 @@
         menu.classList.toggle('hidden');
         this.setAttribute('aria-expanded', String(!expanded));
     });
+
+    // Theme toggle: plain JS, sets data-theme directly on <html> and
+    // persists the choice in a cookie. Deliberately not relying on
+    // daisyUI's CSS-only theme-controller mechanism, so the switch always
+    // works the same way regardless of browser/daisyUI version quirks.
+    (function() {
+        const toggle = document.getElementById('themeToggle');
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.cookie = 'theme=' + theme + ';path=/;max-age=31536000';
+        }
+        toggle.addEventListener('change', function() {
+            applyTheme(this.checked ? 'zygame-light' : 'zygame');
+        });
+    })();
 
     // Cookie consent
     function setCookie(cname, cvalue, exdays) {
