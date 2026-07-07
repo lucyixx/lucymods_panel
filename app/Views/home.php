@@ -76,7 +76,8 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
     <h2 class="text-sm uppercase tracking-wide opacity-60">Supported games</h2>
     <a href="<?= site_url('games') ?>" class="text-sm link opacity-70 flex items-center gap-1">View more <svg class="icon"><use href="#i-arrow-right" /></svg></a>
 </div>
-<div class="flex gap-4 overflow-x-auto pb-3 snap-x -mx-4 px-4">
+<div class="flex gap-4 overflow-x-auto pb-3 snap-x">
+    <div class="shrink-0 w-0 sm:w-0" aria-hidden="true" style="width:1rem"></div>
     <?php foreach ($games as $i => $game) : ?>
         <button onclick="openGameModal(<?= $i ?>)" class="snap-start shrink-0 w-44 text-left bg-base-200 border border-base-300 rounded-box p-4 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
             <div class="rounded-lg w-full h-24 flex items-center justify-center mb-3 overflow-hidden" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-<?= $gradientVars[$i % count($gradientVars)] ?>) 25%, transparent), var(--color-base-300));">
@@ -86,6 +87,7 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
             <p class="text-xs opacity-60 truncate"><?= esc(implode(', ', $game->features)) ?></p>
         </button>
     <?php endforeach; ?>
+    <div class="shrink-0" aria-hidden="true" style="width:1rem"></div>
 </div>
 
 <dialog id="gameModal" class="modal">

@@ -1,11 +1,13 @@
-$(".after-card").hide();
-$(document).ready(function () {
-  $(".after-card").fadeIn("slow");
-  $("input").change(function (e) {
-    e.preventDefault();
-    $(".field-hint, .alert-error, .text-error").hide();
+if (typeof $ !== "undefined") {
+  $(".after-card").hide();
+  $(document).ready(function () {
+    $(".after-card").fadeIn("slow");
+    $("input").change(function (e) {
+      e.preventDefault();
+      $(".field-hint, .alert-error, .text-error").hide();
+    });
   });
-});
+}
 
 // Minimal vanilla-JS carousel, replaces Bootstrap's carousel component.
 // Usage: <div id="X"><div class="carousel-inner">...<div class="carousel-item">...</div></div></div>
@@ -22,14 +24,16 @@ function carouselMove(id, dir) {
   inner.style.transform = `translateX(-${idx * 100}%)`;
 }
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
+if (typeof Swal !== "undefined") {
+  var Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+}

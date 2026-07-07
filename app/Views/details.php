@@ -1,4 +1,10 @@
 <?= $this->extend('Layout/Starter') ?>
+
+<?= $this->section('headScripts') ?>
+<?= script_tag('https://code.jquery.com/jquery-3.6.0.js') ?>
+<?= script_tag("https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.0/sweetalert2.all.min.js") ?>
+<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
 
 <style>

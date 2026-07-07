@@ -9,6 +9,12 @@
     <?= link_tag('favicon.ico', "shortcut icon", "image/x-icon") ?>
     <title><?= BASE_NAME ?> - <?= isset($title) ? $title : 'Panel' ?></title>
 
+    <!-- Warm up the CDN connections early so the actual requests below don't
+         each pay a fresh DNS+TLS handshake — shaves a noticeable chunk off
+         first load, especially on mobile networks. -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://play-lh.googleusercontent.com" crossorigin>
+
     <!-- DaisyUI + Tailwind CSS (CDN, no build step needed on Serv00) -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -16,8 +22,10 @@
     <?= link_tag('assets/css/daisyui.css') ?>
     <?= $this->renderSection('css') ?>
 
-    <?= script_tag('https://code.jquery.com/jquery-3.6.0.js') ?>
-    <?= script_tag("https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.0/sweetalert2.all.min.js") ?>
+    <!-- jQuery/SweetAlert are only pulled in by pages that actually need
+         them (e.g. details.php's AJAX call), via the headScripts section,
+         instead of being loaded unconditionally on every page. -->
+    <?= $this->renderSection('headScripts') ?>
 </head>
 
 <body class="min-h-screen flex flex-col bg-base-100 text-base-content">
