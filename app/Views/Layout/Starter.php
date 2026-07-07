@@ -29,8 +29,8 @@
          screens. The dropdown is native daisyUI (CSS + tabindex focus),
          so it always opens attached to the toggle button, regardless of
          scroll position. -->
-    <div class="navbar bg-base-200/80 backdrop-blur border-b border-base-300 px-4 sticky top-0 z-30">
-        <div class="max-w-5xl mx-auto w-full navbar p-0">
+    <div class="bg-base-200/80 backdrop-blur border-b border-base-300 px-4 sticky top-0 z-30">
+        <div class="max-w-5xl mx-auto w-full navbar p-0 min-h-14 py-1">
             <div class="navbar-start">
                 <div class="dropdown">
                     <div tabindex="0" role="button" class="btn btn-ghost lg:hidden" aria-label="Toggle navigation">
