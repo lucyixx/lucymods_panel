@@ -38,5 +38,10 @@
         <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 4v3M4 4h3M20 4v3M20 4h-3M4 20v-3M4 20h3M20 20v-3M20 20h-3" /><rect x="7" y="7" width="10" height="10" rx="1" /></symbol>
         <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7" /></symbol>
         <symbol id="i-diagram" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3" /><circle cx="18" cy="6" r="3" /><circle cx="12" cy="18" r="3" /><path d="M8.5 7.5L10 16M15.5 7.5L14 16" /></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.9 6.3.6-4.8 4.3 1.4 6.2L12 16.9 6.4 20l1.4-6.2-4.8-4.3 6.3-.6L12 3z" /></symbol>
+        <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1" /><path d="M3 9V6a2 2 0 012-2h14a2 2 0 012 2v3M12 4v17M12 9c-1-3-6-3-6 0s5 3 6 0c1 3 6 3 6 0s-5-3-6 0z" /></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3.5 2" /></symbol>
+        <symbol id="i-crown" viewBox="0 0 24 24"><path d="M3 8l4 3 5-6 5 6 4-3-2 11H5L3 8z" /></symbol>
+        <symbol id="i-news" viewBox="0 0 24 24"><path d="M4 4h13a2 2 0 012 2v14H6a2 2 0 01-2-2V4z" /><path d="M8 8h8M8 12h8M8 16h4M18 8v10a2 2 0 002-2V6" /></symbol>
     </defs>
 </svg>

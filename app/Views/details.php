@@ -20,77 +20,73 @@
 </style>
 
 <?= $this->include('Layout/preloader') ?>
-<div class="flex justify-center">
-    <div style="max-width: 720px; width: 100%;">
-        <div class="card card-border bg-base-200 border-base-300 my-3">
-            <div class="card-body">
-                <div class="relative rounded-box overflow-hidden mb-4">
-                    <img class="w-full" id="app_featureGraphic">
-                    <div class="absolute w-full h-3/4" style="left: 0; bottom: 0; background-image: linear-gradient(to top, #000d, #0000)"></div>
-                    <div class="flex m-3 absolute items-center gap-3" style="left: 0; bottom: 0;">
-                        <img loading="lazy" class="rounded-lg w-14 h-14 object-cover shrink-0" id="app_icon" itemprop="image">
-                        <div>
-                            <h1 class="text-lg app_name text-white m-0"></h1>
-                            <p class="text-success app_developer text-sm m-0"></p>
-                        </div>
-                    </div>
-                </div>
 
-                <table class="table table-zebra mb-4">
-                    <tbody class="text-sm">
-                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-gamepad" /></svg> Name</th><td class="opacity-70 app_name"></td></tr>
-                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-gear" /></svg> Developer</th><td class="text-success app_developer"></td></tr>
-                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-diagram" /></svg> Type</th><td class="opacity-70 app_type"></td></tr>
-                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-shield" /></svg> Version</th><td class="opacity-70 app_version"></td></tr>
-                        <tr><th class="font-normal"><svg class="icon text-error"><use href="#i-key" /></svg> Package</th><td><a class="app_packageName link" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '') ?>"></a></td></tr>
-                    </tbody>
-                </table>
+<!-- Banner: full width -->
+<div class="relative rounded-box overflow-hidden mb-6 bg-base-300" style="aspect-ratio: 16/6;">
+    <img class="w-full h-full object-cover" id="app_featureGraphic">
+    <div class="absolute inset-0" style="background-image: linear-gradient(to top, #000d, #0000)"></div>
+    <div class="absolute left-0 bottom-0 p-4 flex items-center gap-3">
+        <img loading="lazy" class="rounded-lg w-16 h-16 object-cover shrink-0 border border-base-300" id="app_icon" itemprop="image">
+        <div>
+            <h1 class="text-xl app_name text-white m-0"></h1>
+            <p class="text-success app_developer text-sm m-0"></p>
+        </div>
+    </div>
+</div>
 
-                <details class="collapse collapse-arrow border border-base-300 rounded-box mb-4">
-                    <summary class="collapse-title">MOD Info</summary>
-                    <div class="collapse-content"><ul class="text-sm"><li>Draw Esp</li><li>Chams hack</li><li>[more..]</li></ul></div>
-                </details>
+<!-- Desktop: 2 columns (media/description left, info sidebar right). Mobile: stacks. -->
+<div class="grid lg:grid-cols-3 gap-6">
 
-                <div class="mb-4">
-                    <div id="carouselExample" class="relative rounded-box overflow-hidden" data-idx="0">
-                        <div class="carousel-inner w-full"></div>
-                        <button class="btn btn-circle btn-sm absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', -1)" aria-label="Previous">
-                            <svg class="icon"><use href="#i-chev-l" /></svg>
-                        </button>
-                        <button class="btn btn-circle btn-sm absolute right-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', 1)" aria-label="Next">
-                            <svg class="icon"><use href="#i-chev-r" /></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <p class="text-center text-sm opacity-70 mb-4"><em class="app_summary"></em></p>
-
-                <div class="mb-4">
-                    <h2 class="text-base font-medium mb-1">About this <span class="app_type"></span></h2>
-                    <p class="opacity-70 text-sm app_description"></p>
-                </div>
-
-                <div class="mb-4">
-                    <p class="text-sm">Last updated</p>
-                    <p class="opacity-70 text-sm app_lastUpdated"></p>
-                </div>
-
-                <button class="btn btn-error w-full mb-4">Download Now</button>
-
-                <div class="flex items-center justify-center gap-3 border-t border-base-300 pt-4 text-sm opacity-70">
-                    <span class="app_installs"></span>
-                    <span class="border-r border-base-300 h-4"></span>
-                    <span class="app_rating"></span>
-                </div>
-            </div>
+    <div class="lg:col-span-2 flex flex-col gap-6">
+        <div id="carouselExample" class="relative rounded-box overflow-hidden bg-base-200" style="aspect-ratio: 16/9;" data-idx="0">
+            <div class="carousel-inner w-full h-full"></div>
+            <button class="btn btn-circle btn-sm absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', -1)" aria-label="Previous">
+                <svg class="icon"><use href="#i-chev-l" /></svg>
+            </button>
+            <button class="btn btn-circle btn-sm absolute right-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', 1)" aria-label="Next">
+                <svg class="icon"><use href="#i-chev-r" /></svg>
+            </button>
         </div>
 
-        <div class="card card-border bg-base-200 border-base-300 my-3">
-            <div class="card-body">
-                <h2 class="text-base font-medium mb-3">Reviews</h2>
-                <div id="reviewer-list"></div>
-            </div>
+        <details class="collapse collapse-arrow bg-base-200 border border-base-300 rounded-box">
+            <summary class="collapse-title">MOD Info</summary>
+            <div class="collapse-content"><ul class="text-sm opacity-80"><li>Draw Esp</li><li>Chams hack</li><li>[more..]</li></ul></div>
+        </details>
+
+        <div>
+            <h2 class="text-base font-medium mb-1">About this <span class="app_type"></span></h2>
+            <p class="opacity-70 text-sm leading-relaxed app_description"></p>
+            <p class="text-sm opacity-70 mt-2"><em class="app_summary"></em></p>
         </div>
+
+        <div>
+            <h2 class="text-base font-medium mb-3">Reviews</h2>
+            <div id="reviewer-list"></div>
+        </div>
+    </div>
+
+    <!-- Sidebar: info table + download, sticky on desktop -->
+    <div class="lg:sticky lg:top-20 lg:self-start flex flex-col gap-4">
+        <div class="bg-base-200 border border-base-300 rounded-box p-4">
+            <table class="table table-sm">
+                <tbody class="text-sm">
+                    <tr><th class="font-normal px-0"><svg class="icon text-error"><use href="#i-gamepad" /></svg> Name</th><td class="opacity-70 text-right px-0 app_name"></td></tr>
+                    <tr><th class="font-normal px-0"><svg class="icon text-error"><use href="#i-gear" /></svg> Developer</th><td class="text-success text-right px-0 app_developer"></td></tr>
+                    <tr><th class="font-normal px-0"><svg class="icon text-error"><use href="#i-diagram" /></svg> Type</th><td class="opacity-70 text-right px-0 app_type"></td></tr>
+                    <tr><th class="font-normal px-0"><svg class="icon text-error"><use href="#i-shield" /></svg> Version</th><td class="opacity-70 text-right px-0 app_version"></td></tr>
+                </tbody>
+            </table>
+            <a class="app_packageName link text-sm block truncate mt-1" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '') ?>"></a>
+        </div>
+
+        <button class="btn btn-error w-full">Download Now</button>
+
+        <div class="flex items-center justify-center gap-3 text-sm opacity-70 py-2 border-t border-base-300">
+            <span class="app_installs"></span>
+            <span class="border-r border-base-300 h-4"></span>
+            <span class="app_rating"></span>
+        </div>
+        <p class="text-xs opacity-50 text-center">Last updated <span class="app_lastUpdated"></span></p>
     </div>
 </div>
 
@@ -119,7 +115,7 @@
 
                     var images = null;
                     response.images.forEach(function(element) {
-                        images = (images ?? '') + `<div class="carousel-item"><img loading="lazy" class="block w-full" src="${element}"></div>`;
+                        images = (images ?? '') + `<div class="carousel-item"><img loading="lazy" class="block w-full h-full object-cover" src="${element}"></div>`;
                     });
                     $('.carousel-inner').html(images);
                     $('#carouselExample').attr('data-idx', 0);

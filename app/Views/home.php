@@ -13,19 +13,39 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
     <p class="text-sm opacity-60">Generate, manage and track your game licenses in one place — fast, reliable, always up to date.</p>
 </div>
 
-<p class="text-center text-xs uppercase tracking-widest text-primary font-medium mb-4">Featured this week</p>
-
 <section class="relative rounded-box bg-base-200 border border-base-300 px-6 md:px-10 py-12 md:py-16 mb-10">
     <div class="absolute inset-0 overflow-hidden rounded-box pointer-events-none">
         <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full opacity-60" style="background: radial-gradient(circle, var(--hero-glow), transparent 70%);"></div>
     </div>
     <div class="relative grid lg:grid-cols-2 gap-10 items-center">
         <div>
+            <span class="badge badge-outline border-primary/40 text-primary gap-2 py-3 px-3 mb-4">
+                <svg class="icon"><use href="#i-star" /></svg>
+                <span class="text-xs font-semibold uppercase tracking-wide">Featured this week</span>
+            </span>
             <h1 class="text-4xl md:text-5xl font-semibold leading-[1.1] mb-4">Your next license,<br><span class="opacity-45">30 seconds away.</span></h1>
             <p class="opacity-70 max-w-sm mb-6 leading-relaxed">ESP, aimbot and bullet-track for Call of Duty: Mobile, Free Fire and Liên Quân — generate a key and drop it straight into the loader.</p>
-            <div class="flex flex-wrap gap-2 mb-2">
-                <a href="<?= site_url('keys/free') ?>" class="btn btn-primary">Get a free key</a>
-                <a href="#games" class="btn btn-ghost">See supported games</a>
+            <div class="flex flex-wrap gap-2 mb-8">
+                <a href="<?= site_url('keys/free') ?>" class="btn btn-primary gap-1">Get a free key <svg class="icon"><use href="#i-arrow-right" /></svg></a>
+                <a href="#games" class="btn btn-ghost gap-1">See supported games <svg class="icon"><use href="#i-arrow-right" /></svg></a>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-base-300">
+                <div class="flex items-start gap-2">
+                    <svg class="icon text-primary shrink-0 mt-0.5"><use href="#i-clock" /></svg>
+                    <div><p class="text-sm font-medium">Fast</p><p class="text-xs opacity-50">Key instantly</p></div>
+                </div>
+                <div class="flex items-start gap-2">
+                    <svg class="icon text-primary shrink-0 mt-0.5"><use href="#i-check-circle" /></svg>
+                    <div><p class="text-sm font-medium">Reliable</p><p class="text-xs opacity-50">99.9% uptime</p></div>
+                </div>
+                <div class="flex items-start gap-2">
+                    <svg class="icon text-primary shrink-0 mt-0.5"><use href="#i-shield" /></svg>
+                    <div><p class="text-sm font-medium">Secure</p><p class="text-xs opacity-50">Encrypted &amp; safe</p></div>
+                </div>
+                <div class="flex items-start gap-2">
+                    <svg class="icon text-primary shrink-0 mt-0.5"><use href="#i-refresh" /></svg>
+                    <div><p class="text-sm font-medium">Up to date</p><p class="text-xs opacity-50">Auto-updated</p></div>
+                </div>
             </div>
         </div>
         <div class="flex flex-col items-center lg:items-end" style="perspective: 1400px;">
@@ -72,22 +92,83 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
     </div>
 </section>
 
-<div class="flex items-center justify-between mb-4" id="games">
-    <h2 class="text-sm uppercase tracking-wide opacity-60">Supported games</h2>
-    <a href="<?= site_url('games') ?>" class="text-sm link opacity-70 flex items-center gap-1">View more <svg class="icon"><use href="#i-arrow-right" /></svg></a>
-</div>
-<div class="flex gap-4 overflow-x-auto pb-3 snap-x">
-    <div class="shrink-0 w-0 sm:w-0" aria-hidden="true" style="width:1rem"></div>
-    <?php foreach ($games as $i => $game) : ?>
-        <button onclick="openGameModal(<?= $i ?>)" class="snap-start shrink-0 w-44 text-left bg-base-200 border border-base-300 rounded-box p-4 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
-            <div class="rounded-lg w-full h-24 flex items-center justify-center mb-3 overflow-hidden" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-<?= $gradientVars[$i % count($gradientVars)] ?>) 25%, transparent), var(--color-base-300));">
-                <img src="<?= esc($game->image_url) ?>" loading="lazy" alt="<?= esc($game->name) ?>" class="w-12 h-12 rounded-lg object-cover">
-            </div>
-            <p class="font-medium text-sm truncate"><?= esc($game->name) ?></p>
-            <p class="text-xs opacity-60 truncate"><?= esc(implode(', ', $game->features)) ?></p>
-        </button>
-    <?php endforeach; ?>
-    <div class="shrink-0" aria-hidden="true" style="width:1rem"></div>
+<div class="grid lg:grid-cols-3 gap-6 mb-10" id="games">
+    <div class="lg:col-span-2">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm uppercase tracking-wide opacity-60 flex items-center gap-2"><svg class="icon"><use href="#i-gamepad" /></svg>Supported games</h2>
+            <a href="<?= site_url('games') ?>" class="text-sm link opacity-70 flex items-center gap-1">View more <svg class="icon"><use href="#i-arrow-right" /></svg></a>
+        </div>
+
+        <!-- Mobile: horizontal snap-scroll rail -->
+        <div class="lg:hidden flex gap-4 overflow-x-auto pb-3 snap-x">
+            <div class="shrink-0 w-0 sm:w-0" aria-hidden="true" style="width:1rem"></div>
+            <?php foreach ($games as $i => $game) : ?>
+                <button onclick="openGameModal(<?= $i ?>)" class="snap-start shrink-0 w-44 text-left bg-base-200 border border-base-300 rounded-box p-4 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div class="rounded-lg w-full h-24 flex items-center justify-center mb-3 overflow-hidden" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-<?= $gradientVars[$i % count($gradientVars)] ?>) 25%, transparent), var(--color-base-300));">
+                        <img src="<?= esc($game->image_url) ?>" loading="lazy" alt="<?= esc($game->name) ?>" class="w-12 h-12 rounded-lg object-cover">
+                    </div>
+                    <p class="font-medium text-sm truncate"><?= esc($game->name) ?></p>
+                    <p class="text-xs opacity-60 truncate"><?= esc(implode(', ', $game->features)) ?></p>
+                </button>
+            <?php endforeach; ?>
+            <div class="shrink-0" aria-hidden="true" style="width:1rem"></div>
+        </div>
+
+        <!-- Desktop: static grid, no scroll -->
+        <div class="hidden lg:grid grid-cols-3 gap-4">
+            <?php foreach ($games as $i => $game) : ?>
+                <button onclick="openGameModal(<?= $i ?>)" class="text-left bg-base-200 border border-base-300 rounded-box p-3 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div class="rounded-lg w-full h-20 flex items-center justify-center mb-2 overflow-hidden" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-<?= $gradientVars[$i % count($gradientVars)] ?>) 25%, transparent), var(--color-base-300));">
+                        <img src="<?= esc($game->image_url) ?>" loading="lazy" alt="<?= esc($game->name) ?>" class="w-10 h-10 rounded-lg object-cover">
+                    </div>
+                    <p class="font-medium text-sm truncate"><?= esc($game->name) ?></p>
+                    <p class="text-xs opacity-60 truncate"><?= esc(implode(', ', $game->features)) ?></p>
+                </button>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div>
+        <h2 class="text-sm uppercase tracking-wide opacity-60 flex items-center gap-2 mb-4"><svg class="icon"><use href="#i-news" /></svg>Latest news</h2>
+        <div class="flex flex-col gap-3">
+            <button onclick="openNewsModal('codm-update')" class="flex items-start gap-3 text-left bg-base-200 border border-base-300 rounded-box p-3 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
+                <div class="rounded-lg w-10 h-10 flex items-center justify-center shrink-0" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-primary) 25%, transparent), var(--color-base-300));"><svg class="icon opacity-70" style="width:1rem;height:1rem"><use href="#i-gamepad" /></svg></div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2 mb-0.5">
+                        <span class="badge badge-success badge-outline badge-xs">Updated</span>
+                        <span class="text-xs opacity-50">2 days ago</span>
+                    </div>
+                    <p class="text-sm font-medium leading-snug">Call of Duty: Mobile — v1.0.44</p>
+                    <p class="text-xs opacity-50">Fixed crash on Android 15</p>
+                </div>
+                <svg class="icon opacity-30 shrink-0 mt-1"><use href="#i-arrow-right" /></svg>
+            </button>
+            <button onclick="openNewsModal('aov-new')" class="flex items-start gap-3 text-left bg-base-200 border border-base-300 rounded-box p-3 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
+                <div class="rounded-lg w-10 h-10 flex items-center justify-center shrink-0" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-success) 25%, transparent), var(--color-base-300));"><svg class="icon opacity-70" style="width:1rem;height:1rem"><use href="#i-gamepad" /></svg></div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2 mb-0.5">
+                        <span class="badge badge-primary badge-outline badge-xs">New</span>
+                        <span class="text-xs opacity-50">5 days ago</span>
+                    </div>
+                    <p class="text-sm font-medium leading-snug">Arena of Valor — hack map</p>
+                    <p class="text-xs opacity-50">Jungle &amp; river vision overlay</p>
+                </div>
+                <svg class="icon opacity-30 shrink-0 mt-1"><use href="#i-arrow-right" /></svg>
+            </button>
+            <button onclick="openNewsModal('ff-update')" class="flex items-start gap-3 text-left bg-base-200 border border-base-300 rounded-box p-3 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
+                <div class="rounded-lg w-10 h-10 flex items-center justify-center shrink-0" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-accent) 25%, transparent), var(--color-base-300));"><svg class="icon opacity-70" style="width:1rem;height:1rem"><use href="#i-gamepad" /></svg></div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2 mb-0.5">
+                        <span class="badge badge-success badge-outline badge-xs">Updated</span>
+                        <span class="text-xs opacity-50">1 week ago</span>
+                    </div>
+                    <p class="text-sm font-medium leading-snug">Free Fire Max — v2.1.9</p>
+                    <p class="text-xs opacity-50">Smaller APK, better tracking</p>
+                </div>
+                <svg class="icon opacity-30 shrink-0 mt-1"><use href="#i-arrow-right" /></svg>
+            </button>
+        </div>
+    </div>
 </div>
 
 <dialog id="gameModal" class="modal">
@@ -101,50 +182,6 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
     </div>
     <form method="dialog" class="modal-backdrop"><button>close</button></form>
 </dialog>
-
-<div class="divider my-10"></div>
-
-<div class="flex items-center justify-between mb-4">
-    <h2 class="text-sm uppercase tracking-wide opacity-60">Latest news</h2>
-</div>
-<div class="flex flex-col gap-3 mb-10">
-    <button onclick="openNewsModal('codm-update')" class="flex items-center gap-4 text-left bg-base-200 border border-base-300 rounded-box p-4 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
-        <div class="rounded-lg w-14 h-14 flex items-center justify-center shrink-0" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-primary) 25%, transparent), var(--color-base-300));"><svg class="icon opacity-70"><use href="#i-gamepad" /></svg></div>
-        <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2 mb-0.5">
-                <span class="badge badge-success badge-outline badge-xs">Updated</span>
-                <span class="text-xs opacity-50">2 days ago</span>
-            </div>
-            <p class="text-sm font-medium truncate">Call of Duty: Mobile &mdash; module updated to v1.0.44</p>
-            <p class="text-xs opacity-50 truncate">Recompiled ESP overlay, fixed crash on Android 15</p>
-        </div>
-        <svg class="icon opacity-30 shrink-0"><use href="#i-arrow-right" /></svg>
-    </button>
-    <button onclick="openNewsModal('aov-new')" class="flex items-center gap-4 text-left bg-base-200 border border-base-300 rounded-box p-4 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
-        <div class="rounded-lg w-14 h-14 flex items-center justify-center shrink-0" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-success) 25%, transparent), var(--color-base-300));"><svg class="icon opacity-70"><use href="#i-gamepad" /></svg></div>
-        <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2 mb-0.5">
-                <span class="badge badge-primary badge-outline badge-xs">New</span>
-                <span class="text-xs opacity-50">5 days ago</span>
-            </div>
-            <p class="text-sm font-medium truncate">Arena of Valor &mdash; new hack map module</p>
-            <p class="text-xs opacity-50 truncate">Added icon info overlay for jungle &amp; river vision</p>
-        </div>
-        <svg class="icon opacity-30 shrink-0"><use href="#i-arrow-right" /></svg>
-    </button>
-    <button onclick="openNewsModal('ff-update')" class="flex items-center gap-4 text-left bg-base-200 border border-base-300 rounded-box p-4 hover:border-primary/50 hover:-translate-y-0.5 transition-all cursor-pointer">
-        <div class="rounded-lg w-14 h-14 flex items-center justify-center shrink-0" style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-accent) 25%, transparent), var(--color-base-300));"><svg class="icon opacity-70"><use href="#i-gamepad" /></svg></div>
-        <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2 mb-0.5">
-                <span class="badge badge-success badge-outline badge-xs">Updated</span>
-                <span class="text-xs opacity-50">1 week ago</span>
-            </div>
-            <p class="text-sm font-medium truncate">Free Fire Max &mdash; module updated to v2.1.9</p>
-            <p class="text-xs opacity-50 truncate">Improved bullet-track accuracy, smaller APK size</p>
-        </div>
-        <svg class="icon opacity-30 shrink-0"><use href="#i-arrow-right" /></svg>
-    </button>
-</div>
 
 <dialog id="newsModal" class="modal">
     <div class="modal-box">
@@ -187,6 +224,18 @@ $gradientVars = ['primary', 'accent', 'info', 'success', 'warning'];
                 </ul>
             </div>
         </div>
+
+        <div class="bg-base-200 border border-base-300 rounded-box p-5 flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div class="flex items-center gap-3">
+                <svg class="icon text-primary" style="width:1.5rem;height:1.5rem"><use href="#i-crown" /></svg>
+                <div>
+                    <p class="font-medium">Get your free key now</p>
+                    <p class="text-sm opacity-60">No credit card required. Fast and easy.</p>
+                </div>
+            </div>
+            <a href="<?= site_url('keys/free') ?>" class="btn btn-primary gap-1">Get a free key <svg class="icon"><use href="#i-arrow-right" /></svg></a>
+        </div>
+
         <div class="flex flex-wrap items-center justify-between gap-3 border-t border-base-300 pt-6">
             <p class="text-xs opacity-50">&copy; <?= date('Y') ?> ZyGames. All rights reserved.</p>
             <div class="flex items-center gap-1">
