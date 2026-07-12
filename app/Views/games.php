@@ -1,25 +1,163 @@
-<?php $games = getSupportedGames(); ?>
+<?php
+/**
+ * Games — the canonical marketplace catalog.
+ *
+ * Every browsing interaction (search, filter, sort, pagination) lives
+ * here and only here; Home never duplicates this. Search/filter/sort
+ * run entirely client-side over the already-rendered list below —
+ * there is no search/filter API today, and the catalog is small enough
+ * that this is the right amount of engineering, not a shortcut.
+ *
+ * Categories are derived here, in the view, from each game's existing
+ * ->features text (simple keyword match) — this does not change
+ * GameData or getSupportedGames(), it just reads what's already there.
+ */
+$games = getSupportedGames();
+
+$categoryDefs = [
+    'esp'    => 'ESP',
+    'aimbot' => 'Aimbot',
+    'bullet' => 'Bullet Track',
+    'map'    => 'Hack Map',
+    'icon'   => 'Icon Info',
+];
+
+$gamesWithCategories = array_map(function ($game) use ($categoryDefs) {
+    $haystack = strtolower(implode(' ', $game->features));
+    $cats = [];
+    foreach ($categoryDefs as $key => $label) {
+        if (str_contains($haystack, $key) || ($key === 'esp' && str_contains($haystack, 'esp'))) {
+            $cats[] = $key;
+        }
+    }
+    return ['game' => $game, 'categories' => $cats];
+}, $games);
+?>
 
 <?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
 
-<div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-    <h1 class="text-xl font-medium">Supported games</h1>
-    <a href="<?= site_url('') ?>" class="text-sm link opacity-70">&larr; Back to home</a>
-</div>
-<p class="text-sm opacity-60 mb-6">All games with an active mod module. Tap any game to see full details.</p>
+<!-- Sticky toolbar: search + filter + sort, pinned just below the navbar -->
+<div class="sticky top-14 z-[var(--z-sticky)] bg-base-200/95 backdrop-blur-sm border-b border-base-300 -mx-4 px-4 py-3 mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <label class="input input-bordered input-sm sm:input-md flex items-center gap-2 w-full sm:max-w-xs">
+            <svg class="icon opacity-50"><use href="#i-search" /></svg>
+            <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '') ?>">
+        </label>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-    <?php foreach ($games as $game) : ?>
-        <a href="<?= site_url('details?id=' . $game->id) ?>" class="bg-base-200 border border-base-300 rounded-box p-3 sm:p-4 flex items-center gap-3 hover:border-primary/50 hover:-translate-y-0.5 transition-all">
-            <img src="<?= esc($game->image_url) ?>" loading="lazy" alt="<?= esc($game->name) ?>" class="w-14 h-14 rounded-lg object-cover shrink-0">
-            <div class="min-w-0">
-                <p class="font-medium text-sm truncate"><?= esc($game->name) ?></p>
-                <p class="text-xs opacity-60 truncate"><?= esc(implode(' + ', $game->modes)) ?></p>
-                <p class="text-xs opacity-60 truncate"><?= esc(implode(', ', $game->features)) ?></p>
-            </div>
-        </a>
+        <div id="gameFilters" class="filter flex-1 min-w-0 overflow-x-auto flex-nowrap">
+            <input class="btn filter-reset btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="×" value="">
+            <?php foreach ($categoryDefs as $key => $label) : ?>
+                <input class="btn btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="<?= esc($label) ?>" value="<?= esc($key) ?>">
+            <?php endforeach; ?>
+        </div>
+
+        <label class="select select-bordered select-sm sm:select-md w-full sm:w-40 flex items-center gap-2">
+            <svg class="icon opacity-50 shrink-0"><use href="#i-sort" /></svg>
+            <select id="gameSort" class="grow">
+                <option value="default">Newest</option>
+                <option value="name">Name A–Z</option>
+            </select>
+        </label>
+    </div>
+</div>
+
+<!-- Catalog -->
+<div id="gameGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <?php foreach ($gamesWithCategories as $i => $entry) : ?>
+        <div class="game-card-wrap<?= $i >= 9 ? ' hidden' : '' ?>"
+             data-name="<?= esc(strtolower($entry['game']->name)) ?>"
+             data-categories="<?= esc(implode(' ', $entry['categories'])) ?>"
+             data-batch="<?= $i < 9 ? '0' : (int) floor(($i - 9) / 9) + 1 ?>">
+            <?= $this->setData(['game' => $entry['game'], 'density' => 'tight'])->include('Layout/partials/app_card') ?>
+        </div>
     <?php endforeach; ?>
 </div>
 
+<?= $this->setData([
+    'wrapperId' => 'gameEmptyState',
+    'hidden' => true,
+    'title' => 'No games match your filters',
+    'subtitle' => 'Try a different search term or clear your filters.',
+    'actionLabel' => 'Clear filters',
+    'actionId' => 'clearFiltersBtn',
+])->include('Layout/partials/empty_state') ?>
+
+<div class="text-center mt-6">
+    <button id="loadMoreBtn" type="button" class="btn btn-outline btn-wide">Load more</button>
+</div>
+
+<?= $this->endSection() ?>
+
+<?= $this->section('js') ?>
+<script>
+    (function() {
+        const grid = document.getElementById('gameGrid');
+        const cards = Array.from(grid.querySelectorAll('.game-card-wrap'));
+        const searchInput = document.getElementById('gameSearch');
+        const filterEl = document.getElementById('gameFilters');
+        const sortSelect = document.getElementById('gameSort');
+        const emptyState = document.getElementById('gameEmptyState');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+        let visibleBatches = 0; // how many extra batches of 9 have been revealed
+        const maxBatch = Math.max(...cards.map(c => parseInt(c.dataset.batch, 10)));
+
+        function currentCategory() {
+            const checked = filterEl.querySelector('input[name="gameCategory"]:checked');
+            return checked ? checked.value : '';
+        }
+
+        function applyFilters() {
+            const q = searchInput.value.trim().toLowerCase();
+            const cat = currentCategory();
+            let anyVisible = false;
+
+            cards.forEach(card => {
+                const matchesSearch = !q || card.dataset.name.includes(q);
+                const matchesCategory = !cat || card.dataset.categories.split(' ').includes(cat);
+                const withinBatch = parseInt(card.dataset.batch, 10) <= visibleBatches;
+                const show = matchesSearch && matchesCategory && withinBatch;
+                card.classList.toggle('hidden', !show);
+                if (show) anyVisible = true;
+            });
+
+            emptyState.classList.toggle('hidden', anyVisible);
+            emptyState.classList.toggle('flex', !anyVisible);
+
+            const moreToLoad = visibleBatches < maxBatch && (!q && !cat);
+            loadMoreBtn.classList.toggle('hidden', !moreToLoad);
+        }
+
+        function applySort() {
+            const mode = sortSelect.value;
+            if (mode === 'name') {
+                cards.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+            } else {
+                cards.sort((a, b) => parseInt(a.dataset.batch, 10) - parseInt(b.dataset.batch, 10));
+            }
+            cards.forEach(card => grid.appendChild(card));
+        }
+
+        searchInput.addEventListener('input', applyFilters);
+        filterEl.addEventListener('change', applyFilters);
+        sortSelect.addEventListener('change', () => {
+            applySort();
+            applyFilters();
+        });
+        loadMoreBtn.addEventListener('click', () => {
+            visibleBatches += 1;
+            applyFilters();
+        });
+        clearFiltersBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            filterEl.querySelector('input[value=""]').checked = true;
+            applyFilters();
+        });
+
+        // Initial render — also respects ?q= prefilled by Home's Hero search.
+        applyFilters();
+    })();
+</script>
 <?= $this->endSection() ?>

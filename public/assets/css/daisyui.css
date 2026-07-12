@@ -32,9 +32,6 @@
     --radius-field: 0.5rem;
     --radius-box: 0.75rem;
     --border: 1px;
-    /* Soft accent glow used behind the hero card — tuned per theme so it
-       never turns into a muddy smudge on a light background. */
-    --hero-glow: color-mix(in oklch, var(--color-primary) 35%, transparent);
 }
 
 [data-theme="zygame-light"] {
@@ -61,11 +58,18 @@
     --color-error-content: oklch(98% 0.004 25);
     --radius-selector: 0.5rem;
     --radius-field: 0.5rem;
-    /* Much lighter than the dark theme's glow, so it stays a soft tint
-       instead of turning into a dirty-looking blob on white. */
-    --hero-glow: color-mix(in oklch, var(--color-primary) 14%, transparent);
     --radius-box: 0.75rem;
     --border: 1px;
+}
+
+/* Z-index scale — the only new tokens this redesign needed (see Visual
+   Design Foundation audit). Three tiers is enough for the whole app:
+   sticky in-page bars/sidebars, the navbar above them, and modals above
+   everything. Nothing here should ever need a fourth tier. */
+:root {
+    --z-sticky: 10;
+    --z-navbar: 20;
+    --z-modal: 50;
 }
 
 * {

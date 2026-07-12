@@ -7,18 +7,6 @@
 
 <?= $this->section('content') ?>
 
-<style>
-    .carousel-inner {
-        display: flex;
-        transition: transform 0.35s ease;
-    }
-
-    .carousel-item {
-        flex: 0 0 100%;
-        width: 100%;
-    }
-</style>
-
 <?= $this->include('Layout/preloader') ?>
 
 <!-- Banner: full width -->
@@ -34,40 +22,33 @@
     </div>
 </div>
 
-<!-- Desktop: 2 columns (media/description left, info sidebar right). Mobile: stacks. -->
-<div class="grid lg:grid-cols-3 gap-6">
+<!--
+    Desktop: 3-col grid, Gallery (row 1, cols 1-2), Sidebar (rows 1-2, col 3,
+    sticky — spans the full height of Gallery + Main content so it stays in
+    view while scrolling), Main content (row 2, cols 1-2).
+    Mobile: order-* gives the locked sequence Gallery → Sidebar (Metadata +
+    Get Access) → Main content (MOD Info, About, Reviews, Related) — the
+    one deliberate trade-off where Get Access appears before About/Reviews
+    on mobile, since there's no sticky sidebar there to keep it in view.
+-->
+<div class="grid lg:grid-cols-3 lg:grid-rows-[auto_1fr] gap-6">
 
-    <div class="lg:col-span-2 flex flex-col gap-6">
-        <div id="carouselExample" class="relative rounded-box overflow-hidden bg-base-200" style="aspect-ratio: 16/9;" data-idx="0">
-            <div class="carousel-inner w-full h-full"></div>
-            <button class="btn btn-circle btn-sm absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', -1)" aria-label="Previous">
+    <!-- Gallery -->
+    <div class="order-1 lg:order-none lg:col-span-2 lg:row-start-1">
+        <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 w-full gap-2" style="aspect-ratio: 16/9;"></div>
+        <div class="flex justify-end gap-2 mt-2">
+            <button class="btn btn-circle btn-sm" type="button" onclick="galleryScroll(-1)" aria-label="Previous screenshot">
                 <svg class="icon"><use href="#i-chev-l" /></svg>
             </button>
-            <button class="btn btn-circle btn-sm absolute right-2 top-1/2 -translate-y-1/2" type="button" onclick="carouselMove('carouselExample', 1)" aria-label="Next">
+            <button class="btn btn-circle btn-sm" type="button" onclick="galleryScroll(1)" aria-label="Next screenshot">
                 <svg class="icon"><use href="#i-chev-r" /></svg>
             </button>
         </div>
-
-        <details class="collapse collapse-arrow bg-base-200 border border-base-300 rounded-box">
-            <summary class="collapse-title">MOD Info</summary>
-            <div class="collapse-content"><ul class="text-sm opacity-80"><li>Draw Esp</li><li>Chams hack</li><li>[more..]</li></ul></div>
-        </details>
-
-        <div>
-            <h2 class="text-base font-medium mb-1">About this <span class="app_type"></span></h2>
-            <p class="opacity-70 text-sm leading-relaxed app_description"></p>
-            <p class="text-sm opacity-70 mt-2"><em class="app_summary"></em></p>
-        </div>
-
-        <div>
-            <h2 class="text-base font-medium mb-3">Reviews</h2>
-            <div id="reviewer-list"></div>
-        </div>
     </div>
 
-    <!-- Sidebar: info table + download, sticky on desktop -->
-    <div class="lg:sticky lg:top-20 lg:self-start flex flex-col gap-4">
-        <div class="bg-base-200 border border-base-300 rounded-box p-4">
+    <!-- Sidebar: metadata + Get Access, sticky, spans full height on desktop -->
+    <div class="order-2 lg:order-none lg:col-span-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-20 lg:self-start flex flex-col gap-4">
+        <div class="card card-border bg-base-200 border-base-300 p-4">
             <table class="table table-sm">
                 <tbody class="text-sm">
                     <tr><th class="font-normal px-0"><svg class="icon text-error"><use href="#i-gamepad" /></svg> Name</th><td class="opacity-70 text-right px-0 app_name"></td></tr>
@@ -79,7 +60,8 @@
             <a class="app_packageName link text-sm block truncate mt-1" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '') ?>"></a>
         </div>
 
-        <button class="btn btn-error w-full">Download Now</button>
+        <!-- Get Access — the only purchase CTA in the entire public marketplace UI -->
+        <button class="btn btn-primary w-full mt-2">Get Access</button>
 
         <div class="flex items-center justify-center gap-3 text-sm opacity-70 py-2 border-t border-base-300">
             <span class="app_installs"></span>
@@ -88,9 +70,49 @@
         </div>
         <p class="text-xs opacity-50 text-center">Last updated <span class="app_lastUpdated"></span></p>
     </div>
+
+    <!-- Main content: MOD Info, About, Reviews, Related Applications -->
+    <div class="order-3 lg:order-none lg:col-span-2 lg:row-start-2 flex flex-col gap-6">
+        <details class="collapse collapse-arrow bg-base-200 border border-base-300 rounded-box">
+            <summary class="collapse-title">MOD Info</summary>
+            <div class="collapse-content"><ul class="text-sm opacity-80"><li>Draw Esp</li><li>Chams hack</li><li>[more..]</li></ul></div>
+        </details>
+
+        <div>
+            <h2 class="text-lg font-medium mb-1">About this <span class="app_type"></span></h2>
+            <p class="opacity-70 text-sm leading-relaxed app_description"></p>
+            <p class="text-sm opacity-70 mt-2"><em class="app_summary"></em></p>
+        </div>
+
+        <div>
+            <h2 class="text-lg font-medium mb-3">Reviews</h2>
+            <div id="reviewer-list" class="flex flex-col gap-4"></div>
+        </div>
+
+        <!--
+            Related Applications — reuses the same App Card shape (icon,
+            title, subtitle, whole card links to Details). Hidden until
+            populated: the current API response has no similar-apps field
+            yet (parseSimilar()/parseOthers() exist in google-play.php but
+            aren't wired into proxy.php's output — a backend task, not
+            solved here).
+        -->
+        <div id="relatedAppsSection" class="hidden">
+            <h2 class="text-lg font-medium mb-3">Related Applications</h2>
+            <div id="relatedAppsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div>
+    </div>
 </div>
 
 <script>
+    // ---- Gallery: native scroll-snap carousel (DaisyUI `carousel`), no
+    // transform/index bookkeeping needed like the old custom carousel. ----
+    function galleryScroll(dir) {
+        const el = document.getElementById('carouselGallery');
+        if (!el) return;
+        el.scrollBy({ left: dir * el.clientWidth, behavior: 'smooth' });
+    }
+
     $(document).ready(function() {
         $.ajax({
             url: "<?= site_url('proxy.php?id=') . esc($_GET['id'] ?? '') ?>",
@@ -113,20 +135,18 @@
                     $('.app_installs').html('<svg class="icon"><use href="#i-download" /></svg> ' + response.installs);
                     $('.app_rating').html('<svg class="icon text-warning"><use href="#i-check" /></svg> ' + parseFloat(response.rating).toFixed(1));
 
-                    var images = null;
-                    response.images.forEach(function(element) {
-                        images = (images ?? '') + `<div class="carousel-item"><img loading="lazy" class="block w-full h-full object-cover" src="${element}"></div>`;
+                    var gallery = '';
+                    response.images.forEach(function(src) {
+                        gallery += `<div class="carousel-item w-full"><img loading="lazy" class="w-full h-full object-cover rounded-box" src="${src}"></div>`;
                     });
-                    $('.carousel-inner').html(images);
-                    $('#carouselExample').attr('data-idx', 0);
-                    $('#carouselExample .carousel-inner').css('transform', 'translateX(0)');
+                    $('#carouselGallery').html(gallery);
 
-                    var reviews = ``;
+                    var reviews = '';
                     response.reviews.forEach(function(element) {
-                        var stars = ``;
+                        var stars = '';
                         for (let i = 0; i < 5; i++) stars += `<svg class="icon ${element.stars > i ? 'text-warning' : 'opacity-20'}"><use href="#i-check-circle" /></svg>`;
                         reviews += `
-                            <div class="mb-4">
+                            <div>
                                 <div class="flex mb-2 justify-between items-center">
                                     <div class="flex items-center gap-2">
                                         <img class="rounded-full w-8 h-8" aria-hidden="true" loading="lazy" src="${element.reviewer.avatar}" alt="">
@@ -138,9 +158,29 @@
                                     <p class="text-sm opacity-70 m-0">${element.review_text}</p>
                                 </div>
                             </div>
-                        `
+                        `;
                     });
                     $('#reviewer-list').html(reviews);
+
+                    // Related Applications — only renders if the API ever
+                    // starts returning this field (see comment above).
+                    if (response.similarApps && response.similarApps.length) {
+                        var related = '';
+                        response.similarApps.forEach(function(app) {
+                            related += `
+                                <a href="<?= site_url('details') ?>?id=${encodeURIComponent(app.packageName)}"
+                                   class="card card-border bg-base-100 border-base-300 hover:border-primary/50 transition-colors flex-row items-center gap-3 p-3">
+                                    <img src="${app.icon}" loading="lazy" alt="" class="w-10 h-10 rounded-lg object-cover shrink-0">
+                                    <div class="min-w-0 flex-1">
+                                        <p class="font-medium text-sm truncate">${app.name}</p>
+                                        <p class="text-xs opacity-60 truncate">${app.developer || ''}</p>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                        $('#relatedAppsGrid').html(related);
+                        $('#relatedAppsSection').removeClass('hidden');
+                    }
                 } else {
                     console.warn(`Error: ${response.message}`);
                 }
