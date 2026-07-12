@@ -9,21 +9,6 @@ if (typeof $ !== "undefined") {
   });
 }
 
-// Minimal vanilla-JS carousel, replaces Bootstrap's carousel component.
-// Usage: <div id="X"><div class="carousel-inner">...<div class="carousel-item">...</div></div></div>
-// Buttons: onclick="carouselMove('X', -1)" / onclick="carouselMove('X', 1)"
-function carouselMove(id, dir) {
-  const wrap = document.getElementById(id);
-  if (!wrap) return;
-  const inner = wrap.querySelector(".carousel-inner");
-  const items = inner ? inner.children.length : 0;
-  if (!items) return;
-  let idx = parseInt(wrap.dataset.idx || "0", 10);
-  idx = (idx + dir + items) % items;
-  wrap.dataset.idx = idx;
-  inner.style.transform = `translateX(-${idx * 100}%)`;
-}
-
 if (typeof Swal !== "undefined") {
   var Toast = Swal.mixin({
     toast: true,

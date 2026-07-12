@@ -36,7 +36,7 @@
     <!-- Gallery -->
     <div class="order-1 lg:order-none lg:col-span-2 lg:row-start-1">
         <div class="relative">
-            <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 w-full gap-2" style="aspect-ratio: 16/9;"></div>
+            <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 w-full h-56 sm:h-72 lg:h-80 gap-2"></div>
             <button class="btn btn-circle btn-md bg-base-100/80 border-base-300 hover:bg-base-100 absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="galleryScroll(-1)" aria-label="Previous screenshot">
                 <svg class="icon"><use href="#i-chev-l" /></svg>
             </button>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Package Name</p>
-                    <a class="app_packageName link link-hover text-sm opacity-80 truncate block" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '') ?>"></a>
+                    <a class="app_packageName link link-hover text-sm opacity-80 truncate block" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '', 'url') ?>"></a>
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Version</p>
@@ -127,7 +127,7 @@
 
     $(document).ready(function() {
         $.ajax({
-            url: "<?= site_url('proxy.php?id=') . esc($_GET['id'] ?? '') ?>",
+            url: "<?= site_url('proxy.php?id=') . esc($_GET['id'] ?? '', 'url') ?>",
             type: "GET",
             dataType: "json",
             success: function(response) {
@@ -149,7 +149,7 @@
 
                     var gallery = '';
                     response.images.forEach(function(src) {
-                        gallery += `<div class="carousel-item w-full"><img loading="lazy" class="w-full h-full object-cover rounded-box" src="${src}"></div>`;
+                        gallery += `<div class="carousel-item w-full h-full overflow-hidden"><img loading="lazy" class="w-full h-full object-cover rounded-box" src="${src}"></div>`;
                     });
                     $('#carouselGallery').html(gallery);
 

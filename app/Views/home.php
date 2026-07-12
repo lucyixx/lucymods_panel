@@ -66,7 +66,7 @@ $whatsNew = [
             if (!$game) continue; // data drift guard — never render a dead link
         ?>
             <?= $this->setData([
-                'href' => site_url('details?id=' . $field($game, 'id')),
+                'href' => site_url('details?id=' . esc($field($game, 'id'), 'url')),
                 'icon' => $item['icon'],
                 'title' => $item['headline'],
                 'date' => $item['date'],

@@ -37,7 +37,7 @@ $padding  = $roomier ? 'p-4' : 'p-3';
 $iconBox  = $roomier ? 'w-14 h-14' : 'w-11 h-11';
 $gap      = $roomier ? 'gap-4' : 'gap-3';
 ?>
-<a href="<?= site_url('details?id=' . $id) ?>"
+<a href="<?= site_url('details?id=' . esc($id, 'url')) ?>"
    class="group card card-border bg-base-100 border-base-300 hover:border-primary/50 hover:-translate-y-0.5 transition-all duration-150 flex-row items-center <?= $gap ?> <?= $padding ?>">
     <div class="<?= $iconBox ?> rounded-xl overflow-hidden shrink-0 bg-base-200 ring-1 ring-base-300 group-hover:ring-primary/30 transition-colors">
         <img src="<?= esc($imageUrl) ?>" loading="lazy" alt="" aria-hidden="true" class="w-full h-full object-cover">

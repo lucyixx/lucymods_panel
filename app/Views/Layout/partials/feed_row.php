@@ -15,7 +15,7 @@
  */
 $tag = !empty($href) ? 'a' : 'div';
 ?>
-<<?= $tag ?> <?= !empty($href) ? 'href="' . esc($href) . '"' : '' ?>
+<<?= $tag ?> <?= !empty($href) ? 'href="' . esc($href, 'attr') . '"' : '' ?>
    class="flex items-center gap-2.5 px-2.5 py-1.5 card card-border bg-base-100 border-base-300 hover:border-primary/40 transition-colors">
     <svg class="icon opacity-60 shrink-0" style="width:0.85rem;height:0.85rem"><use href="#<?= esc($icon ?? 'i-news') ?>" /></svg>
     <p class="text-sm truncate flex-1 min-w-0"><?= esc($title) ?></p>

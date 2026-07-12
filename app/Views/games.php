@@ -54,7 +54,7 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
         <label class="input input-sm sm:input-md flex items-center gap-2 w-full sm:max-w-xs">
             <svg class="icon opacity-50"><use href="#i-search" /></svg>
-            <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '') ?>">
+            <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '', 'attr') ?>">
         </label>
 
         <div id="gameFilters" class="filter flex-1 min-w-0 overflow-x-auto flex-nowrap">
