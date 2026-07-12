@@ -16,7 +16,7 @@
 $currentTheme = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'zygame-light') ? 'zygame-light' : 'zygame';
 ?>
 <div class="bg-base-100/90 backdrop-blur border-b border-base-300 px-4 sticky top-0 z-[var(--z-navbar)]">
-    <div class="max-w-5xl mx-auto w-full navbar p-0 min-h-14 py-1">
+    <div class="max-w-5xl mx-auto w-full navbar h-16">
         <div class="navbar-start">
             <div class="dropdown">
                 <div tabindex="0" role="button" class="btn btn-ghost lg:hidden" aria-label="Toggle navigation">

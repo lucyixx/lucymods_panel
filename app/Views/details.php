@@ -46,8 +46,9 @@
         </div>
     </div>
 
-    <!-- Sidebar: metadata + Get Access, sticky, spans full height on desktop -->
-    <div class="order-2 lg:order-none lg:col-span-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-20 lg:self-start flex flex-col gap-4">
+    <!-- Sidebar: metadata + Get Access, sticky, spans full height on desktop.
+         top-16 matches the Navbar's fixed h-16 height (see Layout/partials/navbar.php). -->
+    <div class="order-2 lg:order-none lg:col-span-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-16 lg:self-start flex flex-col gap-4">
         <div class="card card-border bg-base-200 border-base-300 p-4">
             <div class="grid grid-cols-2 gap-x-3 gap-y-4">
                 <div class="min-w-0">
@@ -59,19 +60,20 @@
                     <p class="text-sm text-success truncate app_developer"></p>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Type</p>
-                    <p class="text-sm opacity-80 truncate app_type"></p>
+                    <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Package Name</p>
+                    <a class="app_packageName link link-hover text-sm opacity-80 truncate block" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '') ?>"></a>
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Version</p>
                     <p class="text-sm opacity-80 truncate app_version"></p>
                 </div>
             </div>
-            <a class="app_packageName link text-xs opacity-60 block truncate mt-4" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '') ?>"></a>
         </div>
 
-        <!-- Get Access — the only purchase CTA in the entire public marketplace UI -->
-        <button class="btn btn-primary w-full mt-2">Get Access</button>
+        <!-- Get Access — the only purchase CTA in the entire public marketplace UI.
+             Product Selection doesn't exist yet (tracked open item), so this gives
+             honest feedback instead of doing nothing when pressed. -->
+        <button type="button" class="btn btn-primary w-full mt-2" onclick="Swal.fire({icon: 'info', title: 'Coming soon', text: 'Product selection isn\'t available yet — check back soon.', confirmButtonColor: 'var(--color-primary)'})">Get Access</button>
 
         <div class="flex items-center justify-center gap-3 text-sm opacity-70 py-2 border-t border-base-300">
             <span class="app_installs"></span>
