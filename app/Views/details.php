@@ -36,7 +36,7 @@
     <!-- Gallery -->
     <div class="order-1 lg:order-none lg:col-span-2 lg:row-start-1">
         <div class="relative">
-            <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 w-full h-56 sm:h-72 lg:h-80 gap-2"></div>
+            <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 w-full h-56 sm:h-72 lg:h-80 gap-2 overflow-y-hidden"></div>
             <button class="btn btn-circle btn-md bg-base-100/80 border-base-300 hover:bg-base-100 absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="galleryScroll(-1)" aria-label="Previous screenshot">
                 <svg class="icon"><use href="#i-chev-l" /></svg>
             </button>

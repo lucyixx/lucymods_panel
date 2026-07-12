@@ -57,7 +57,7 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
             <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '', 'attr') ?>">
         </label>
 
-        <div id="gameFilters" class="filter flex-1 min-w-0 overflow-x-auto flex-nowrap">
+        <div id="gameFilters" class="filter flex-1 min-w-0">
             <input class="btn filter-reset btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="Clear category filter" value="">
             <?php foreach ($categoryDefs as $key => $label) : ?>
                 <input class="btn btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="<?= esc($label) ?>" value="<?= esc($key) ?>">

@@ -81,6 +81,15 @@
     outline-offset: 2px;
 }
 
+/* .input/.select wrap a real <input>/<select> and already draw their own
+   complete focus outline on the wrapper via :focus-within (see daisyUI's
+   own input.css/select.css). Without this, the inner field gets our ring
+   too, doubling up into a clashing two-color outline. */
+.input :focus-visible,
+.select :focus-visible {
+    outline: none;
+}
+
 a {
     text-decoration: none !important;
 }
