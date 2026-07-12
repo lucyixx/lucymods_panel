@@ -35,12 +35,12 @@
 
     <!-- Gallery -->
     <div class="order-1 lg:order-none lg:col-span-2 lg:row-start-1">
-        <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 w-full gap-2" style="aspect-ratio: 16/9;"></div>
-        <div class="flex justify-end gap-2 mt-2">
-            <button class="btn btn-circle btn-sm" type="button" onclick="galleryScroll(-1)" aria-label="Previous screenshot">
+        <div class="relative">
+            <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 w-full gap-2" style="aspect-ratio: 16/9;"></div>
+            <button class="btn btn-circle btn-md bg-base-100/80 border-base-300 hover:bg-base-100 absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="galleryScroll(-1)" aria-label="Previous screenshot">
                 <svg class="icon"><use href="#i-chev-l" /></svg>
             </button>
-            <button class="btn btn-circle btn-sm" type="button" onclick="galleryScroll(1)" aria-label="Next screenshot">
+            <button class="btn btn-circle btn-md bg-base-100/80 border-base-300 hover:bg-base-100 absolute right-2 top-1/2 -translate-y-1/2" type="button" onclick="galleryScroll(1)" aria-label="Next screenshot">
                 <svg class="icon"><use href="#i-chev-r" /></svg>
             </button>
         </div>
@@ -49,15 +49,25 @@
     <!-- Sidebar: metadata + Get Access, sticky, spans full height on desktop -->
     <div class="order-2 lg:order-none lg:col-span-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-20 lg:self-start flex flex-col gap-4">
         <div class="card card-border bg-base-200 border-base-300 p-4">
-            <table class="table table-sm">
-                <tbody class="text-sm">
-                    <tr><th class="font-normal px-0"><svg class="icon text-error"><use href="#i-gamepad" /></svg> Name</th><td class="opacity-70 text-right px-0 app_name"></td></tr>
-                    <tr><th class="font-normal px-0"><svg class="icon text-error"><use href="#i-gear" /></svg> Developer</th><td class="text-success text-right px-0 app_developer"></td></tr>
-                    <tr><th class="font-normal px-0"><svg class="icon text-error"><use href="#i-diagram" /></svg> Type</th><td class="opacity-70 text-right px-0 app_type"></td></tr>
-                    <tr><th class="font-normal px-0"><svg class="icon text-error"><use href="#i-shield" /></svg> Version</th><td class="opacity-70 text-right px-0 app_version"></td></tr>
-                </tbody>
-            </table>
-            <a class="app_packageName link text-sm block truncate mt-1" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '') ?>"></a>
+            <div class="grid grid-cols-2 gap-x-3 gap-y-4">
+                <div class="min-w-0">
+                    <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Name</p>
+                    <p class="text-sm font-medium truncate app_name"></p>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Developer</p>
+                    <p class="text-sm text-success truncate app_developer"></p>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Type</p>
+                    <p class="text-sm opacity-80 truncate app_type"></p>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Version</p>
+                    <p class="text-sm opacity-80 truncate app_version"></p>
+                </div>
+            </div>
+            <a class="app_packageName link text-xs opacity-60 block truncate mt-4" target="_blank" href="https://play.google.com/store/apps/details?id=<?= esc($_GET['id'] ?? '') ?>"></a>
         </div>
 
         <!-- Get Access — the only purchase CTA in the entire public marketplace UI -->

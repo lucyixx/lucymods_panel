@@ -22,7 +22,7 @@ $currentTheme = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'zygame-light
                 <div tabindex="0" role="button" class="btn btn-ghost lg:hidden" aria-label="Toggle navigation">
                     <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
                 </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 border border-base-300 rounded-box z-[var(--z-navbar)] mt-3 w-48 p-2 shadow-sm">
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-48 p-2 shadow-sm">
                     <li><a href="<?= site_url('') ?>">Home</a></li>
                     <li><a href="<?= site_url('games') ?>">Games</a></li>
                 </ul>
