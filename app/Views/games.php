@@ -46,32 +46,33 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
 <?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
 
-<!-- Sticky toolbar: search + filter + sort, pinned just below the navbar.
-     top-16 matches the Navbar's fixed h-16 height exactly (single source
-     of truth — see Layout/partials/navbar.php) so it never gaps or
-     overlaps regardless of content. -->
-<div class="sticky top-16 z-[var(--z-sticky)] bg-base-200/95 backdrop-blur-sm border-b border-base-300 -mx-4 px-4 py-3 mb-6">
-    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-        <label class="input input-sm sm:input-md flex items-center gap-2 w-full sm:max-w-xs">
-            <svg class="icon opacity-50"><use href="#i-search" /></svg>
-            <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '', 'attr') ?>">
-        </label>
+<!-- Sticky: search only. top-16 matches the Navbar's fixed h-16 height
+     exactly (single source of truth — see Layout/partials/navbar.php) so
+     it never gaps or overlaps regardless of content. Filter and Sort are
+     intentionally NOT part of the sticky block — they scroll with the
+     page, right below the search bar. -->
+<div class="sticky top-16 z-[var(--z-sticky)] bg-base-100/95 backdrop-blur-sm border-b border-base-300 -mx-4 px-4 py-3">
+    <label class="input input-sm sm:input-md flex items-center gap-2 w-full sm:max-w-xs">
+        <svg class="icon opacity-50"><use href="#i-search" /></svg>
+        <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '', 'attr') ?>">
+    </label>
+</div>
 
-        <div id="gameFilters" class="filter flex-1 min-w-0">
-            <input class="btn filter-reset btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="Clear category filter" value="">
-            <?php foreach ($categoryDefs as $key => $label) : ?>
-                <input class="btn btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="<?= esc($label) ?>" value="<?= esc($key) ?>">
-            <?php endforeach; ?>
-        </div>
-
-        <label class="flex items-center gap-2 w-full sm:w-40">
-            <svg class="icon opacity-50 shrink-0"><use href="#i-sort" /></svg>
-            <select id="gameSort" class="select select-sm sm:select-md w-full">
-                <option value="default">Newest</option>
-                <option value="name">Name A–Z</option>
-            </select>
-        </label>
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 px-4 -mx-4 py-3 mb-3 border-b border-base-300">
+    <div id="gameFilters" class="filter flex-1 min-w-0">
+        <input class="btn filter-reset btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="Clear category filter" value="">
+        <?php foreach ($categoryDefs as $key => $label) : ?>
+            <input class="btn btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="<?= esc($label) ?>" value="<?= esc($key) ?>">
+        <?php endforeach; ?>
     </div>
+
+    <label class="flex items-center gap-2 w-full sm:w-40">
+        <svg class="icon opacity-50 shrink-0"><use href="#i-sort" /></svg>
+        <select id="gameSort" class="select select-sm sm:select-md w-full">
+            <option value="default">Newest</option>
+            <option value="name">Name A–Z</option>
+        </select>
+    </label>
 </div>
 
 <!-- Catalog -->

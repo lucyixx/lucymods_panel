@@ -36,7 +36,7 @@
     <!-- Gallery -->
     <div class="order-1 lg:order-none lg:col-span-2 lg:row-start-1">
         <div class="relative">
-            <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 w-full h-56 sm:h-72 lg:h-80 gap-2 overflow-y-hidden"></div>
+            <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 gap-2" style="width:100%; height:clamp(180px, 42vw, 320px); overflow-y:hidden;"></div>
             <button class="btn btn-circle btn-md bg-base-100/80 border-base-300 hover:bg-base-100 absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="galleryScroll(-1)" aria-label="Previous screenshot">
                 <svg class="icon"><use href="#i-chev-l" /></svg>
             </button>
@@ -149,7 +149,7 @@
 
                     var gallery = '';
                     response.images.forEach(function(src) {
-                        gallery += `<div class="carousel-item w-full h-full overflow-hidden"><img loading="lazy" class="w-full h-full object-cover rounded-box" src="${src}"></div>`;
+                        gallery += `<div class="carousel-item" style="flex:0 0 100%; width:100%; height:100%; overflow:hidden;"><img loading="lazy" style="display:block; width:100%; height:100%; object-fit:cover; border-radius:var(--radius-box);" src="${src}"></div>`;
                     });
                     $('#carouselGallery').html(gallery);
 
@@ -161,7 +161,7 @@
                             <div>
                                 <div class="flex mb-2 justify-between items-center">
                                     <div class="flex items-center gap-2">
-                                        <img class="rounded-full w-8 h-8" aria-hidden="true" loading="lazy" src="${element.reviewer.avatar}" alt="">
+                                        <img style="display:block; width:2rem; height:2rem; border-radius:9999px; object-fit:cover;" aria-hidden="true" loading="lazy" src="${element.reviewer.avatar}" alt="">
                                         <span class="text-sm">${element.reviewer.name}</span>
                                     </div>
                                     <div class="opacity-70 flex gap-0.5">${stars}</div>
@@ -182,7 +182,7 @@
                             related += `
                                 <a href="<?= site_url('details') ?>?id=${encodeURIComponent(app.packageName)}"
                                    class="card card-border bg-base-100 border-base-300 hover:border-primary/50 transition-colors flex-row items-center gap-3 p-3">
-                                    <img src="${app.icon}" loading="lazy" alt="" class="w-10 h-10 rounded-lg object-cover shrink-0">
+                                    <img src="${app.icon}" loading="lazy" alt="" style="display:block; width:2.5rem; height:2.5rem; border-radius:0.75rem; object-fit:cover; flex-shrink:0;">
                                     <div class="min-w-0 flex-1">
                                         <p class="font-medium text-sm truncate">${app.name}</p>
                                         <p class="text-xs opacity-60 truncate">${app.developer || ''}</p>
