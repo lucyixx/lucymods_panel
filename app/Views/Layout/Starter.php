@@ -1,6 +1,6 @@
 <?php $currentTheme = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'zygame-light') ? 'zygame-light' : 'zygame'; ?>
 <!DOCTYPE html>
-<html data-theme="<?= $currentTheme ?>" lang="en">
+<html data-theme="<?= $currentTheme ?>" lang="en" style="overflow-x: hidden;">
 
 <head>
     <meta charset="UTF-8">
