@@ -46,12 +46,8 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
 <?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
 
-<!-- Sticky: search only. top-16 matches the Navbar's fixed h-16 height
-     exactly (single source of truth — see Layout/partials/navbar.php) so
-     it never gaps or overlaps regardless of content. Filter and Sort are
-     intentionally NOT part of the sticky block — they scroll with the
-     page, right below the search bar. -->
-<div class="sticky top-16 z-[var(--z-sticky)] bg-base-100/95 backdrop-blur-sm border-b border-base-300 -mx-4 px-4 py-3">
+<!-- Search — not sticky (per explicit requirement). -->
+<div class="bg-base-100 px-4 -mx-4 py-3">
     <label class="input input-sm sm:input-md flex items-center gap-2 w-full sm:max-w-xs">
         <svg class="icon opacity-50"><use href="#i-search" /></svg>
         <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '', 'attr') ?>">
