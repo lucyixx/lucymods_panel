@@ -36,7 +36,7 @@
     <!-- Gallery -->
     <div class="order-1 lg:order-none lg:col-span-2 lg:row-start-1">
         <div class="relative">
-            <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 gap-2" style="width:100%; height:clamp(180px, 42vw, 320px); overflow-y:hidden; display:grid; grid-auto-flow:column; grid-auto-columns:100%;"></div>
+            <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 gap-2" style="width:100%; height:clamp(180px, 42vw, 320px); overflow-y:hidden;"></div>
             <button class="btn btn-circle btn-md bg-base-100/80 border-base-300 hover:bg-base-100 absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="galleryScroll(-1)" aria-label="Previous screenshot">
                 <svg class="icon"><use href="#i-chev-l" /></svg>
             </button>
@@ -117,6 +117,72 @@
 </div>
 
 <script>
+    // =====================================================================
+    // TEMPORARY DEBUG INSTRUMENT — NOT A FIX. REMOVE AFTER USE.
+    // Scans the real, live DOM for whatever is actually causing horizontal
+    // overflow and prints exact measurements to the console. Run this on
+    // Chrome (where the bug reproduces), open DevTools console, reload the
+    // page, wait for the gallery images to load, then copy everything
+    // printed under "=== OVERFLOW DEBUG ===" back.
+    // =====================================================================
+    function runOverflowDebug() {
+        console.log('=== OVERFLOW DEBUG ===');
+        const vw = window.innerWidth;
+        console.log('window.innerWidth:', vw);
+
+        function report(label, el) {
+            if (!el) { console.log(label, '-> element not found'); return; }
+            const r = el.getBoundingClientRect();
+            const cs = getComputedStyle(el);
+            console.log(label, {
+                tag: el.tagName, id: el.id, class: el.className,
+                rectWidth: r.width, rectRight: r.right,
+                clientWidth: el.clientWidth, scrollWidth: el.scrollWidth,
+                computedWidth: cs.width, display: cs.display,
+                position: cs.position, transform: cs.transform,
+                margin: cs.margin, padding: cs.padding,
+                boxSizing: cs.boxSizing, overflowX: cs.overflowX,
+                flexBasis: cs.flexBasis, flexGrow: cs.flexGrow, flexShrink: cs.flexShrink
+            });
+        }
+
+        report('html', document.documentElement);
+        report('body', document.body);
+        const gallery = document.getElementById('carouselGallery');
+        report('#carouselGallery', gallery);
+        if (gallery) {
+            const item = gallery.querySelector('.carousel-item');
+            report('.carousel-item (first)', item);
+            if (item) report('img (first)', item.querySelector('img'));
+        }
+
+        console.log('--- scanning ALL elements for right-edge > viewport ---');
+        let found = 0;
+        document.querySelectorAll('*').forEach(function(el) {
+            const r = el.getBoundingClientRect();
+            if (r.right > vw + 1 || r.width > vw + 1) {
+                found++;
+                const cs = getComputedStyle(el);
+                console.log('OVERFLOW ELEMENT:', {
+                    tag: el.tagName, id: el.id, class: el.className,
+                    rectWidth: r.width, rectRight: r.right, rectLeft: r.left,
+                    computedWidth: cs.width, position: cs.position,
+                    transform: cs.transform, margin: cs.margin, padding: cs.padding,
+                    flexBasis: cs.flexBasis
+                });
+            }
+        });
+        console.log('Total overflowing elements found:', found);
+        console.log('=== END OVERFLOW DEBUG ===');
+    }
+    // Run once on load, and again 2s later (after the AJAX gallery + images
+    // have had time to load) since intrinsic image size can only be known
+    // once the image itself has actually loaded.
+    window.addEventListener('load', function() {
+        runOverflowDebug();
+        setTimeout(runOverflowDebug, 2000);
+    });
+
     // ---- Gallery: native scroll-snap carousel (DaisyUI `carousel`), no
     // transform/index bookkeeping needed like the old custom carousel. ----
     function galleryScroll(dir) {
@@ -149,7 +215,7 @@
 
                     var gallery = '';
                     response.images.forEach(function(src) {
-                        gallery += `<div class="carousel-item" style="box-sizing:border-box; width:100%; height:100%; overflow:hidden;"><img loading="lazy" style="display:block; width:100%; height:100%; object-fit:cover; border-radius:var(--radius-box);" src="${src}"></div>`;
+                        gallery += `<div class="carousel-item" style="flex:0 0 100%; width:100%; height:100%; overflow:hidden;"><img loading="lazy" style="display:block; width:100%; height:100%; object-fit:cover; border-radius:var(--radius-box);" src="${src}"></div>`;
                     });
                     $('#carouselGallery').html(gallery);
 
