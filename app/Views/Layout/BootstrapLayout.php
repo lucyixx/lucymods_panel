@@ -20,6 +20,7 @@
 </head>
 
 <body>
+    <?= $this->include('Layout/icons') ?>
   <?= $this->include('Layout/BootstrapPreloader') ?>
     <div class="d-flex min-vh-100 flex-column">
         <?= $this->include('Layout/BootstrapHeader') ?>
@@ -47,6 +48,8 @@
             </div>
         </footer>
     </div>
+
+    <?= (new \App\Libraries\Debug\DebugToolbar())->render() ?>
 </body>
 
 </html>

@@ -1,0 +1,360 @@
+/* ==========================================================================
+   Frontend/UI Debug Toolbar — standalone stylesheet.
+
+   Plain CSS on purpose, not Tailwind utility classes: this project's own
+   pages were bitten more than once by Tailwind's CDN runtime JIT not
+   reliably generating classes for dynamically-inserted content. A
+   debugging tool is the last place to risk that same class of bug, so
+   everything here is written out directly. Reads the app's own --color-*
+   theme variables where convenient, with hardcoded fallbacks so it still
+   renders correctly even standalone.
+   ========================================================================== */
+
+#dbg-toolbar,
+#dbg-toolbar *,
+#dbg-overlay-layer * {
+    box-sizing: border-box;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+#dbg-toolbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2147483647; /* above everything on the page, always — this tool must never be the thing hidden by a stacking bug */
+    display: flex;
+    flex-direction: column;
+    background: #111318;
+    color: #e8e8ec;
+    border-top: 1px solid #33363f;
+    box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.35);
+}
+
+.dbg-icon {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+/* ---- Tab bar (always visible, even collapsed) ---- */
+.dbg-tabs {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 6px;
+    overflow-x: auto;
+}
+
+.dbg-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: #a6a9b3;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.dbg-tab:hover {
+    color: #e8e8ec;
+    border-color: #33363f;
+}
+
+.dbg-tab[aria-selected="true"] {
+    background: #1b1e26;
+    color: #ffd873;
+    border-color: #33363f;
+}
+
+.dbg-tab--brand {
+    color: #ffd873;
+    font-weight: 600;
+}
+
+.dbg-tabs-spacer {
+    flex: 1 1 auto;
+}
+
+.dbg-env {
+    color: #7d8090;
+    padding: 0 8px;
+    white-space: nowrap;
+}
+
+.dbg-tab--close {
+    color: #7d8090;
+}
+
+/* ---- Collapse / expand ---- */
+.dbg-panels {
+    display: none;
+    border-top: 1px solid #33363f;
+    max-height: min(60vh, 520px);
+    overflow: auto;
+    padding: 12px 14px 16px;
+}
+
+#dbg-toolbar[data-state="expanded"] .dbg-panels {
+    display: block;
+}
+
+.dbg-panel[hidden] {
+    display: none;
+}
+
+/* ---- Shared panel building blocks ---- */
+.dbg-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.dbg-panel-header h3 {
+    margin: 0;
+    font-size: 13px;
+    color: #e8e8ec;
+}
+
+.dbg-section-title {
+    margin: 14px 0 6px;
+    color: #7d8090;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.dbg-panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.dbg-btn {
+    background: #1b1e26;
+    color: #e8e8ec;
+    border: 1px solid #33363f;
+    border-radius: 6px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.dbg-btn:hover {
+    border-color: #565a66;
+}
+
+.dbg-btn--accent {
+    background: #3a3410;
+    color: #ffd873;
+    border-color: #5c521c;
+}
+
+.dbg-row-btn {
+    background: transparent;
+    color: #ffd873;
+    border: 1px solid #5c521c;
+    border-radius: 4px;
+    padding: 2px 8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.dbg-row-btn:hover {
+    background: #3a3410;
+}
+
+.dbg-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #a6a9b3;
+    cursor: pointer;
+}
+
+.dbg-muted {
+    color: #7d8090;
+    margin: 0 0 10px;
+}
+
+.dbg-code {
+    display: inline-block;
+    background: #1b1e26;
+    color: #ffd873;
+    padding: 2px 6px;
+    border-radius: 4px;
+    word-break: break-all;
+}
+
+/* ---- Key/value grid (Layout, Responsive, Inspector rect/style) ---- */
+.dbg-kv-grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 4px 16px;
+    margin: 0 0 4px;
+}
+
+.dbg-kv-grid > * {
+    margin: 0;
+}
+
+.dbg-kv-grid dt,
+.dbg-kv-grid .dbg-kv-key {
+    color: #7d8090;
+}
+
+.dbg-kv-grid dd,
+.dbg-kv-grid .dbg-kv-val {
+    margin: 0;
+    color: #e8e8ec;
+    word-break: break-all;
+}
+
+/* ---- Tables (Overflow, Sticky, Z-Index) ---- */
+.dbg-table-wrap {
+    overflow-x: auto;
+}
+
+.dbg-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dbg-table th {
+    text-align: left;
+    color: #7d8090;
+    font-weight: normal;
+    padding: 4px 8px;
+    border-bottom: 1px solid #33363f;
+    white-space: nowrap;
+}
+
+.dbg-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #1b1e26;
+    vertical-align: top;
+}
+
+.dbg-table tr:hover td {
+    background: #1b1e26;
+}
+
+.dbg-table code {
+    color: #e8e8ec;
+    word-break: break-all;
+}
+
+/* ---- Lists (Inspector children) ---- */
+.dbg-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dbg-list code {
+    color: #e8e8ec;
+}
+
+/* ---- Overlay layer: highlight boxes drawn directly on the page ---- */
+#dbg-overlay-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483646;
+    pointer-events: none;
+}
+
+.dbg-highlight-box {
+    position: fixed;
+    border: 2px solid;
+    pointer-events: none;
+}
+
+.dbg-highlight-label {
+    position: absolute;
+    top: -18px;
+    left: 0;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    color: #111;
+}
+
+.dbg-highlight-box--overflow { border-color: #ff5252; background: rgba(255, 82, 82, 0.12); }
+.dbg-highlight-box--overflow .dbg-highlight-label { background: #ff5252; }
+
+.dbg-highlight-box--sticky { border-color: #4fc3f7; background: rgba(79, 195, 247, 0.10); }
+.dbg-highlight-box--sticky .dbg-highlight-label { background: #4fc3f7; }
+
+.dbg-highlight-box--zindex { border-color: #ffd873; background: rgba(255, 216, 115, 0.10); }
+.dbg-highlight-box--zindex .dbg-highlight-label { background: #ffd873; }
+
+.dbg-highlight-box--flex { border-color: #ba68c8; background: rgba(186, 104, 200, 0.08); }
+.dbg-highlight-box--flex .dbg-highlight-label { background: #ba68c8; }
+
+.dbg-highlight-box--grid { border-color: #66bb6a; background: rgba(102, 187, 106, 0.08); }
+.dbg-highlight-box--grid .dbg-highlight-label { background: #66bb6a; }
+
+.dbg-highlight-box--inspector { border-color: #ff8a65; background: rgba(255, 138, 101, 0.14); }
+
+/* ---- Responsive: the toolbar itself must never be what overflows ---- */
+@media (max-width: 640px) {
+    #dbg-toolbar,
+    #dbg-toolbar * {
+        font-size: 11px;
+    }
+
+    .dbg-panels {
+        max-height: 70vh;
+    }
+
+    .dbg-tab span:not(.dbg-icon) {
+        display: none;
+    }
+
+    .dbg-tab--brand span {
+        display: inline;
+    }
+
+    .dbg-kv-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dbg-table thead {
+        display: none;
+    }
+
+    .dbg-table tr {
+        display: block;
+        border-bottom: 1px solid #33363f;
+        padding: 6px 0;
+    }
+
+    .dbg-table td {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        border-bottom: none;
+        padding: 2px 4px;
+    }
+
+    .dbg-table td::before {
+        content: attr(data-label);
+        color: #7d8090;
+        flex-shrink: 0;
+    }
+}

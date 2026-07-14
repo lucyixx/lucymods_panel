@@ -48,6 +48,8 @@
             <button class="btn btn-primary btn-sm w-full mt-2" onclick="acceptCookieConsent();">Accept</button>
         </div>
     </div>
+
+    <?= (new \App\Libraries\Debug\DebugToolbar())->render() ?>
 </body>
 
 </html>
