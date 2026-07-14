@@ -46,23 +46,32 @@
     function render(results) {
         var panel = DebugToolbar.panel('sticky');
         var summary = panel.querySelector('[data-dbg-sticky-summary]');
+        var wrap = panel.querySelector('.dbg-table-wrap');
         var tbody = panel.querySelector('[data-dbg-sticky-table] tbody');
 
         summary.textContent = results.length === 0
             ? 'No position:sticky elements found.'
             : results.length + ' sticky element(s) found.';
 
+        var allLines = ['Element\tTop\tZ-Index\tScroll container\tParent'];
+
         tbody.innerHTML = '';
         results.forEach(function (item, i) {
+            var scrollContainerText = typeof item.scrollContainer === 'string' ? item.scrollContainer : DebugToolbar.describeElement(item.scrollContainer);
+            var parentText = DebugToolbar.describeElement(item.el.parentElement);
+            var line = DebugToolbar.describeElement(item.el) + '\t' + item.top + '\t' + item.zIndex + '\t' + scrollContainerText + '\t' + parentText;
+            allLines.push(line);
+
             var tr = document.createElement('tr');
             tr.innerHTML =
                 '<td><code>' + DebugToolbar.describeElement(item.el) + '</code></td>' +
                 '<td>' + item.top + '</td>' +
                 '<td>' + item.zIndex + '</td>' +
-                '<td><code>' + (typeof item.scrollContainer === 'string' ? item.scrollContainer : DebugToolbar.describeElement(item.scrollContainer)) + '</code></td>' +
-                '<td><code>' + DebugToolbar.describeElement(item.el.parentElement) + '</code></td>' +
-                '<td><button type="button" class="dbg-row-btn" data-i="' + i + '">Show</button></td>';
-            tr.querySelector('button').addEventListener('click', function () {
+                '<td><code>' + scrollContainerText + '</code></td>' +
+                '<td><code>' + parentText + '</code></td>' +
+                '<td><button type="button" class="dbg-row-btn" data-i="' + i + '">Show</button> ' +
+                '<button type="button" class="dbg-row-btn" data-copy="' + i + '">Copy</button></td>';
+            tr.querySelector('[data-i]').addEventListener('click', function () {
                 item.el.scrollIntoView({ block: 'center', behavior: 'smooth' });
                 DebugToolbar.drawOverlay('sticky', [{
                     rect: item.el.getBoundingClientRect(),
@@ -71,8 +80,17 @@
                 var box = panel.querySelector('[data-dbg-action="sticky:highlight"]');
                 if (box) box.checked = true;
             });
+            var copyBtn = tr.querySelector('[data-copy]');
+            copyBtn.addEventListener('click', function () {
+                DebugToolbar.copyText(line, function () { DebugToolbar.flashCopied(copyBtn); });
+            });
             tbody.appendChild(tr);
         });
+
+        var copyAllBtn = panel.querySelector('[data-dbg-action="sticky:copy-all"]');
+        if (copyAllBtn) copyAllBtn.dataset.lines = allLines.join('\n');
+
+        if (wrap) wrap.scrollLeft = 0;
     }
 
     function updateHighlightAll(enabled) {
@@ -87,6 +105,9 @@
     }
 
     DebugToolbar.onAction('sticky:scan', scan);
+    DebugToolbar.onAction('sticky:copy-all', function (btn) {
+        DebugToolbar.copyText(btn.dataset.lines || '(nothing scanned yet)', function () { DebugToolbar.flashCopied(btn); });
+    });
     DebugToolbar.onAction('sticky:highlight', function (el) {
         updateHighlightAll(el.checked);
     });

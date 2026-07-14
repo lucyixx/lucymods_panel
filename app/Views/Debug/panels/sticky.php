@@ -5,6 +5,7 @@
             <input type="checkbox" data-dbg-action="sticky:highlight">
             <span>Highlight on page</span>
         </label>
+        <button type="button" class="dbg-btn" data-dbg-action="sticky:copy-all">Copy all</button>
         <button type="button" class="dbg-btn" data-dbg-action="sticky:scan">Scan</button>
     </div>
 </div>

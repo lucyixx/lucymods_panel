@@ -75,9 +75,19 @@
 
         var panel = DebugToolbar.panel('responsive');
         panel.querySelector('[data-dbg-responsive-output]').innerHTML = kv(pairs);
+
+        var copyAllBtn = panel.querySelector('[data-dbg-action="responsive:copy-all"]');
+        if (copyAllBtn) {
+            copyAllBtn.dataset.lines = pairs.map(function (p) {
+                return p[0] + '\t' + p[1].replace(/<br>/g, ' | ').replace(/<[^>]+>/g, '');
+            }).join('\n');
+        }
     }
 
     DebugToolbar.onAction('responsive:refresh', collect);
+    DebugToolbar.onAction('responsive:copy-all', function (btn) {
+        DebugToolbar.copyText(btn.dataset.lines || '(not measured yet)', function () { DebugToolbar.flashCopied(btn); });
+    });
     window.addEventListener('resize', function () {
         if (!DebugToolbar.panel('responsive').hidden) collect();
     });

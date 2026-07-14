@@ -47,26 +47,39 @@
         return results;
     }
 
+    function rowText(item, cs) {
+        return DebugToolbar.describeElement(item.el) + '\t' +
+            Math.round(item.rect.width) + 'px\t' +
+            cs.width + '\t' +
+            Math.round(item.overflow) + 'px';
+    }
+
     function render(results, vw) {
         var panel = DebugToolbar.panel('overflow');
         var summary = panel.querySelector('[data-dbg-overflow-summary]');
+        var wrap = panel.querySelector('.dbg-table-wrap');
         var tbody = panel.querySelector('[data-dbg-overflow-table] tbody');
 
         summary.textContent = results.length === 0
             ? 'No horizontal overflow detected (viewport ' + vw + 'px).'
             : results.length + ' element(s) overflowing the ' + vw + 'px viewport.';
 
+        var allLines = ['Element\tRect W\tComputed W\tOverflow'];
+
         tbody.innerHTML = '';
         results.forEach(function (item, i) {
             var cs = getComputedStyle(item.el);
+            var line = rowText(item, cs);
+            allLines.push(line);
             var tr = document.createElement('tr');
             tr.innerHTML =
                 '<td><code>' + DebugToolbar.describeElement(item.el) + '</code></td>' +
                 '<td>' + Math.round(item.rect.width) + 'px</td>' +
                 '<td>' + cs.width + '</td>' +
                 '<td>' + Math.round(item.overflow) + 'px</td>' +
-                '<td><button type="button" class="dbg-row-btn" data-i="' + i + '">Show</button></td>';
-            tr.querySelector('button').addEventListener('click', function () {
+                '<td><button type="button" class="dbg-row-btn" data-i="' + i + '">Show</button> ' +
+                '<button type="button" class="dbg-row-btn" data-copy="' + i + '">Copy</button></td>';
+            tr.querySelector('[data-i]').addEventListener('click', function () {
                 item.el.scrollIntoView({ block: 'center', behavior: 'smooth' });
                 DebugToolbar.drawOverlay('overflow', [{
                     rect: item.el.getBoundingClientRect(),
@@ -75,8 +88,19 @@
                 var box = panel.querySelector('[data-dbg-action="overflow:highlight"]');
                 if (box) box.checked = true;
             });
+            var copyBtn = tr.querySelector('[data-copy]');
+            copyBtn.addEventListener('click', function () {
+                DebugToolbar.copyText(line, function () { DebugToolbar.flashCopied(copyBtn); });
+            });
             tbody.appendChild(tr);
         });
+
+        var copyAllBtn = panel.querySelector('[data-dbg-action="overflow:copy-all"]');
+        if (copyAllBtn) copyAllBtn.dataset.lines = allLines.join('\n');
+
+        // Always show results starting from the left edge, never scrolled
+        // partway/to the right from a previous interaction.
+        if (wrap) wrap.scrollLeft = 0;
     }
 
     function updateHighlightAll(enabled) {
@@ -91,6 +115,9 @@
     }
 
     DebugToolbar.onAction('overflow:scan', scan);
+    DebugToolbar.onAction('overflow:copy-all', function (btn) {
+        DebugToolbar.copyText(btn.dataset.lines || '(nothing scanned yet)', function () { DebugToolbar.flashCopied(btn); });
+    });
     DebugToolbar.onAction('overflow:highlight', function (el) {
         updateHighlightAll(el.checked);
     });

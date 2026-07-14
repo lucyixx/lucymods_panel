@@ -5,6 +5,7 @@
             <input type="checkbox" data-dbg-action="overflow:highlight">
             <span>Highlight on page</span>
         </label>
+        <button type="button" class="dbg-btn" data-dbg-action="overflow:copy-all">Copy all</button>
         <button type="button" class="dbg-btn" data-dbg-action="overflow:scan">Scan</button>
     </div>
 </div>

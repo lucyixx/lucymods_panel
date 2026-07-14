@@ -5,6 +5,7 @@
             <input type="checkbox" data-dbg-action="zindex:highlight">
             <span>Highlight on page</span>
         </label>
+        <button type="button" class="dbg-btn" data-dbg-action="zindex:copy-all">Copy all</button>
         <button type="button" class="dbg-btn" data-dbg-action="zindex:scan">Scan</button>
     </div>
 </div>

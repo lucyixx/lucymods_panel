@@ -37,22 +37,30 @@
     function render(results) {
         var panel = DebugToolbar.panel('zindex');
         var summary = panel.querySelector('[data-dbg-zindex-summary]');
+        var wrap = panel.querySelector('.dbg-table-wrap');
         var tbody = panel.querySelector('[data-dbg-zindex-table] tbody');
 
         summary.textContent = results.length === 0
             ? 'No elements with an explicit z-index found.'
             : results.length + ' element(s) with a z-index other than auto.';
 
+        var allLines = ['Element\tZ-Index\tPosition\tStacking parent'];
+
         tbody.innerHTML = '';
         results.forEach(function (item, i) {
+            var parentText = DebugToolbar.describeElement(item.stackingParent);
+            var line = DebugToolbar.describeElement(item.el) + '\t' + item.zIndex + '\t' + item.position + '\t' + parentText;
+            allLines.push(line);
+
             var tr = document.createElement('tr');
             tr.innerHTML =
                 '<td><code>' + DebugToolbar.describeElement(item.el) + '</code></td>' +
                 '<td>' + item.zIndex + '</td>' +
                 '<td>' + item.position + '</td>' +
-                '<td><code>' + DebugToolbar.describeElement(item.stackingParent) + '</code></td>' +
-                '<td><button type="button" class="dbg-row-btn" data-i="' + i + '">Show</button></td>';
-            tr.querySelector('button').addEventListener('click', function () {
+                '<td><code>' + parentText + '</code></td>' +
+                '<td><button type="button" class="dbg-row-btn" data-i="' + i + '">Show</button> ' +
+                '<button type="button" class="dbg-row-btn" data-copy="' + i + '">Copy</button></td>';
+            tr.querySelector('[data-i]').addEventListener('click', function () {
                 item.el.scrollIntoView({ block: 'center', behavior: 'smooth' });
                 DebugToolbar.drawOverlay('zindex', [{
                     rect: item.el.getBoundingClientRect(),
@@ -61,8 +69,17 @@
                 var box = panel.querySelector('[data-dbg-action="zindex:highlight"]');
                 if (box) box.checked = true;
             });
+            var copyBtn = tr.querySelector('[data-copy]');
+            copyBtn.addEventListener('click', function () {
+                DebugToolbar.copyText(line, function () { DebugToolbar.flashCopied(copyBtn); });
+            });
             tbody.appendChild(tr);
         });
+
+        var copyAllBtn = panel.querySelector('[data-dbg-action="zindex:copy-all"]');
+        if (copyAllBtn) copyAllBtn.dataset.lines = allLines.join('\n');
+
+        if (wrap) wrap.scrollLeft = 0;
     }
 
     function updateHighlightAll(enabled) {
@@ -77,6 +94,9 @@
     }
 
     DebugToolbar.onAction('zindex:scan', scan);
+    DebugToolbar.onAction('zindex:copy-all', function (btn) {
+        DebugToolbar.copyText(btn.dataset.lines || '(nothing scanned yet)', function () { DebugToolbar.flashCopied(btn); });
+    });
     DebugToolbar.onAction('zindex:highlight', function (el) {
         updateHighlightAll(el.checked);
     });

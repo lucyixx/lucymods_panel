@@ -223,6 +223,8 @@
 /* ---- Tables (Overflow, Sticky, Z-Index) ---- */
 .dbg-table-wrap {
     overflow-x: auto;
+    direction: ltr;
+    text-align: left;
 }
 
 .dbg-table {

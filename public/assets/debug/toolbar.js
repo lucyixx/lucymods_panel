@@ -146,6 +146,37 @@
         return document.documentElement;
     }
 
+    // ---- Shared clipboard helper ---------------------------------------
+    function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) { /* no-op */ }
+        ta.remove();
+    }
+
+    function copyText(text, onDone) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(onDone, function () {
+                fallbackCopy(text);
+                if (onDone) onDone();
+            });
+        } else {
+            fallbackCopy(text);
+            if (onDone) onDone();
+        }
+    }
+
+    function flashCopied(btn) {
+        var original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = original; }, 1000);
+    }
+
     // ---- Public API ---------------------------------------------------
     window.DebugToolbar = {
         panel: function (id) {
@@ -161,6 +192,8 @@
         },
         establishesStackingContext: establishesStackingContext,
         findStackingParent: findStackingParent,
+        copyText: copyText,
+        flashCopied: flashCopied,
         /** Best-effort CSS selector for an element, for display purposes. */
         describeElement: function (el) {
             if (!el) return '(none)';

@@ -65,9 +65,19 @@
 
         var panel = DebugToolbar.panel('layout');
         panel.querySelector('[data-dbg-layout-output]').innerHTML = kv(pairs);
+
+        var copyAllBtn = panel.querySelector('[data-dbg-action="layout:copy-all"]');
+        if (copyAllBtn) {
+            copyAllBtn.dataset.lines = pairs.map(function (p) {
+                return p[0] + '\t' + p[1].replace(/<[^>]+>/g, '');
+            }).join('\n');
+        }
     }
 
     DebugToolbar.onAction('layout:refresh', collect);
+    DebugToolbar.onAction('layout:copy-all', function (btn) {
+        DebugToolbar.copyText(btn.dataset.lines || '(not measured yet)', function () { DebugToolbar.flashCopied(btn); });
+    });
 
     // Auto-refresh whenever the panel becomes visible or the viewport changes,
     // so the numbers are never stale by the time someone looks at them.
