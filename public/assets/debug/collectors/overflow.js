@@ -11,6 +11,24 @@
 
     var lastResults = [];
 
+    function containedBySafeScrollAncestor(el, vw) {
+        var node = el.parentElement;
+        while (node && node !== document.documentElement) {
+            var cs = getComputedStyle(node);
+            if (cs.overflowX === 'scroll' || cs.overflowX === 'auto' || cs.overflowX === 'hidden') {
+                var ar = node.getBoundingClientRect();
+                var ancestorBreaches = ar.right > vw + 1 || ar.width > vw + 1;
+                // If the scrollable ancestor itself fits the viewport, whatever
+                // it clips/scrolls inside it is by design, not a page bug.
+                // If the ancestor ALSO breaches the viewport, that's the real
+                // bug — surface the ancestor, not every child inside it.
+                return !ancestorBreaches;
+            }
+            node = node.parentElement;
+        }
+        return false;
+    }
+
     function scan() {
         var vw = window.innerWidth;
         var results = [];
@@ -18,7 +36,7 @@
             if (el.closest('#dbg-toolbar') || el.closest('#dbg-overlay-layer')) return;
             var r = el.getBoundingClientRect();
             var overflowAmount = Math.max(r.right - vw, r.width - vw);
-            if (overflowAmount > 1) {
+            if (overflowAmount > 1 && !containedBySafeScrollAncestor(el, vw)) {
                 results.push({ el: el, rect: r, overflow: overflowAmount });
             }
         });
