@@ -19,11 +19,14 @@
             if (cs.overflowX === 'scroll' || cs.overflowX === 'auto' || cs.overflowX === 'hidden') {
                 var ar = node.getBoundingClientRect();
                 var ancestorBreaches = ar.right > vw + 1 || ar.width > vw + 1;
-                // If the scrollable ancestor itself fits the viewport, whatever
-                // it clips/scrolls inside it is by design, not a page bug.
-                // If the ancestor ALSO breaches the viewport, that's the real
-                // bug — surface the ancestor, not every child inside it.
-                return !ancestorBreaches;
+                // Found a containing ancestor that itself fits the viewport —
+                // whatever it clips/scrolls inside it is by design, not a bug.
+                if (!ancestorBreaches) return true;
+                // This ancestor also breaches (e.g. a carousel-item that wraps
+                // an image just as tightly as the image itself) — it isn't the
+                // real container, keep looking further up instead of giving up
+                // here. The actual scrollable container (e.g. the .carousel
+                // element itself) is often another level or two further up.
             }
             node = node.parentElement;
         }
