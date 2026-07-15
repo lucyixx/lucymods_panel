@@ -54,7 +54,7 @@
 
     function kv(pairs) {
         return pairs.map(function (p) {
-            return '<span class="dbg-kv-key">' + p[0] + '</span><span class="dbg-kv-val">' + p[1] + '</span>';
+            return '<tr><th>' + p[0] + '</th><td>' + p[1] + '</td></tr>';
         }).join('');
     }
 
@@ -78,15 +78,16 @@
 
         var copyAllBtn = panel.querySelector('[data-dbg-action="responsive:copy-all"]');
         if (copyAllBtn) {
-            copyAllBtn.dataset.lines = pairs.map(function (p) {
-                return p[0] + '\t' + p[1].replace(/<br>/g, ' | ').replace(/<[^>]+>/g, '');
-            }).join('\n');
+            var lines = ['=== Responsive ==='].concat(pairs.map(function (p) {
+                return p[0] + ': ' + p[1].replace(/<br>/g, ' | ').replace(/<[^>]+>/g, '');
+            }));
+            copyAllBtn.dataset.report = lines.join('\n');
         }
     }
 
     DebugToolbar.onAction('responsive:refresh', collect);
     DebugToolbar.onAction('responsive:copy-all', function (btn) {
-        DebugToolbar.copyText(btn.dataset.lines || '(not measured yet)', function () { DebugToolbar.flashCopied(btn); });
+        DebugToolbar.copyText(btn.dataset.report || '=== Responsive ===\nNot measured yet.');
     });
     window.addEventListener('resize', function () {
         if (!DebugToolbar.panel('responsive').hidden) collect();

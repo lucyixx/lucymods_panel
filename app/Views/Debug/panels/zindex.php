@@ -15,10 +15,11 @@
         <thead>
             <tr>
                 <th>Element</th>
-                <th>Z-Index</th>
-                <th>Position</th>
-                <th>Stacking context parent</th>
-                <th></th>
+                <th>z-index</th>
+                <th>Stacking Context</th>
+                <th>Parent</th>
+                <th>Effective Layer</th>
+                <th>Copy</th>
             </tr>
         </thead>
         <tbody></tbody>

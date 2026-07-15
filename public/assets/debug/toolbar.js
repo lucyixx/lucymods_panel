@@ -6,6 +6,7 @@
  *   - DebugToolbar.drawOverlay(id, boxes)  shared highlight-box renderer
  *   - DebugToolbar.clearOverlay(id)
  *   - DebugToolbar.panel(id)               the panel <section> element
+ *   - DebugToolbar.copyText(text, cb)      robust clipboard write + toast
  *
  * Vanilla JS only, no dependencies. This file is only ever loaded when
  * ENVIRONMENT === 'development' (see DebugToolbar.php / Debug/toolbar.php).
@@ -14,14 +15,21 @@
     'use strict';
 
     var toolbar = document.getElementById('dbg-toolbar');
+    var win = document.getElementById('dbg-window');
     var overlayLayer = document.getElementById('dbg-overlay-layer');
-    if (!toolbar || !overlayLayer) return;
+    var toastLayer = document.getElementById('dbg-toast-layer');
+    if (!toolbar || !win || !overlayLayer) return;
 
+    var STORAGE_KEY = 'dbgToolbarOpen';
     var tabs = Array.prototype.slice.call(toolbar.querySelectorAll('[data-dbg-tab]'));
     var panels = Array.prototype.slice.call(toolbar.querySelectorAll('[data-dbg-panel]'));
 
+    // ---- Open / close (floating button <-> floating window) -----------
     function setExpanded(expanded) {
         toolbar.dataset.state = expanded ? 'expanded' : 'collapsed';
+        document.getElementById('dbg-toggle').setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        win.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+        try { localStorage.setItem(STORAGE_KEY, expanded ? '1' : '0'); } catch (e) { /* private mode, etc — non-fatal */ }
     }
 
     function selectTab(id) {
@@ -32,18 +40,12 @@
         panels.forEach(function (panel) {
             panel.hidden = panel.getAttribute('data-dbg-panel') !== id;
         });
-        setExpanded(true);
     }
 
     document.getElementById('dbg-toggle').addEventListener('click', function () {
-        var isExpanded = toolbar.dataset.state === 'expanded';
-        if (isExpanded) {
-            setExpanded(false);
-        } else {
-            // Expand to whichever tab was last active, or the first one.
-            var current = tabs.find(function (t) { return t.getAttribute('aria-selected') === 'true'; });
-            selectTab((current || tabs[0]).dataset.dbgTab);
-        }
+        setExpanded(true);
+        var current = tabs.filter(function (t) { return t.getAttribute('aria-selected') === 'true'; })[0];
+        selectTab((current || tabs[0]).dataset.dbgTab);
     });
 
     document.getElementById('dbg-close').addEventListener('click', function () {
@@ -56,9 +58,31 @@
         });
     });
 
+    // ESC closes the window.
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && toolbar.dataset.state === 'expanded') {
+            setExpanded(false);
+        }
+    });
+
+    // Clicking anywhere outside the window (and outside the launcher)
+    // closes it. Uses mousedown so it doesn't fight with a click that's
+    // still opening the window in the same event.
+    document.addEventListener('mousedown', function (e) {
+        if (toolbar.dataset.state !== 'expanded') return;
+        if (toolbar.contains(e.target)) return;
+        setExpanded(false);
+    });
+
+    // Restore last-open state on load.
+    try {
+        if (localStorage.getItem(STORAGE_KEY) === '1') {
+            setExpanded(true);
+            selectTab((tabs[0] || {}).dataset && tabs[0].dataset.dbgTab);
+        }
+    } catch (e) { /* private mode, etc — default to collapsed */ }
+
     // ---- Shared action-delegation helper --------------------------------
-    // Collectors call DebugToolbar.onAction('overflow:scan', fn) instead of
-    // wiring up their own querySelector/addEventListener boilerplate.
     var actionHandlers = {};
 
     toolbar.addEventListener('click', function (e) {
@@ -76,9 +100,6 @@
     });
 
     // ---- Shared overlay renderer ------------------------------------------
-    // Each collector "owns" a variant name (matches its highlight color in
-    // toolbar.css) so multiple overlays can coexist without clobbering
-    // each other's boxes.
     var overlayGroups = {};
 
     function drawOverlay(variant, boxes) {
@@ -111,8 +132,6 @@
         }
     }
 
-    // Overlay boxes are positioned in viewport coordinates (getBoundingClientRect),
-    // so they need to be redrawn on scroll/resize for as long as any group is active.
     function redrawActiveOverlays() {
         window.dispatchEvent(new CustomEvent('dbg:overlay:redraw'));
     }
@@ -120,8 +139,6 @@
     window.addEventListener('resize', redrawActiveOverlays);
 
     // ---- Shared stacking-context helpers -------------------------------
-    // Used by both sticky.js and zindex.js (and any future collector) so
-    // this logic exists in exactly one place.
     function establishesStackingContext(el) {
         var cs = getComputedStyle(el);
         if (cs.position !== 'static' && cs.zIndex !== 'auto') return true;
@@ -146,32 +163,72 @@
         return document.documentElement;
     }
 
-    // ---- Shared clipboard helper ---------------------------------------
-    function fallbackCopy(text) {
+    // ---- Toast --------------------------------------------------------
+    function showToast(message, kind) {
+        if (!toastLayer) return;
+        var el = document.createElement('div');
+        el.className = 'dbg-toast dbg-toast--' + (kind || 'success');
+        el.textContent = message;
+        toastLayer.appendChild(el);
+        // Force layout so the transition actually runs.
+        void el.offsetWidth;
+        el.classList.add('dbg-toast--visible');
+        setTimeout(function () {
+            el.classList.remove('dbg-toast--visible');
+            setTimeout(function () { el.remove(); }, 200);
+        }, 1800);
+    }
+
+    // ---- Clipboard ------------------------------------------------------
+    // Tries the modern async Clipboard API first (requires a secure
+    // context — HTTPS or localhost — and a real user gesture). Falls back
+    // to the older execCommand('copy') via a temporary textarea, which
+    // still works over plain HTTP and on older Android WebViews. Every
+    // path reports real, verified success/failure via a toast — nothing
+    // is assumed to have worked.
+    function execCommandCopy(text) {
         var ta = document.createElement('textarea');
         ta.value = text;
+        ta.setAttribute('readonly', '');
+        // Off-screen but NOT display:none/opacity:0 — some Android/iOS
+        // browsers refuse to select() an invisible field.
         ta.style.position = 'fixed';
-        ta.style.opacity = '0';
+        ta.style.top = '0';
+        ta.style.left = '-9999px';
+        ta.style.width = '1px';
+        ta.style.height = '1px';
         document.body.appendChild(ta);
         ta.focus();
         ta.select();
-        try { document.execCommand('copy'); } catch (e) { /* no-op */ }
+        try { ta.setSelectionRange(0, text.length); } catch (e) { /* not all inputs support this */ }
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
         ta.remove();
+        return ok;
     }
 
     function copyText(text, onDone) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(onDone, function () {
-                fallbackCopy(text);
-                if (onDone) onDone();
-            });
+        function finish(ok) {
+            showToast(ok ? 'Copied to clipboard' : 'Copy failed — select and copy manually', ok ? 'success' : 'error');
+            if (onDone) onDone(ok);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(
+                function () { finish(true); },
+                function () { finish(execCommandCopy(text)); }
+            );
         } else {
-            fallbackCopy(text);
-            if (onDone) onDone();
+            // Not a secure context (plain HTTP) or API unavailable — go
+            // straight to the fallback rather than letting the async API
+            // silently reject.
+            finish(execCommandCopy(text));
         }
     }
 
     function flashCopied(btn) {
+        // Kept for backward compatibility with any caller still using it —
+        // the toast is now the primary success/failure signal.
         var original = btn.textContent;
         btn.textContent = 'Copied!';
         setTimeout(function () { btn.textContent = original; }, 1000);
@@ -194,6 +251,7 @@
         findStackingParent: findStackingParent,
         copyText: copyText,
         flashCopied: flashCopied,
+        showToast: showToast,
         /** Best-effort CSS selector for an element, for display purposes. */
         describeElement: function (el) {
             if (!el) return '(none)';

@@ -10,6 +10,7 @@
     if (!window.DebugToolbar) return;
 
     var lastResults = [];
+    var lastViewport = 0;
 
     function containedBySafeScrollAncestor(el, vw) {
         var node = el.parentElement;
@@ -33,7 +34,7 @@
         var vw = window.innerWidth;
         var results = [];
         document.querySelectorAll('*').forEach(function (el) {
-            if (el.closest('#dbg-toolbar') || el.closest('#dbg-overlay-layer')) return;
+            if (el.closest('#dbg-toolbar') || el.closest('#dbg-overlay-layer') || el.closest('#dbg-toast-layer')) return;
             var r = el.getBoundingClientRect();
             var overflowAmount = Math.max(r.right - vw, r.width - vw);
             if (overflowAmount > 1 && !containedBySafeScrollAncestor(el, vw)) {
@@ -43,15 +44,29 @@
         // Largest offender first.
         results.sort(function (a, b) { return b.overflow - a.overflow; });
         lastResults = results;
+        lastViewport = vw;
         render(results, vw);
         return results;
     }
 
-    function rowText(item, cs) {
-        return DebugToolbar.describeElement(item.el) + '\t' +
-            Math.round(item.rect.width) + 'px\t' +
-            cs.width + '\t' +
-            Math.round(item.overflow) + 'px';
+    function itemReportBlock(item) {
+        return DebugToolbar.describeElement(item.el) + '\n' +
+            '  width: ' + Math.round(item.rect.width) + 'px\n' +
+            '  right: ' + Math.round(item.rect.right) + 'px\n' +
+            '  overflow: ' + Math.round(item.overflow) + 'px';
+    }
+
+    function buildReport(results, vw) {
+        var lines = ['=== Overflow ===', 'Viewport: ' + vw + 'px', ''];
+        if (!results.length) {
+            lines.push('No horizontal overflow detected.');
+        } else {
+            results.forEach(function (item, i) {
+                lines.push(itemReportBlock(item));
+                if (i < results.length - 1) lines.push('');
+            });
+        }
+        return lines.join('\n');
     }
 
     function render(results, vw) {
@@ -64,21 +79,16 @@
             ? 'No horizontal overflow detected (viewport ' + vw + 'px).'
             : results.length + ' element(s) overflowing the ' + vw + 'px viewport.';
 
-        var allLines = ['Element\tRect W\tComputed W\tOverflow'];
-
         tbody.innerHTML = '';
         results.forEach(function (item, i) {
-            var cs = getComputedStyle(item.el);
-            var line = rowText(item, cs);
-            allLines.push(line);
             var tr = document.createElement('tr');
             tr.innerHTML =
                 '<td><code>' + DebugToolbar.describeElement(item.el) + '</code></td>' +
+                '<td>' + vw + 'px</td>' +
                 '<td>' + Math.round(item.rect.width) + 'px</td>' +
-                '<td>' + cs.width + '</td>' +
                 '<td>' + Math.round(item.overflow) + 'px</td>' +
-                '<td><button type="button" class="dbg-row-btn" data-i="' + i + '">Show</button> ' +
-                '<button type="button" class="dbg-row-btn" data-copy="' + i + '">Copy</button></td>';
+                '<td><button type="button" class="dbg-row-btn" data-i="' + i + '">Show</button></td>' +
+                '<td><button type="button" class="dbg-row-btn" data-copy="' + i + '">Copy</button></td>';
             tr.querySelector('[data-i]').addEventListener('click', function () {
                 item.el.scrollIntoView({ block: 'center', behavior: 'smooth' });
                 DebugToolbar.drawOverlay('overflow', [{
@@ -90,13 +100,13 @@
             });
             var copyBtn = tr.querySelector('[data-copy]');
             copyBtn.addEventListener('click', function () {
-                DebugToolbar.copyText(line, function () { DebugToolbar.flashCopied(copyBtn); });
+                DebugToolbar.copyText(itemReportBlock(item));
             });
             tbody.appendChild(tr);
         });
 
         var copyAllBtn = panel.querySelector('[data-dbg-action="overflow:copy-all"]');
-        if (copyAllBtn) copyAllBtn.dataset.lines = allLines.join('\n');
+        if (copyAllBtn) copyAllBtn.dataset.report = buildReport(results, vw);
 
         // Always show results starting from the left edge, never scrolled
         // partway/to the right from a previous interaction.
@@ -116,7 +126,7 @@
 
     DebugToolbar.onAction('overflow:scan', scan);
     DebugToolbar.onAction('overflow:copy-all', function (btn) {
-        DebugToolbar.copyText(btn.dataset.lines || '(nothing scanned yet)', function () { DebugToolbar.flashCopied(btn); });
+        DebugToolbar.copyText(btn.dataset.report || buildReport([], lastViewport || window.innerWidth));
     });
     DebugToolbar.onAction('overflow:highlight', function (el) {
         updateHighlightAll(el.checked);

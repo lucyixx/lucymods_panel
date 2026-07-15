@@ -5,6 +5,8 @@
         <button type="button" class="dbg-btn" data-dbg-action="responsive:refresh">Refresh</button>
     </div>
 </div>
-<div class="dbg-kv-grid" data-dbg-responsive-output>
-    <p class="dbg-muted">Not measured yet.</p>
-</div>
+<table class="dbg-kv-table">
+    <tbody data-dbg-responsive-output>
+        <tr><td colspan="2" class="dbg-muted">Not measured yet.</td></tr>
+    </tbody>
+</table>

@@ -40,7 +40,7 @@
 
     function kv(pairs) {
         return pairs.map(function (p) {
-            return '<span class="dbg-kv-key">' + p[0] + '</span><span class="dbg-kv-val">' + p[1] + '</span>';
+            return '<tr><th>' + p[0] + '</th><td>' + p[1] + '</td></tr>';
         }).join('');
     }
 
@@ -57,7 +57,7 @@
             ['Breakpoint', currentBreakpoint(vw)],
             ['Orientation', screen.orientation ? screen.orientation.type : (vw > vh ? 'landscape' : 'portrait')],
             ['Vertical scrollbar', hasVScroll ? 'yes (' + (doc.scrollHeight - doc.clientHeight) + 'px overflow)' : 'no'],
-            ['Horizontal scrollbar', hasHScroll ? '<span class="dbg-highlight-box--overflow" style="color:#ff5252">yes (' + (doc.scrollWidth - doc.clientWidth) + 'px overflow)</span>' : 'no'],
+            ['Horizontal scrollbar', hasHScroll ? '<span style="color:#ff5252">yes (' + (doc.scrollWidth - doc.clientWidth) + 'px overflow)</span>' : 'no'],
             ['Scrollbar width', (window.innerWidth - doc.clientWidth) + 'px'],
             ['Safe-area top/bottom', safeAreaInset('top') + ' / ' + safeAreaInset('bottom')],
             ['Device pixel ratio', window.devicePixelRatio],
@@ -68,15 +68,16 @@
 
         var copyAllBtn = panel.querySelector('[data-dbg-action="layout:copy-all"]');
         if (copyAllBtn) {
-            copyAllBtn.dataset.lines = pairs.map(function (p) {
-                return p[0] + '\t' + p[1].replace(/<[^>]+>/g, '');
-            }).join('\n');
+            var lines = ['=== Layout ==='].concat(pairs.map(function (p) {
+                return p[0] + ': ' + p[1].replace(/<[^>]+>/g, '');
+            }));
+            copyAllBtn.dataset.report = lines.join('\n');
         }
     }
 
     DebugToolbar.onAction('layout:refresh', collect);
     DebugToolbar.onAction('layout:copy-all', function (btn) {
-        DebugToolbar.copyText(btn.dataset.lines || '(not measured yet)', function () { DebugToolbar.flashCopied(btn); });
+        DebugToolbar.copyText(btn.dataset.report || '=== Layout ===\nNot measured yet.');
     });
 
     // Auto-refresh whenever the panel becomes visible or the viewport changes,

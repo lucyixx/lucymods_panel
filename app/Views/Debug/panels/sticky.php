@@ -15,11 +15,11 @@
         <thead>
             <tr>
                 <th>Element</th>
+                <th>Position</th>
                 <th>Top</th>
-                <th>Z-Index</th>
-                <th>Scroll container</th>
                 <th>Parent</th>
-                <th></th>
+                <th>Stacking Context</th>
+                <th>Copy</th>
             </tr>
         </thead>
         <tbody></tbody>

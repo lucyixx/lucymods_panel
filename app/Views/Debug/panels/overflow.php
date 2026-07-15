@@ -15,10 +15,11 @@
         <thead>
             <tr>
                 <th>Element</th>
-                <th>Rect W</th>
-                <th>Computed W</th>
+                <th>Viewport Width</th>
+                <th>Actual Width</th>
                 <th>Overflow</th>
-                <th></th>
+                <th>Show</th>
+                <th>Copy</th>
             </tr>
         </thead>
         <tbody></tbody>
