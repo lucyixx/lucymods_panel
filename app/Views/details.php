@@ -34,7 +34,7 @@
 <div class="grid lg:grid-cols-3 lg:grid-rows-[auto_1fr] gap-6">
 
     <!-- Gallery -->
-    <div class="order-1 lg:order-none lg:col-span-2 lg:row-start-1">
+    <div class="order-1 lg:order-none lg:col-span-2 lg:row-start-1 min-w-0">
         <div class="relative">
             <div id="carouselGallery" class="carousel carousel-center rounded-box bg-base-200 gap-2" style="width:100%; height:clamp(180px, 42vw, 320px); overflow-y:hidden;"></div>
             <button class="btn btn-circle btn-md bg-base-100/80 border-base-300 hover:bg-base-100 absolute left-2 top-1/2 -translate-y-1/2" type="button" onclick="galleryScroll(-1)" aria-label="Previous screenshot">
