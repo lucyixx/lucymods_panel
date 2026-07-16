@@ -31,7 +31,7 @@
     one deliberate trade-off where Get Access appears before About/Reviews
     on mobile, since there's no sticky sidebar there to keep it in view.
 -->
-<div class="grid lg:grid-cols-3 lg:grid-rows-[auto_1fr] gap-6">
+<div class="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-[auto_1fr] gap-6">
 
     <!-- Gallery -->
     <div class="order-1 lg:order-none lg:col-span-2 lg:row-start-1 min-w-0">
