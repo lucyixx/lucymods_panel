@@ -28,17 +28,28 @@
     <?= $this->renderSection('headScripts') ?>
 </head>
 
-<body class="min-h-screen flex flex-col bg-base-100 text-base-content">
+<body class="min-h-screen bg-base-100 text-base-content">
     <?= $this->include('Layout/icons') ?>
     <?= $this->include('Layout/preloader') ?>
 
-    <?= $this->include('Layout/partials/navbar') ?>
+    <div class="drawer">
+        <input id="app-drawer" type="checkbox" class="drawer-toggle" />
 
-    <main class="content">
-        <div class="max-w-5xl mx-auto w-full p-4"><?= $this->renderSection('content') ?></div>
-    </main>
+        <div class="drawer-content flex flex-col min-h-screen">
+            <?= $this->include('Layout/partials/navbar') ?>
 
-    <?= $this->include('Layout/partials/footer') ?>
+            <main class="content">
+                <div class="max-w-5xl mx-auto w-full p-4"><?= $this->renderSection('content') ?></div>
+            </main>
+
+            <?= $this->include('Layout/partials/footer') ?>
+        </div>
+
+        <div class="drawer-side z-[var(--z-modal)]">
+            <label for="app-drawer" aria-label="Close menu" class="drawer-overlay"></label>
+            <?= $this->include('Layout/partials/mobile_menu') ?>
+        </div>
+    </div>
 
     <!-- Cookie consent notice -->
     <div id="cookieNotice" class="card card-border bg-base-200 border-base-300 shadow-lg fixed z-[var(--z-modal)]" style="right: 10px; bottom: 10px; max-width: 380px; display: none;">

@@ -47,8 +47,9 @@
     </div>
 
     <!-- Sidebar: metadata + Get Access, sticky, spans full height on desktop.
-         top-16 matches the Navbar's fixed h-16 height (see Layout/partials/navbar.php). -->
-    <div class="order-2 lg:order-none lg:col-span-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-16 lg:self-start flex flex-col gap-4">
+         top-20 matches the new floating Navbar's real clearance (top-3 + h-16
+         = 76px) plus a small breathing gap — see Layout/partials/navbar.php. -->
+    <div class="order-2 lg:order-none lg:col-span-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-20 lg:self-start flex flex-col gap-4">
         <div class="card card-border bg-base-200 border-base-300 p-4">
             <div class="grid grid-cols-2 gap-x-3 gap-y-4">
                 <div class="min-w-0">
