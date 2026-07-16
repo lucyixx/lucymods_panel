@@ -49,7 +49,7 @@
         var vh = window.innerHeight;
         var doc = document.documentElement;
         var hasVScroll = doc.scrollHeight > doc.clientHeight;
-        var hasHScroll = doc.scrollWidth > doc.clientWidth;
+        var hasHScroll = doc.scrollWidth > vw;
 
         var pairs = [
             ['Viewport', vw + ' x ' + vh + 'px'],
@@ -57,7 +57,7 @@
             ['Breakpoint', currentBreakpoint(vw)],
             ['Orientation', screen.orientation ? screen.orientation.type : (vw > vh ? 'landscape' : 'portrait')],
             ['Vertical scrollbar', hasVScroll ? 'yes (' + (doc.scrollHeight - doc.clientHeight) + 'px overflow)' : 'no'],
-            ['Horizontal scrollbar', hasHScroll ? '<span style="color:#ff5252">yes (' + (doc.scrollWidth - doc.clientWidth) + 'px overflow)</span>' : 'no'],
+            ['Horizontal scrollbar', hasHScroll ? '<span style="color:#ff5252">yes (' + (doc.scrollWidth - vw) + 'px overflow)</span>' : 'no'],
             ['Scrollbar width', (window.innerWidth - doc.clientWidth) + 'px'],
             ['Safe-area top/bottom', safeAreaInset('top') + ' / ' + safeAreaInset('bottom')],
             ['Device pixel ratio', window.devicePixelRatio],
