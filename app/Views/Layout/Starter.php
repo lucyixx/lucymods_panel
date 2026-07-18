@@ -32,23 +32,14 @@
     <?= $this->include('Layout/icons') ?>
     <?= $this->include('Layout/preloader') ?>
 
-    <div class="drawer">
-        <input id="app-drawer" type="checkbox" class="drawer-toggle" />
+    <div class="flex flex-col min-h-screen">
+        <?= $this->include('Layout/partials/navbar') ?>
 
-        <div class="drawer-content flex flex-col min-h-screen">
-            <?= $this->include('Layout/partials/navbar') ?>
+        <main class="content">
+            <div class="max-w-5xl mx-auto w-full p-4"><?= $this->renderSection('content') ?></div>
+        </main>
 
-            <main class="content">
-                <div class="max-w-5xl mx-auto w-full p-4"><?= $this->renderSection('content') ?></div>
-            </main>
-
-            <?= $this->include('Layout/partials/footer') ?>
-        </div>
-
-        <div class="drawer-side z-[var(--z-modal)]">
-            <label for="app-drawer" aria-label="Close menu" class="drawer-overlay"></label>
-            <?= $this->include('Layout/partials/mobile_menu') ?>
-        </div>
+        <?= $this->include('Layout/partials/footer') ?>
     </div>
 
     <!-- Cookie consent notice -->

@@ -31,11 +31,13 @@
  * matching comment in details.php. (Mobile never has a sticky sidebar,
  * so the mobile-only top-0 change here doesn't affect that.)
  *
- * Mobile nav itself is a real DaisyUI drawer (see Layout/Starter.php),
- * not a shrunk copy of desktop — full-height, large touch rows, opened
- * via the hamburger label below. Session state comes straight from the
- * existing session()->get('unames')/has('userid') — no controller
- * change, no invented fields.
+ * Mobile nav uses DaisyUI's own official responsive pattern — a
+ * `dropdown` anchored in `navbar-start` — not a Drawer/Sidebar. Session
+ * state comes straight from the existing
+ * session()->get('unames')/has('userid') — no controller change, no
+ * invented fields. Nav items live in $navLinks below so adding a future
+ * item (Dashboard, Licenses, Downloads...) never requires touching the
+ * markup, just the array.
  *
  * $currentTheme is recomputed here (not reused from Starter.php's local
  * variable) since $this->include() renders this partial through its own
@@ -54,9 +56,16 @@ $navLinks = [
 <div class="sticky top-0 lg:top-3 z-[var(--z-navbar)] px-3 pt-2 pb-0 lg:px-4 lg:pt-0">
     <div class="max-w-7xl mx-auto navbar h-16 min-h-0 bg-base-100/90 backdrop-blur shadow-sm rounded-box px-3">
         <div class="navbar-start gap-1">
-            <label for="app-drawer" class="btn btn-ghost btn-circle w-11 h-11 lg:hidden" aria-label="Open menu">
-                <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
-            </label>
+            <div class="dropdown lg:hidden">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle w-11 h-11" aria-label="Open menu">
+                    <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-48 p-2 shadow-sm">
+                    <?php foreach ($navLinks as $link) : ?>
+                        <li><a class="<?= $link['active'] ? 'active' : '' ?>" href="<?= $link['url'] ?>"><?= esc($link['label']) ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
             <a class="flex items-center gap-2 text-lg font-semibold px-2" href="<?= site_url('') ?>">
                 <svg class="icon text-primary" style="width:1.4rem;height:1.4rem"><use href="#i-key" /></svg>ZyGames
             </a>
