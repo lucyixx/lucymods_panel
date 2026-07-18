@@ -54,7 +54,7 @@ $navLinks = [
 ];
 ?>
 <div class="sticky top-0 lg:top-3 z-[var(--z-navbar)] px-3 pt-2 pb-0 lg:px-4 lg:pt-0">
-    <div class="max-w-7xl mx-auto navbar h-16 min-h-0 bg-base-200 border border-base-300 shadow-md rounded-xl px-3">
+    <div class="max-w-7xl mx-auto navbar h-16 min-h-0 bg-base-100/90 backdrop-blur shadow-sm rounded-box px-3">
         <div class="navbar-start gap-1">
             <div class="dropdown lg:hidden">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle w-11 h-11" aria-label="Open menu">
@@ -89,7 +89,7 @@ $navLinks = [
             <?php if ($isLoggedIn) : ?>
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button" class="btn btn-ghost btn-circle w-11 h-11 avatar avatar-placeholder" aria-label="Account menu">
-                        <div class="bg-neutral text-neutral-content w-8 rounded-xl">
+                        <div class="bg-neutral text-neutral-content w-8 rounded-full">
                             <span class="text-xs"><?= esc($initial) ?></span>
                         </div>
                     </div>
