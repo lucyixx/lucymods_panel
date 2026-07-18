@@ -100,8 +100,8 @@ $navLinks = [
                     </ul>
                 </div>
             <?php else : ?>
-                <a class="btn btn-primary h-11 min-h-11 gap-1 px-4" href="<?= site_url('login') ?>">
-                    <svg class="icon"><use href="#i-user" /></svg>Login
+                <a class="btn btn-primary h-11 min-h-11 gap-1 px-3 sm:px-4" href="<?= site_url('login') ?>">
+                    <svg class="icon"><use href="#i-user" /></svg><span class="hidden sm:inline">Login</span>
                 </a>
             <?php endif; ?>
         </div>

@@ -23,7 +23,10 @@
 </style>
 
 <div class='body__preloader'>
-    <span class="loading loading-spinner loading-lg text-primary"></span>
+    <div class="flex flex-col items-center gap-3 animate-pulse">
+        <svg class="icon text-primary" style="width:2.25rem;height:2.25rem"><use href="#i-key" /></svg>
+        <div class="skeleton h-1.5 w-20 rounded-full"></div>
+    </div>
 </div>
 
 <script>
