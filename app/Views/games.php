@@ -46,29 +46,30 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
 <?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
 
-<!-- Search — not sticky (per explicit requirement). -->
-<div class="bg-base-100 px-4 -mx-4 py-3">
-    <label class="input input-sm sm:input-md flex items-center gap-2 w-full sm:max-w-xs">
+<!-- Toolbar: search + filter + sort, one cohesive surface matching the
+     card language used everywhere else (Navbar, App Card, Hero CTA). -->
+<div class="card card-border bg-base-100 border-base-300 p-3 mb-6">
+    <label class="input input-sm sm:input-md flex items-center gap-2 w-full sm:max-w-xs mb-3">
         <svg class="icon opacity-50"><use href="#i-search" /></svg>
         <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '', 'attr') ?>">
     </label>
-</div>
 
-<div class="flex flex-col sm:flex-row sm:items-center gap-3 px-4 -mx-4 py-3 mb-3 border-b border-base-300">
-    <div id="gameFilters" class="filter flex-1 min-w-0">
-        <input class="btn filter-reset btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="Clear category filter" value="">
-        <?php foreach ($categoryDefs as $key => $label) : ?>
-            <input class="btn btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="<?= esc($label) ?>" value="<?= esc($key) ?>">
-        <?php endforeach; ?>
+    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <div id="gameFilters" class="filter flex-1 min-w-0">
+            <input class="btn filter-reset btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="Clear category filter" value="">
+            <?php foreach ($categoryDefs as $key => $label) : ?>
+                <input class="btn btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="<?= esc($label) ?>" value="<?= esc($key) ?>">
+            <?php endforeach; ?>
+        </div>
+
+        <label class="flex items-center gap-2 w-full sm:w-40">
+            <svg class="icon opacity-50 shrink-0"><use href="#i-sort" /></svg>
+            <select id="gameSort" class="select select-sm sm:select-md w-full">
+                <option value="default">Newest</option>
+                <option value="name">Name A–Z</option>
+            </select>
+        </label>
     </div>
-
-    <label class="flex items-center gap-2 w-full sm:w-40">
-        <svg class="icon opacity-50 shrink-0"><use href="#i-sort" /></svg>
-        <select id="gameSort" class="select select-sm sm:select-md w-full">
-            <option value="default">Newest</option>
-            <option value="name">Name A–Z</option>
-        </select>
-    </label>
 </div>
 
 <!-- Catalog -->
@@ -165,7 +166,10 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
             applyFilters();
         });
 
-        // Initial render — also respects ?q= prefilled by Home's Hero search.
+        // Initial render — ?q= is still honored if linked to directly
+        // (Home's search bar was replaced by the Game Selector and no
+        // longer hands off a query here, but the support is harmless to
+        // keep for any other entry point).
         applyFilters();
     })();
 </script>
