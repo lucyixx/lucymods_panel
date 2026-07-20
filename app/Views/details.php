@@ -141,7 +141,7 @@
                     $('.app_developer').text(response.developer);
                     $('.app_type').text(response.type);
                     $('.app_version').text(response.versionName);
-                    $('.app_description').text(response.description);
+                    $('.app_description').html(response.description);
                     $('.app_lastUpdated').text(response.lastUpdated);
                     $('.app_packageName').text(response.packageName);
                     $('.app_summary').html(response.summary);
