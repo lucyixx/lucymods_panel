@@ -89,7 +89,7 @@ $gameCount = count($allGames);
                     data-id="<?= esc($field($game, 'id'), 'attr') ?>"
                     data-name="<?= esc($field($game, 'name'), 'attr') ?>"
                     data-icon="<?= esc($field($game, 'image_url'), 'attr') ?>"
-                    data-details-url="<?= site_url('game/details?id=' . esc($field($game, 'id'), 'url')) ?>">
+                    data-details-url="<?= site_url('games/details?id=' . esc($field($game, 'id'), 'url')) ?>">
                 <img src="<?= esc($field($game, 'image_url')) ?>" alt="" loading="lazy" class="w-10 h-10 rounded-xl object-cover">
                 <span class="text-xs font-medium max-w-16 truncate"><?= esc($field($game, 'name')) ?></span>
             </button>
