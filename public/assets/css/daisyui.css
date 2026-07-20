@@ -90,17 +90,6 @@
     outline: none;
 }
 
-/* DaisyUI v5's .filter collapse-on-select animates margin/opacity/padding/
-   border-width over up to 0.3s but does NOT include width or scale in that
-   transition list (see filter.css) — so width snaps to 0 instantly while
-   padding/opacity are still fading, producing a mismatched intermediate
-   frame where clipped label text (the aria-label ::after content from
-   button.css) renders garbled for a moment. Removing the transition here
-   makes the collapse a single clean frame instead of racing properties. */
-#gameFilters input {
-    transition: none !important;
-}
-
 a {
     text-decoration: none !important;
 }

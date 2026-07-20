@@ -55,10 +55,10 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
     </label>
 
     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-        <div id="gameFilters" class="filter flex-1 min-w-0">
-            <input class="btn filter-reset btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="Clear category filter" value="">
+        <div id="gameFilters" class="flex flex-wrap gap-2 flex-1 min-w-0">
+            <button type="button" class="btn btn-primary btn-xs sm:btn-sm" data-category="" aria-label="All categories" aria-pressed="true">All</button>
             <?php foreach ($categoryDefs as $key => $label) : ?>
-                <input class="btn btn-xs sm:btn-sm" type="radio" name="gameCategory" aria-label="<?= esc($label) ?>" value="<?= esc($key) ?>">
+                <button type="button" class="btn btn-outline btn-xs sm:btn-sm" data-category="<?= esc($key, 'attr') ?>" aria-label="<?= esc($label) ?>" aria-pressed="false"><?= esc($label) ?></button>
             <?php endforeach; ?>
         </div>
 
@@ -115,8 +115,18 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
         const maxBatch = Math.max(...cards.map(c => parseInt(c.dataset.batch, 10)));
 
         function currentCategory() {
-            const checked = filterEl.querySelector('input[name="gameCategory"]:checked');
-            return checked ? checked.value : '';
+            const active = filterEl.querySelector('button[aria-pressed="true"]');
+            return active ? active.dataset.category : '';
+        }
+
+        function selectCategory(btn) {
+            filterEl.querySelectorAll('button').forEach(b => {
+                const selected = b === btn;
+                b.setAttribute('aria-pressed', selected ? 'true' : 'false');
+                b.classList.toggle('btn-primary', selected);
+                b.classList.toggle('btn-outline', !selected);
+            });
+            applyFilters();
         }
 
         function applyFilters() {
@@ -151,7 +161,10 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
         }
 
         searchInput.addEventListener('input', applyFilters);
-        filterEl.addEventListener('change', applyFilters);
+        filterEl.addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-category]');
+            if (btn) selectCategory(btn);
+        });
         sortSelect.addEventListener('change', () => {
             applySort();
             applyFilters();
@@ -162,8 +175,7 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
         });
         clearFiltersBtn.addEventListener('click', () => {
             searchInput.value = '';
-            filterEl.querySelector('input[value=""]').checked = true;
-            applyFilters();
+            selectCategory(filterEl.querySelector('button[data-category=""]'));
         });
 
         // Initial render — ?q= is still honored if linked to directly

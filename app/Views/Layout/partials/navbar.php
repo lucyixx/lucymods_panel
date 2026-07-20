@@ -60,7 +60,7 @@ $navLinks = [
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle w-11 h-11" aria-label="Open menu">
                     <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
                 </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-48 p-2 shadow-sm">
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-48 p-2 shadow-sm">
                     <?php foreach ($navLinks as $link) : ?>
                         <li><a class="<?= $link['active'] ? 'active' : '' ?>" href="<?= $link['url'] ?>"><?= esc($link['label']) ?></a></li>
                     <?php endforeach; ?>
@@ -93,7 +93,7 @@ $navLinks = [
                             <span class="text-xs"><?= esc($initial) ?></span>
                         </div>
                     </div>
-                    <ul tabindex="0" class="menu dropdown-content bg-base-100 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-52 p-2 shadow-sm">
+                    <ul tabindex="0" class="menu dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-52 p-2 shadow-sm">
                         <li class="menu-title truncate"><?= esc($username) ?></li>
                         <li><a href="<?= site_url('dashboard') ?>"><svg class="icon"><use href="#i-gear" /></svg>Dashboard</a></li>
                         <li><a href="<?= site_url('logout') ?>" class="text-error"><svg class="icon"><use href="#i-logout" /></svg>Logout</a></li>
