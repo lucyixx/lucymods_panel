@@ -85,7 +85,7 @@
     </div>
 
     <!-- Main content: MOD Info, About, Reviews, Related Applications -->
-    <div class="order-3 lg:order-none lg:col-span-2 lg:row-start-2 flex flex-col gap-6">
+    <div class="order-3 lg:order-none lg:col-span-2 lg:row-start-2 flex flex-col gap-6 min-w-0">
         <details class="collapse collapse-arrow bg-base-200 border border-base-300 rounded-box">
             <summary class="collapse-title">MOD Info</summary>
             <div class="collapse-content"><ul class="text-sm opacity-80"><li>Draw Esp</li><li>Chams hack</li><li>[more..]</li></ul></div>
