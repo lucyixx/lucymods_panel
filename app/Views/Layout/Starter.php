@@ -1,4 +1,13 @@
-<?php $currentTheme = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'zygame-light') ? 'zygame-light' : 'zygame'; ?>
+<?php
+$currentTheme = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'zygame-light') ? 'zygame-light' : 'zygame';
+// Same --color-base-100 values as public/assets/css/daisyui.css, so the
+// browser chrome (status/address bar) always matches the page background —
+// single source of truth, shared with the toggle script further down.
+$themeColors = [
+    'zygame'       => 'oklch(20% 0.004 80)',
+    'zygame-light' => 'oklch(98% 0.003 80)',
+];
+?>
 <!DOCTYPE html>
 <html data-theme="<?= $currentTheme ?>" lang="en">
 
@@ -6,6 +15,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="<?= $themeColors[$currentTheme] ?>">
     <?= link_tag('favicon.ico', "shortcut icon", "image/x-icon") ?>
     <title><?= BASE_NAME ?> - <?= isset($title) ? $title : 'Panel' ?></title>
 
@@ -64,11 +74,20 @@
     // persists the choice in a cookie. Deliberately not relying on
     // daisyUI's CSS-only theme-controller mechanism, so the switch always
     // works the same way regardless of browser/daisyUI version quirks.
+    //
+    // Also updates <meta name="theme-color"> so the browser status/address
+    // bar recolors immediately — without this the browser keeps whatever
+    // color it sampled on initial page load, since toggling here never
+    // reloads the page. themeColors comes straight from PHP (Starter.php),
+    // so this can never drift out of sync with the meta tag's initial value.
     (function() {
         const toggle = document.getElementById('themeToggle');
+        const themeColors = <?= json_encode($themeColors) ?>;
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             document.cookie = 'theme=' + theme + ';path=/;max-age=31536000';
+            if (themeColorMeta) themeColorMeta.setAttribute('content', themeColors[theme]);
         }
         toggle.addEventListener('change', function() {
             applyTheme(this.checked ? 'zygame-light' : 'zygame');

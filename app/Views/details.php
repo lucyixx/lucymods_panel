@@ -181,7 +181,7 @@
                         var related = '';
                         response.similarApps.forEach(function(app) {
                             related += `
-                                <a href="<?= site_url('details') ?>?id=${encodeURIComponent(app.packageName)}"
+                                <a href="<?= site_url('games/details') ?>?id=${encodeURIComponent(app.packageName)}"
                                    class="card card-border bg-base-100 border-base-300 hover:border-primary/50 transition-colors flex-row items-center gap-3 p-3">
                                     <img src="${app.icon}" loading="lazy" alt="" style="display:block; width:2.5rem; height:2.5rem; border-radius:0.75rem; object-fit:cover; flex-shrink:0;">
                                     <div class="min-w-0 flex-1">

@@ -1,49 +1,28 @@
-<?= $this->extend('Layout/BootstrapLayout') ?>
+<?= $this->extend('Layout/AppShell') ?>
 <?= $this->section('content') ?>
 
-<div class="row justify-content-center">
-    <div class="col-lg-6">
-        <?= $this->include('Layout/BootstrapMsgStatus') ?>
-        <div class="card mb-3">
-            <div class="card-header">
-                <div class="card-title m-0"><span>Accont Information</span></div>
-            </div>
-            <div class="card-body">
-                <?= form_open() ?>
-                <div class="my-3">
-                    <div class="my-3">
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <label for="fullname" class="input-group-text"><i class="bi bi-person-gear"></i></label>
-                                <input type="text" name="fullname" id="fullname" class="form-control" placeholder="Admin full name" value="<?= old('fullname') ?: $user->fullname ?>">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <label for="current" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
-                            <input type="password" name="current" id="current" class="form-control" placeholder="Current Password">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <label for="password" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="New Password">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <label for="password2" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
-                            <input type="password" name="password2" id="password2" class="form-control" placeholder="Confirm Password">
-                        </div>
-                    </div>
-                </div>
-                <div class="text-end mt-3">
-                    <button type="submit" class="btn btn-sm btn-primary">Change Password</button>
-                </div>
-                <?= form_close() ?>
-            </div>
-        </div>
-    </div>
+<div class="max-w-md">
+    <?= $this->include('Layout/msgStatus') ?>
+
+    <?= form_open() ?>
+    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-4">
+        <legend class="fieldset-legend">Account information</legend>
+
+        <label class="label">Full name</label>
+        <input type="text" name="fullname" id="fullname" class="input w-full" placeholder="Admin full name" value="<?= old('fullname') ?: $user->fullname ?>">
+
+        <label class="label">Current password</label>
+        <input type="password" name="current" id="current" class="input w-full" placeholder="Current password">
+
+        <label class="label">New password</label>
+        <input type="password" name="password" id="password" class="input w-full" placeholder="New password">
+
+        <label class="label">Confirm password</label>
+        <input type="password" name="password2" id="password2" class="input w-full" placeholder="Confirm password">
+
+        <button type="submit" class="btn btn-primary mt-4">Change password</button>
+    </fieldset>
+    <?= form_close() ?>
 </div>
+
 <?= $this->endSection() ?>

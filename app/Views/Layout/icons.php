@@ -45,5 +45,7 @@
         <symbol id="i-news" viewBox="0 0 24 24"><path d="M4 4h13a2 2 0 012 2v14H6a2 2 0 01-2-2V4z" /><path d="M8 8h8M8 12h8M8 16h4M18 8v10a2 2 0 002-2V6" /></symbol>
         <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16M7 12h10M10 19h4" /></symbol>
         <symbol id="i-sort" viewBox="0 0 24 24"><path d="M7 4v16M7 4l-3 3M7 4l3 3M17 20V4M17 20l-3-3M17 20l3-3" /></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2" /><path d="M11 18h2" /></symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></symbol>
     </defs>
 </svg>

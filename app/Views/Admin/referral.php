@@ -1,79 +1,71 @@
-<?= $this->extend('Layout/BootstrapLayout') ?>
-
+<?= $this->extend('Layout/AppShell') ?>
 <?= $this->section('content') ?>
-<div class="row">
-    <div class="col-lg-12">
-        <?= $this->include('Layout/BootstrapMsgStatus') ?>
-    </div>
-    <div class="col-lg-4 mb-3">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title m-0"><span>Generate <?= $title ?></span></div>
+
+<?= $this->include('Layout/msgStatus') ?>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="card card-border bg-base-100 border-base-300">
+        <div class="card-body">
+            <h2 class="card-title">Generate <?= $title ?></h2>
+
+            <?= form_open() ?>
+            <div class="mb-3">
+                <label class="label">You can set with multiple saldo</label>
+                <div class="join w-full mt-1">
+                    <span class="join-item btn btn-disabled no-animation px-3">$</span>
+                    <input type="number" class="input join-item w-full" name="saldo" id="saldo" minlength="1" maxlength="11" value="5">
+                </div>
+                <?php if ($validation->hasError('saldo')) : ?>
+                    <p class="text-error text-sm mt-1"><?= $validation->getError('saldo') ?></p>
+                <?php endif; ?>
             </div>
-            <div class="card-body">
-                <?= form_open() ?>
-                <div class="form-group mb-3">
-                    <label for="saldo">You can set with multiple saldo</label>
-                    <div class="input-group mt-2">
-                        <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
-                        <input type="number" class="form-control" name="saldo" id="saldo" minlength="1" maxlength="11" value="5">
-                    </div>
-                    <?php if ($validation->hasError('saldo')) : ?>
-                        <small id="help-saldo" class="text-danger"><?= $validation->getError('saldo') ?></small>
-                    <?php endif; ?>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="level">Account Level</label>
-                    <div class="input-group mt-2">
-                        <span class="input-group-text"><i class="bi bi-person"></i></span>
-                        <?= form_dropdown(['class' => 'form-select', 'name' => 'level', 'id' => 'level'], getLevelArray(), 2) ?>
-                    </div>
-                </div>
-                <div class="form-group text-end">
-                    <button type="submit" class="btn btn-sm btn-primary">Create Code</button>
-                </div>
-                <?= form_close() ?>
+
+            <div class="mb-3">
+                <label class="label">Account level</label>
+                <?= form_dropdown(['class' => 'select w-full mt-1', 'name' => 'level', 'id' => 'level'], getLevelArray(), 2) ?>
             </div>
+
+            <button type="submit" class="btn btn-primary w-full">Create code</button>
+            <?= form_close() ?>
         </div>
     </div>
-    <div class="col-lg-8">
-        <?php if ($code) : ?>
-            <div class="card mb-3">
-                <div class="card-header">
-                    <div class="card-title m-0"><span>History Generate - Total <?= $total_code ?></span></div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-sm table-borderless table-striped" style="width:100%">
-                            <thead>
+
+    <?php if ($code) : ?>
+        <div class="card card-border bg-base-100 border-base-300 lg:col-span-2">
+            <div class="card-body">
+                <h2 class="card-title">History generate &middot; Total <?= $total_code ?></h2>
+
+                <div class="overflow-x-auto">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Referral</th>
+                                <th>Hashed</th>
+                                <th>Saldo</th>
+                                <th>Level</th>
+                                <th>Used by</th>
+                                <th>Create by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($code as $c) : ?>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Referral</th>
-                                    <th>Hashed</th>
-                                    <th>Saldo</th>
-                                    <th>Level</th>
-                                    <th>Used by</th>
-                                    <th>Create by</th>
+                                    <td><?= $c->id_reff ?></td>
+                                    <td><?= $c->code ?></td>
+                                    <td><?= substr($c->hashed, 1, 15) ?></td>
+                                    <td>$<?= $c->saldo ?></td>
+                                    <td><?= $c->level ?></td>
+                                    <td><?= $c->used_by ?: '—' ?></td>
+                                    <td><?= $c->created_by ?></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($code as $c) : ?>
-                                    <tr>
-                                        <td><?= $c->id_reff ?></td>
-                                        <td><?= $c->code ?></td>
-                                        <td><?= substr($c->hashed, 1, 15) ?></td>
-                                        <td>$<?= $c->saldo ?></td>
-                                        <td><?= $c->level ?></td>
-                                        <td><?= $c->used_by ?: '&mdash;' ?></td>
-                                        <td><?= $c->created_by ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
 </div>
+
 <?= $this->endSection() ?>

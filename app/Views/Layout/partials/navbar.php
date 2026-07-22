@@ -39,6 +39,18 @@
  * item (Dashboard, Licenses, Downloads...) never requires touching the
  * markup, just the array.
  *
+ * The account dropdown (navbar-end, logged-in only) is the single home
+ * for every dashboard-area page — Dashboard/Keys/Generate/Settings, plus
+ * an Admin section gated by the same `$user->level == 1` check the old
+ * AppShell sidebar used. Every AppShell-rendered controller already
+ * passes $user; on pages that don't (Home/Games/Details), this partial
+ * falls back to fetching it itself — but only when a session exists, so
+ * anonymous visitors never trigger a lookup. This keeps the Admin
+ * section correct regardless of which page an admin is currently on.
+ * $navLinks intentionally stays Home/Games only — this keeps the public,
+ * always-visible part of the navbar minimal regardless of how many
+ * authenticated pages exist.
+ *
  * $currentTheme is recomputed here (not reused from Starter.php's local
  * variable) since $this->include() renders this partial through its own
  * separate call — see original note history for why.
@@ -48,9 +60,34 @@ $isLoggedIn   = session()->has('userid');
 $username     = $isLoggedIn ? (session()->get('unames') ?? 'User') : null;
 $initial      = $username ? strtoupper(substr($username, 0, 1)) : 'U';
 
+// Home/Games/Details don't pass $user (they never needed it before). Every
+// AppShell-rendered controller already does. Falling back to a lookup here
+// only when logged in and it's missing keeps the Admin section correct on
+// every page without a query for anonymous visitors, and without adding
+// $user to controllers that have no other reason to fetch it.
+if ($isLoggedIn && !isset($user)) {
+    $user = model('UserModel')->getUser();
+}
+$isAdmin = isset($user) && is_object($user) && $user->level == 1;
+$uri     = strtolower(trim(uri_string(), '/'));
+
 $navLinks = [
     ['label' => 'Home', 'url' => site_url(''), 'active' => uri_string() === ''],
     ['label' => 'Games', 'url' => site_url('games'), 'active' => uri_string() === 'games'],
+];
+
+$accountLinks = [
+    ['icon' => 'i-diagram', 'label' => 'Dashboard', 'url' => site_url('dashboard'), 'active' => $uri === 'dashboard' || $uri === ''],
+    ['icon' => 'i-key', 'label' => 'Keys', 'url' => site_url('keys'), 'active' => str_starts_with($uri, 'keys') && $uri !== 'keys/generate'],
+    ['icon' => 'i-plus', 'label' => 'Generate', 'url' => site_url('keys/generate'), 'active' => $uri === 'keys/generate'],
+    ['icon' => 'i-gear', 'label' => 'Settings', 'url' => site_url('settings'), 'active' => $uri === 'settings'],
+];
+
+$adminLinks = [
+    ['icon' => 'i-users', 'label' => 'Manage users', 'url' => site_url('admin/manage-users'), 'active' => str_starts_with($uri, 'admin/manage-users') || str_starts_with($uri, 'admin/user')],
+    ['icon' => 'i-server', 'label' => 'Server', 'url' => site_url('Server'), 'active' => str_starts_with($uri, 'server')],
+    ['icon' => 'i-upload', 'label' => 'Lib online', 'url' => site_url('libOnline'), 'active' => str_starts_with($uri, 'libonline')],
+    ['icon' => 'i-gift', 'label' => 'Referral', 'url' => site_url('admin/create-referral'), 'active' => str_starts_with($uri, 'admin/create-referral') || str_starts_with($uri, 'admin/referral')],
 ];
 ?>
 <div class="sticky top-0 lg:top-3 z-[var(--z-navbar)] px-3 pt-2 pb-0 lg:px-4 lg:pt-0">
@@ -60,7 +97,7 @@ $navLinks = [
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle w-11 h-11" aria-label="Open menu">
                     <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
                 </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-48 p-2 shadow-sm">
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-48 max-w-[calc(100vw-1.5rem)] p-2 shadow-sm">
                     <?php foreach ($navLinks as $link) : ?>
                         <li><a class="<?= $link['active'] ? 'active' : '' ?>" href="<?= $link['url'] ?>"><?= esc($link['label']) ?></a></li>
                     <?php endforeach; ?>
@@ -93,9 +130,20 @@ $navLinks = [
                             <span class="text-xs"><?= esc($initial) ?></span>
                         </div>
                     </div>
-                    <ul tabindex="0" class="menu dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-52 p-2 shadow-sm">
+                    <ul tabindex="0" class="menu dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-64 max-w-[calc(100vw-1.5rem)] max-h-[calc(100vh-6rem)] overflow-y-auto p-2 shadow-sm">
                         <li class="menu-title truncate"><?= esc($username) ?></li>
-                        <li><a href="<?= site_url('dashboard') ?>"><svg class="icon"><use href="#i-gear" /></svg>Dashboard</a></li>
+                        <?php foreach ($accountLinks as $link) : ?>
+                            <li><a class="<?= $link['active'] ? 'active' : '' ?>" href="<?= $link['url'] ?>"><svg class="icon"><use href="#<?= $link['icon'] ?>" /></svg><?= esc($link['label']) ?></a></li>
+                        <?php endforeach; ?>
+
+                        <?php if ($isAdmin) : ?>
+                            <li class="menu-title mt-2">Admin</li>
+                            <?php foreach ($adminLinks as $link) : ?>
+                                <li><a class="<?= $link['active'] ? 'active' : '' ?>" href="<?= $link['url'] ?>"><svg class="icon"><use href="#<?= $link['icon'] ?>" /></svg><?= esc($link['label']) ?></a></li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
+                        <div class="divider my-1"></div>
                         <li><a href="<?= site_url('logout') ?>" class="text-error"><svg class="icon"><use href="#i-logout" /></svg>Logout</a></li>
                     </ul>
                 </div>
