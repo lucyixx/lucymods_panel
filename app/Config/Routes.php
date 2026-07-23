@@ -13,7 +13,7 @@ $routes->match(['get', 'post'], 'Server/lib-online', 'User::Server');
 
 $routes->group('games', function ($routes) {
     $routes->get('/', 'Home::games');
-    $routes->get('/details', 'Home::details');
+    $routes->get('details', 'Home::details');
 });
 
 $routes->group('keys', function ($routes) {

@@ -72,8 +72,8 @@ $gameCount = count($allGames);
                 </div>
             </div>
             <div class="flex gap-2 w-full md:w-auto shrink-0">
-                <a id="heroViewDetails" href="<?= site_url('details?id=' . esc($field($heroGame, 'id'), 'url')) ?>" class="btn bg-white/10 text-white border-white/20 hover:bg-white/20 btn-sm md:btn-md flex-1 md:flex-none">View Details</a>
-                <a id="heroGetAccess" href="<?= site_url('details?id=' . esc($field($heroGame, 'id'), 'url')) ?>" class="btn btn-primary btn-sm md:btn-md flex-1 md:flex-none shadow-[0_0_20px_rgba(255,255,255,0.35)] hover:shadow-[0_0_28px_rgba(255,255,255,0.55)] hover:-translate-y-0.5 transition-all font-semibold">Get Access</a>
+                <a id="heroViewDetails" href="<?= site_url('games/games/details?id=' . esc($field($heroGame, 'id'), 'url')) ?>" class="btn bg-white/10 text-white border-white/20 hover:bg-white/20 btn-sm md:btn-md flex-1 md:flex-none">View Details</a>
+                <a id="heroGetAccess" href="<?= site_url('games/details?id=' . esc($field($heroGame, 'id'), 'url')) ?>" class="btn btn-primary btn-sm md:btn-md flex-1 md:flex-none shadow-[0_0_20px_rgba(255,255,255,0.35)] hover:shadow-[0_0_28px_rgba(255,255,255,0.55)] hover:-translate-y-0.5 transition-all font-semibold">Get Access</a>
             </div>
         </div>
     </div>
@@ -89,7 +89,7 @@ $gameCount = count($allGames);
                     data-id="<?= esc($field($game, 'id'), 'attr') ?>"
                     data-name="<?= esc($field($game, 'name'), 'attr') ?>"
                     data-icon="<?= esc($field($game, 'image_url'), 'attr') ?>"
-                    data-details-url="<?= site_url('details?id=' . esc($field($game, 'id'), 'url')) ?>">
+                    data-details-url="<?= site_url('games/details?id=' . esc($field($game, 'id'), 'url')) ?>">
                 <img src="<?= esc($field($game, 'image_url')) ?>" alt="" loading="lazy" class="w-10 h-10 rounded-xl object-cover">
                 <span class="text-xs font-medium max-w-16 truncate"><?= esc($field($game, 'name')) ?></span>
             </button>
