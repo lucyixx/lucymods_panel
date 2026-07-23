@@ -3,8 +3,6 @@
 use CodeIgniter\Router\RouteCollection;
 
 $routes->get('/', 'Home::index');
-$routes->get('/details', 'Home::details');
-$routes->get('/games', 'Home::games');
 $routes->get('logout', 'Auth::logout');
 $routes->get('dashboard', 'User::index');
 $routes->match(['get', 'post'], 'login', 'Auth::login');
@@ -12,6 +10,11 @@ $routes->match(['get', 'post'], 'register', 'Auth::register');
 $routes->match(['get', 'post'], 'settings', 'User::settings');
 $routes->match(['get', 'post'], 'Server', 'User::Server');
 $routes->match(['get', 'post'], 'Server/lib-online', 'User::Server');
+
+$routes->group('games', function ($routes) {
+    $routes->get('/', 'Home::games');
+    $routes->get('/details', 'Home::details');
+});
 
 $routes->group('keys', function ($routes) {
 	$routes->match(['get', 'post'], '/', 'Keys::index');

@@ -2,16 +2,13 @@
 /**
  * Games — the canonical marketplace catalog.
  *
- * Every browsing interaction (search, filter, sort, pagination) lives
- * here and only here; Home never duplicates this. Search/filter/sort
- * run entirely client-side over the already-rendered list below —
- * there is no search/filter API today, and the catalog is small enough
- * that this is the right amount of engineering, not a shortcut.
+ * Search and sort run entirely client-side over the already-rendered
+ * list below — there is no search API today, and the catalog is small
+ * enough that this is the right amount of engineering, not a shortcut.
  *
- * Categories are derived here, in the view, from each game's ->features
- * text (simple keyword match). Field access goes through $field() rather
- * than -> directly, so this keeps working unchanged the day getSupportedGames()
- * returns DB rows/arrays instead of GameData objects.
+ * Field access goes through $field() rather than -> directly, so this
+ * keeps working unchanged the day getSupportedGames() returns DB
+ * rows/arrays instead of GameData objects.
  */
 $field = function ($source, string $key) {
     if (is_array($source)) {
@@ -22,51 +19,43 @@ $field = function ($source, string $key) {
 
 $games = getSupportedGames();
 
-$categoryDefs = [
-    'esp'    => 'ESP',
-    'aimbot' => 'Aimbot',
-    'bullet' => 'Bullet Track',
-    'map'    => 'Hack Map',
-    'icon'   => 'Icon Info',
+/**
+ * Sort dropdown config: value => label. Values are stable keys used by
+ * the client-side comparator map below; they are independent from the
+ * label text so either can change without touching the other.
+ *
+ * Only 'alpha' has a working comparator today (see js section) — the
+ * others need a date field the data source doesn't provide yet. They
+ * stay in the list because the dropdown itself is final; wiring up
+ * their comparator is a JS-only change once that field exists.
+ */
+$sortOptions = [
+    'newest' => 'Newest → Oldest',
+    'oldest' => 'Oldest → Newest',
+    'alpha'  => 'Alphabetical (A–Z)',
+    'month'  => 'By Month',
 ];
-
-$gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
-    $features = $field($game, 'features') ?? [];
-    $haystack = strtolower(implode(' ', $features));
-    $cats = [];
-    foreach ($categoryDefs as $key => $label) {
-        if (str_contains($haystack, $key)) {
-            $cats[] = $key;
-        }
-    }
-    return ['game' => $game, 'name' => $field($game, 'name'), 'categories' => $cats];
-}, $games);
+$defaultSort = 'newest';
 ?>
 
 <?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
 
-<!-- Toolbar: search + filter + sort, one cohesive surface matching the
-     card language used everywhere else (Navbar, App Card, Hero CTA). -->
+<!-- Toolbar: search + sort, one cohesive surface matching the card
+     language used everywhere else (Navbar, App Card, Hero CTA). -->
 <div class="card card-border bg-base-100 border-base-300 p-3 mb-6">
-    <label class="input input-sm sm:input-md flex items-center gap-2 w-full sm:max-w-xs mb-3">
-        <svg class="icon opacity-50"><use href="#i-search" /></svg>
-        <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '', 'attr') ?>">
-    </label>
-
     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-        <div id="gameFilters" class="flex flex-wrap gap-2 flex-1 min-w-0">
-            <button type="button" class="btn btn-primary btn-xs sm:btn-sm" data-category="" aria-label="All categories" aria-pressed="true">All</button>
-            <?php foreach ($categoryDefs as $key => $label) : ?>
-                <button type="button" class="btn btn-outline btn-xs sm:btn-sm" data-category="<?= esc($key, 'attr') ?>" aria-label="<?= esc($label) ?>" aria-pressed="false"><?= esc($label) ?></button>
-            <?php endforeach; ?>
-        </div>
+        <label class="input input-sm sm:input-md flex items-center gap-2 w-full sm:max-w-xs">
+            <svg class="icon opacity-50"><use href="#i-search" /></svg>
+            <input id="gameSearch" type="text" class="grow" placeholder="Search games" value="<?= esc($_GET['q'] ?? '', 'attr') ?>">
+        </label>
 
-        <label class="flex items-center gap-2 w-full sm:w-40">
+        <label class="flex items-center gap-2 w-full sm:w-48 sm:ml-auto">
             <svg class="icon opacity-50 shrink-0"><use href="#i-sort" /></svg>
             <select id="gameSort" class="select select-sm sm:select-md w-full">
-                <option value="default">Newest</option>
-                <option value="name">Name A–Z</option>
+                <?php foreach ($sortOptions as $value => $label) : ?>
+                    <option value="<?= esc($value, 'attr') ?>"<?= $value === $defaultSort ? ' selected' : '' ?>><?= esc($label) ?></option>
+                <?php endforeach; ?>
             </select>
         </label>
     </div>
@@ -74,12 +63,11 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
 
 <!-- Catalog -->
 <div id="gameGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <?php foreach ($gamesWithCategories as $i => $entry) : ?>
+    <?php foreach ($games as $i => $game) : ?>
         <div class="game-card-wrap<?= $i >= 9 ? ' hidden' : '' ?>"
-             data-name="<?= esc(strtolower($entry['name'])) ?>"
-             data-categories="<?= esc(implode(' ', $entry['categories'])) ?>"
+             data-name="<?= esc(strtolower($field($game, 'name') ?? '')) ?>"
              data-batch="<?= $i < 9 ? '0' : (int) floor(($i - 9) / 9) + 1 ?>">
-            <?= $this->setData(['game' => $entry['game'], 'density' => 'tight'])->include('Layout/partials/app_card') ?>
+            <?= $this->setData(['game' => $game, 'density' => 'tight'])->include('Layout/partials/app_card') ?>
         </div>
     <?php endforeach; ?>
 </div>
@@ -87,10 +75,10 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
 <?= $this->setData([
     'wrapperId' => 'gameEmptyState',
     'hidden' => true,
-    'title' => 'No games match your filters',
-    'subtitle' => 'Try a different search term or clear your filters.',
-    'actionLabel' => 'Clear filters',
-    'actionId' => 'clearFiltersBtn',
+    'title' => 'No games match your search',
+    'subtitle' => 'Try a different search term.',
+    'actionLabel' => 'Clear search',
+    'actionId' => 'clearSearchBtn',
 ])->include('Layout/partials/empty_state') ?>
 
 <div class="text-center mt-6">
@@ -105,40 +93,31 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
         const grid = document.getElementById('gameGrid');
         const cards = Array.from(grid.querySelectorAll('.game-card-wrap'));
         const searchInput = document.getElementById('gameSearch');
-        const filterEl = document.getElementById('gameFilters');
         const sortSelect = document.getElementById('gameSort');
         const emptyState = document.getElementById('gameEmptyState');
         const loadMoreBtn = document.getElementById('loadMoreBtn');
-        const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
 
-        let visibleBatches = 0; // how many extra batches of 9 have been revealed
+        let visibleBatches = 0; // extra batches of 9 revealed beyond the first
         const maxBatch = Math.max(...cards.map(c => parseInt(c.dataset.batch, 10)));
 
-        function currentCategory() {
-            const active = filterEl.querySelector('button[aria-pressed="true"]');
-            return active ? active.dataset.category : '';
-        }
-
-        function selectCategory(btn) {
-            filterEl.querySelectorAll('button').forEach(b => {
-                const selected = b === btn;
-                b.setAttribute('aria-pressed', selected ? 'true' : 'false');
-                b.classList.toggle('btn-primary', selected);
-                b.classList.toggle('btn-outline', !selected);
-            });
-            applyFilters();
-        }
+        // One comparator per sort mode. A mode with no entry here needs a
+        // data field (e.g. a date) the source doesn't provide yet —
+        // selecting it intentionally leaves the current order untouched.
+        // Add the missing comparator once that field becomes available;
+        // no other code here needs to change.
+        const sortComparators = {
+            alpha: (a, b) => a.dataset.name.localeCompare(b.dataset.name),
+        };
 
         function applyFilters() {
             const q = searchInput.value.trim().toLowerCase();
-            const cat = currentCategory();
             let anyVisible = false;
 
             cards.forEach(card => {
                 const matchesSearch = !q || card.dataset.name.includes(q);
-                const matchesCategory = !cat || card.dataset.categories.split(' ').includes(cat);
                 const withinBatch = parseInt(card.dataset.batch, 10) <= visibleBatches;
-                const show = matchesSearch && matchesCategory && withinBatch;
+                const show = matchesSearch && withinBatch;
                 card.classList.toggle('hidden', !show);
                 if (show) anyVisible = true;
             });
@@ -146,25 +125,18 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
             emptyState.classList.toggle('hidden', anyVisible);
             emptyState.classList.toggle('flex', !anyVisible);
 
-            const moreToLoad = visibleBatches < maxBatch && (!q && !cat);
+            const moreToLoad = visibleBatches < maxBatch && !q;
             loadMoreBtn.classList.toggle('hidden', !moreToLoad);
         }
 
         function applySort() {
-            const mode = sortSelect.value;
-            if (mode === 'name') {
-                cards.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
-            } else {
-                cards.sort((a, b) => parseInt(a.dataset.batch, 10) - parseInt(b.dataset.batch, 10));
-            }
+            const comparator = sortComparators[sortSelect.value];
+            if (!comparator) return; // no data for this mode yet — keep current order
+            cards.sort(comparator);
             cards.forEach(card => grid.appendChild(card));
         }
 
         searchInput.addEventListener('input', applyFilters);
-        filterEl.addEventListener('click', (e) => {
-            const btn = e.target.closest('button[data-category]');
-            if (btn) selectCategory(btn);
-        });
         sortSelect.addEventListener('change', () => {
             applySort();
             applyFilters();
@@ -173,15 +145,12 @@ $gamesWithCategories = array_map(function ($game) use ($categoryDefs, $field) {
             visibleBatches += 1;
             applyFilters();
         });
-        clearFiltersBtn.addEventListener('click', () => {
+        clearSearchBtn.addEventListener('click', () => {
             searchInput.value = '';
-            selectCategory(filterEl.querySelector('button[data-category=""]'));
+            applyFilters();
         });
 
-        // Initial render — ?q= is still honored if linked to directly
-        // (Home's search bar was replaced by the Game Selector and no
-        // longer hands off a query here, but the support is harmless to
-        // keep for any other entry point).
+        // Initial render — ?q= is still honored if linked to directly.
         applyFilters();
     })();
 </script>
