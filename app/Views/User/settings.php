@@ -1,49 +1,44 @@
-<?= $this->extend('Layout/BootstrapLayout') ?>
+<?= $this->extend('Layout/Starter') ?>
 <?= $this->section('content') ?>
 
-<div class="row justify-content-center">
-    <div class="col-lg-6">
-        <?= $this->include('Layout/BootstrapMsgStatus') ?>
-        <div class="card mb-3">
-            <div class="card-header">
-                <div class="card-title m-0"><span>Accont Information</span></div>
-            </div>
+<div class="flex justify-center">
+    <div class="w-full max-w-md">
+        <?= $this->include('Layout/msgStatus') ?>
+
+        <div class="card card-border bg-base-100 border-base-300">
             <div class="card-body">
+                <h2 class="card-title">Account Information</h2>
+
                 <?= form_open() ?>
-                <div class="my-3">
-                    <div class="my-3">
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <label for="fullname" class="input-group-text"><i class="bi bi-person-gear"></i></label>
-                                <input type="text" name="fullname" id="fullname" class="form-control" placeholder="Admin full name" value="<?= old('fullname') ?: $user->fullname ?>">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <label for="current" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
-                            <input type="password" name="current" id="current" class="form-control" placeholder="Current Password">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <label for="password" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="New Password">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <label for="password2" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
-                            <input type="password" name="password2" id="password2" class="form-control" placeholder="Confirm Password">
-                        </div>
-                    </div>
-                </div>
-                <div class="text-end mt-3">
-                    <button type="submit" class="btn btn-sm btn-primary">Change Password</button>
+                <fieldset class="fieldset gap-4">
+                    <label class="input w-full">
+                        <svg class="icon opacity-50"><use href="#i-user" /></svg>
+                        <input type="text" name="fullname" id="fullname" class="grow" placeholder="Admin full name" value="<?= old('fullname') ?: $user->fullname ?>">
+                    </label>
+
+                    <label class="input w-full">
+                        <svg class="icon opacity-50"><use href="#i-lock" /></svg>
+                        <input type="password" name="current" id="current" class="grow" placeholder="Current Password">
+                    </label>
+
+                    <label class="input w-full">
+                        <svg class="icon opacity-50"><use href="#i-lock" /></svg>
+                        <input type="password" name="password" id="password" class="grow" placeholder="New Password">
+                    </label>
+
+                    <label class="input w-full">
+                        <svg class="icon opacity-50"><use href="#i-lock" /></svg>
+                        <input type="password" name="password2" id="password2" class="grow" placeholder="Confirm Password">
+                    </label>
+                </fieldset>
+
+                <div class="card-actions justify-end mt-2">
+                    <button type="submit" class="btn btn-primary btn-sm">Change Password</button>
                 </div>
                 <?= form_close() ?>
             </div>
         </div>
     </div>
 </div>
+
 <?= $this->endSection() ?>

@@ -2,12 +2,20 @@
 /**
  * Navbar (shared component — design-system foundation)
  *
- * Single-tier, floating pill bar: Logo | Home Games (Menu) (Admin) | Theme
- * Account/Login. Reused unmodified across every page that extends
- * Layout/Starter — Home/Games/Details plus, now, Dashboard/Keys/
- * Generate/Settings/Admin. No Drawer/Sidebar: authenticated and admin
- * links are just two more dropdowns on this same bar, same as the
- * existing mobile-menu/account dropdowns below.
+ * Single-tier, floating pill bar: 3-line menu (public nav) + Logo | Theme
+ * + Account dropdown/Login. Reused unmodified across every page that
+ * extends Layout/Starter. No Drawer/Sidebar anywhere.
+ *
+ * Two dropdowns, two different jobs — kept deliberately separate rather
+ * than merged into one giant menu:
+ * - The 3-line menu (navbar-start) is public navigation: Home, Games.
+ *   Visible to everyone, on every viewport, logged in or not.
+ * - The avatar dropdown (navbar-end) is the user's own account surface:
+ *   Dashboard/Keys/Generate/Settings, an Admin group for level 1, then
+ *   Logout. It only exists when logged in, and Login replaces it when
+ *   guest.
+ * This mirrors how the routes themselves are split (public routes vs.
+ * authenticated routes) instead of flattening everything into one list.
  *
  * Mobile and desktop deliberately use different sticky geometry, not a
  * shrunk copy of the same bar:
@@ -35,19 +43,22 @@
  * matching comment in details.php. (Mobile never has a sticky sidebar,
  * so the mobile-only top-0 change here doesn't affect that.)
  *
- * Mobile nav uses DaisyUI's own official responsive pattern — a
- * `dropdown` anchored in `navbar-start` — not a Drawer/Sidebar. Session
- * state comes straight from the existing
+ * Both dropdowns use DaisyUI's native `dropdown` (a `tabindex`-focusable
+ * trigger + `dropdown-content`) — no JS, no Bootstrap data-bs-* anything.
+ * That gives keyboard users Tab-to-focus/Enter-or-Space-to-open and
+ * Escape/click-outside-to-close for free from the browser + daisyUI CSS,
+ * matching the account dropdown that already existed here before.
+ *
+ * Session state comes straight from the existing
  * session()->get('unames')/has('userid') — no controller change, no
  * invented fields.
  *
  * Admin visibility depends on $user->level, and $user is only passed in
  * by User/Keys/LibOnline controllers (Home/Games do not pass it) — same
- * constraint the old AppShell drawer had. Guard every admin check with
- * isset($user) so Home/Games simply render without the Admin dropdown
- * rather than notice-erroring; this is a pre-existing limitation, not
- * something introduced here, and fixing it would mean touching
- * controllers, which is out of scope.
+ * pre-existing constraint the old AppShell drawer had. Guard every admin
+ * check with isset($user) so Home/Games simply render without the Admin
+ * group rather than notice-erroring; fixing that would mean touching
+ * controllers, which is out of scope here.
  *
  * $currentTheme is recomputed here (not reused from Starter.php's local
  * variable) since $this->include() renders this partial through its own
@@ -59,14 +70,15 @@ $username     = $isLoggedIn ? (session()->get('unames') ?? 'User') : null;
 $initial      = $username ? strtoupper(substr($username, 0, 1)) : 'U';
 $isAdmin      = isset($user) && $user->level == 1;
 
-// Public nav — same on every page, logged in or not.
+// Public nav — lives in the 3-line menu, same on every page regardless
+// of auth state.
 $navLinks = [
     ['label' => 'Home', 'url' => site_url(''), 'active' => uri_string() === ''],
     ['label' => 'Games', 'url' => site_url('games'), 'active' => uri_string() === 'games'],
 ];
 
-// Authenticated nav — grouped under one "Menu" dropdown instead of a
-// sidebar. Keys vs Generate is checked most-specific-first so a
+// Authenticated nav — lives inside the Account dropdown. Keys vs
+// Generate is checked most-specific-first (see $active below) so a
 // Generate page never also lights up the Keys item.
 $menuItems = [
     ['icon' => 'i-server', 'label' => 'Dashboard', 'url' => 'dashboard', 'key' => 'dashboard'],
@@ -75,8 +87,9 @@ $menuItems = [
     ['icon' => 'i-gear', 'label' => 'Settings', 'url' => 'settings', 'key' => 'settings'],
 ];
 
-// Admin-only nav — matches app/Config/Routes.php exactly (Server has no
-// admin/ prefix, Lib Online lives under the top-level libOnline group).
+// Admin-only nav — also inside the Account dropdown, below a divider.
+// Matches app/Config/Routes.php exactly (Server has no admin/ prefix,
+// Lib Online lives under the top-level libOnline group).
 $adminItems = [
     ['icon' => 'i-users', 'label' => 'Manage Users', 'url' => 'admin/manage-users', 'key' => 'admin_users'],
     ['icon' => 'i-server', 'label' => 'Server', 'url' => 'Server', 'key' => 'admin_server'],
@@ -84,9 +97,7 @@ $adminItems = [
     ['icon' => 'i-scan', 'label' => 'Referral', 'url' => 'admin/create-referral', 'key' => 'admin_referral'],
 ];
 
-// Canonical active key, resolved once against the real request URI —
-// same logic previously in AppShell.php, moved here so it's shared by
-// every page instead of living only in the drawer layout.
+// Canonical active key, resolved once against the real request URI.
 $active = '';
 $uri = strtolower(trim(uri_string(), '/'));
 if ($isLoggedIn) {
@@ -111,73 +122,24 @@ if ($isAdmin) {
         $active = 'admin_referral';
     }
 }
-$menuActive  = in_array($active, ['dashboard', 'keys', 'generate', 'settings'], true);
-$adminActive = in_array($active, ['admin_users', 'admin_server', 'admin_lib', 'admin_referral'], true);
 ?>
 <div class="sticky top-0 lg:top-3 z-[var(--z-navbar)] px-3 pt-2 pb-0 lg:px-4 lg:pt-0">
     <div class="max-w-7xl mx-auto navbar h-16 min-h-0 bg-base-200 border border-base-300 shadow-md rounded-xl px-3">
         <div class="navbar-start gap-1">
-            <div class="dropdown lg:hidden">
+            <!-- Public nav: 3-line menu, same on every viewport (not just mobile) -->
+            <div class="dropdown">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle w-11 h-11" aria-label="Open menu">
                     <svg class="icon" style="width:1.25rem;height:1.25rem"><use href="#i-menu" /></svg>
                 </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-56 p-2 shadow-sm">
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-48 p-2 shadow-sm">
                     <?php foreach ($navLinks as $link) : ?>
                         <li><a class="<?= $link['active'] ? 'active' : '' ?>" href="<?= $link['url'] ?>"><?= esc($link['label']) ?></a></li>
                     <?php endforeach; ?>
-
-                    <?php if ($isLoggedIn) : ?>
-                        <li class="menu-title mt-2">Menu</li>
-                        <?php foreach ($menuItems as $item) : ?>
-                            <li><a class="<?= $active === $item['key'] ? 'active' : '' ?>" href="<?= site_url($item['url']) ?>"><svg class="icon"><use href="#<?= $item['icon'] ?>" /></svg><?= esc($item['label']) ?></a></li>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-
-                    <?php if ($isAdmin) : ?>
-                        <li class="menu-title mt-2">Admin</li>
-                        <?php foreach ($adminItems as $item) : ?>
-                            <li><a class="<?= $active === $item['key'] ? 'active' : '' ?>" href="<?= site_url($item['url']) ?>"><svg class="icon"><use href="#<?= $item['icon'] ?>" /></svg><?= esc($item['label']) ?></a></li>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
                 </ul>
             </div>
             <a class="flex items-center gap-2 text-lg font-semibold px-2" href="<?= site_url('') ?>">
                 <svg class="icon text-primary" style="width:1.4rem;height:1.4rem"><use href="#i-key" /></svg>ZyGames
             </a>
-        </div>
-
-        <div class="navbar-center hidden lg:flex">
-            <ul class="flex items-center gap-8 text-sm font-medium">
-                <?php foreach ($navLinks as $link) : ?>
-                    <li><a class="<?= $link['active'] ? 'text-primary' : 'opacity-80 hover:opacity-100 hover:text-primary transition-colors' ?>" href="<?= $link['url'] ?>"><?= esc($link['label']) ?></a></li>
-                <?php endforeach; ?>
-
-                <?php if ($isLoggedIn) : ?>
-                    <li class="dropdown">
-                        <div tabindex="0" role="button" class="btn btn-ghost btn-sm h-11 min-h-11 <?= $menuActive ? 'text-primary' : '' ?>">
-                            Menu
-                        </div>
-                        <ul tabindex="0" class="menu dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-48 p-2 shadow-sm">
-                            <?php foreach ($menuItems as $item) : ?>
-                                <li><a class="<?= $active === $item['key'] ? 'active' : '' ?>" href="<?= site_url($item['url']) ?>"><svg class="icon"><use href="#<?= $item['icon'] ?>" /></svg><?= esc($item['label']) ?></a></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </li>
-                <?php endif; ?>
-
-                <?php if ($isAdmin) : ?>
-                    <li class="dropdown">
-                        <div tabindex="0" role="button" class="btn btn-ghost btn-sm h-11 min-h-11 <?= $adminActive ? 'text-primary' : '' ?>">
-                            Admin
-                        </div>
-                        <ul tabindex="0" class="menu dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-52 p-2 shadow-sm">
-                            <?php foreach ($adminItems as $item) : ?>
-                                <li><a class="<?= $active === $item['key'] ? 'active' : '' ?>" href="<?= site_url($item['url']) ?>"><svg class="icon"><use href="#<?= $item['icon'] ?>" /></svg><?= esc($item['label']) ?></a></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </li>
-                <?php endif; ?>
-            </ul>
         </div>
 
         <div class="navbar-end gap-1">
@@ -194,8 +156,19 @@ $adminActive = in_array($active, ['admin_users', 'admin_server', 'admin_lib', 'a
                             <span class="text-xs"><?= esc($initial) ?></span>
                         </div>
                     </div>
-                    <ul tabindex="0" class="menu dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-52 p-2 shadow-sm">
+                    <ul tabindex="0" class="menu dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-3 w-56 p-2 shadow-sm">
                         <li class="menu-title truncate"><?= esc($username) ?></li>
+                        <?php foreach ($menuItems as $item) : ?>
+                            <li><a class="<?= $active === $item['key'] ? 'active' : '' ?>" href="<?= site_url($item['url']) ?>"><svg class="icon"><use href="#<?= $item['icon'] ?>" /></svg><?= esc($item['label']) ?></a></li>
+                        <?php endforeach; ?>
+
+                        <?php if ($isAdmin) : ?>
+                            <li class="menu-title mt-2">Admin</li>
+                            <?php foreach ($adminItems as $item) : ?>
+                                <li><a class="<?= $active === $item['key'] ? 'active' : '' ?>" href="<?= site_url($item['url']) ?>"><svg class="icon"><use href="#<?= $item['icon'] ?>" /></svg><?= esc($item['label']) ?></a></li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
                         <li><a href="<?= site_url('logout') ?>" class="text-error"><svg class="icon"><use href="#i-logout" /></svg>Logout</a></li>
                     </ul>
                 </div>

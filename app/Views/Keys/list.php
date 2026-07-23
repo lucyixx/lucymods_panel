@@ -1,57 +1,61 @@
-<?php
+<?= $this->extend('Layout/Starter') ?>
 
-
-
-?>
-<?= $this->extend('Layout/BootstrapLayout') ?>
+<?= $this->section('headScripts') ?>
+<?= script_tag('https://code.jquery.com/jquery-3.6.0.js') ?>
+<?= script_tag("https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.0/sweetalert2.all.min.js") ?>
+<?= link_tag("https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css") ?>
+<?= script_tag("https://cdn.datatables.net/2.0.0/js/dataTables.js") ?>
+<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<div class="row justify-content-center">
-    <div class="col-lg-12">
-        <?= $this->include('Layout/BootstrapMsgStatus') ?>
-    </div>
-    <div class="col-lg-12">
-        <div class="card mb-3">
-            <div class="card-header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="">
-                        <div class="card-title m-0"><span>Keys Registered</span></div>
+
+<?= $this->include('Layout/msgStatus') ?>
+
+<div class="card card-border bg-base-100 border-base-300">
+    <div class="card-body">
+        <div class="flex justify-between items-center mb-2 gap-2 flex-wrap">
+            <h2 class="card-title">Keys Registered</h2>
+            <div class="flex items-center gap-1">
+                <a class="btn btn-ghost btn-sm" href="<?= site_url('keys/generate') ?>" aria-label="Generate key">
+                    <svg class="icon"><use href="#i-plus" /></svg>
+                </a>
+                <a class="btn btn-ghost btn-sm" href="<?= site_url('keys/download/all') ?>" aria-label="Download all keys">
+                    <svg class="icon"><use href="#i-download" /></svg>
+                </a>
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-sm" aria-label="Bulk delete options">
+                        <svg class="icon"><use href="#i-trash" /></svg>
                     </div>
-                    <div class="text-end">
-                        <a class="btn btn-default btn-sm" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
-                        <a class="btn btn-default btn-sm" href="<?= site_url('keys/download/all') ?>"><i class="bi bi-download"></i></a>
-                        <a class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><span class="me-1"><i class=" bi bi-trash"></i></span></a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="<?= site_url('keys/start')  ?>">Keys Not Use</a></li>
-                            <li><a class="dropdown-item" href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
-                        </ul>
-                    </div>
+                    <ul tabindex="0" class="menu dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-2 w-48 p-2 shadow-sm">
+                        <li><a href="<?= site_url('keys/start') ?>">Keys Not Use</a></li>
+                        <li><a href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="card-body">
-                <?php if ($keylist) : ?>
-                    <div class="table-responsive">
-                        <table id="datatable" class="table table-borderless table-sm table-hover table-striped w-100">
-                            <thead>
-                                <tr class="border-0">
-                                    <th>ID</th>
-                                    <th>Game</th>
-                                    <th>User Keys</th>
-                                    <th>Devices</th>
-                                    <th>Duration</th>
-                                    <th>Expired</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                <?php else : ?>
-                    <p class="text-center">Nothing keys to show</p>
-                <?php endif; ?>
-            </div>
         </div>
+
+        <?php if ($keylist) : ?>
+            <div class="overflow-x-auto">
+                <table id="datatable" class="table table-sm table-zebra w-full">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Game</th>
+                            <th>User Keys</th>
+                            <th>Devices</th>
+                            <th>Duration</th>
+                            <th>Expired</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        <?php else : ?>
+            <p class="text-center opacity-70">Nothing keys to show</p>
+        <?php endif; ?>
     </div>
 </div>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
@@ -71,21 +75,21 @@
                     data: 'id',
                     name: 'id_keys',
                     render: function(data, type, row, meta) {
-                        return `<span class="small">${data}</span>`
+                        return `<span class="text-xs">${data}</span>`
                     }
                 },
                 {
                     data: 'game',
                     render: function(data, type, row, meta) {
-                        return `<span class="small">${data}</span>`;
+                        return `<span class="text-xs">${data}</span>`;
                     }
                 },
                 {
                     data: 'user_key',
                     render: function(data, type, row, meta) {
-                        const is_valid = (row.status == 'Active') ? "text-success" : "text-danger";
+                        const is_valid = (row.status == 'Active') ? "text-success" : "text-error";
                         const key = row.user_key ?? '&mdash;';
-                        return `<span class="small text-muted ${is_valid}" data-key="${key}">${key}</span> `;
+                        return `<span class="text-xs opacity-70 ${is_valid}" data-key="${key}">${key}</span> `;
                     }
                 },
                 {
@@ -93,18 +97,18 @@
                     render: function(data, type, row, meta) {
                         const totalDevice = (row.devices ? row.devices : 0);
                         if (row.key_level == 1) {
-                            return `<span class="small badge text-success" id="devMax-${row.user_key}">Free ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="text-xs badge badge-success" id="devMax-${row.user_key}">Free ${totalDevice}/${row.max_devices}</span>`;
                         } else if (row.key_level == 2) {
-                            return `<span class="small badge text-warning" id="devMax-${row.user_key}">Vip ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="text-xs badge badge-warning" id="devMax-${row.user_key}">Vip ${totalDevice}/${row.max_devices}</span>`;
                         } else if (row.key_level == 3) {
-                            return `<span class="small badge text-primary" id="devMax-${row.user_key}">Test ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="text-xs badge badge-primary" id="devMax-${row.user_key}">Test ${totalDevice}/${row.max_devices}</span>`;
                         }
                     }
                 },
                 {
                     data: 'duration',
                     render: function(data, type, row, meta) {
-                        return `<span class="small">${data}</span>`;
+                        return `<span class="text-xs">${data}</span>`;
                     }
                 },
                 {
@@ -113,17 +117,17 @@
                     render: function(data, type, row, meta) {
                         const currentDate = new Date();
                         const expirationDate = new Date(data + 'Z');
-                        return `<span class="small text-nowrap ${row.expired && expirationDate <= currentDate ? 'text-danger' : ''}">${row.expired ? data : '(not started yet)'}</span>`;
+                        return `<span class="text-xs text-nowrap ${row.expired && expirationDate <= currentDate ? 'text-error' : ''}">${row.expired ? data : '(not started yet)'}</span>`;
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, row, meta) {
                         console.log(row);
-                        const btnReset = `<button class="btn text-warning" onclick="resetUserKey('${row.user_key}')"><i class="bi bi-bootstrap-reboot"></i></button>`;
-                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-sm"><i class="bi bi-gear"></i></a>`;
-                        const btnDelete = `<button class="btn text-danger btn-sm" onclick="deleteKeys('${row.user_key}')"><i class="bi bi-trash"></i></button>`;
-                        return `<div class="btn-group btn-group-sm">${btnReset} ${btnEdits} ${btnDelete}</div>`;
+                        const btnReset = `<button class="btn btn-ghost btn-xs join-item" onclick="resetUserKey('${row.user_key}')"><svg class="icon" style="width:0.9rem;height:0.9rem"><use href="#i-refresh" /></svg></button>`;
+                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-ghost btn-xs join-item"><svg class="icon" style="width:0.9rem;height:0.9rem"><use href="#i-gear" /></svg></a>`;
+                        const btnDelete = `<button class="btn btn-ghost btn-xs join-item text-error" onclick="deleteKeys('${row.user_key}')"><svg class="icon" style="width:0.9rem;height:0.9rem"><use href="#i-trash" /></svg></button>`;
+                        return `<div class="join">${btnReset} ${btnEdits} ${btnDelete}</div>`;
                     }
                 }
             ]

@@ -3,30 +3,22 @@
 
 <?= $this->include('Layout/msgStatus') ?>
 
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    <div class="stats shadow bg-base-100 border border-base-300">
-        <div class="stat">
-            <div class="stat-title">Revenue</div>
-            <div class="stat-value text-success text-2xl">$<?= !isset($user) ?: $user->saldo ?></div>
-        </div>
+<div class="stats stats-vertical lg:stats-horizontal shadow bg-base-100 border border-base-300 w-full mb-6">
+    <div class="stat">
+        <div class="stat-title">Revenue</div>
+        <div class="stat-value text-success text-2xl">$<?= !isset($user) ?: $user->saldo ?></div>
     </div>
-    <div class="stats shadow bg-base-100 border border-base-300">
-        <div class="stat">
-            <div class="stat-title">Sales</div>
-            <div class="stat-value text-2xl">3435</div>
-        </div>
+    <div class="stat">
+        <div class="stat-title">Sales</div>
+        <div class="stat-value text-2xl">3435</div>
     </div>
-    <div class="stats shadow bg-base-100 border border-base-300">
-        <div class="stat">
-            <div class="stat-title">Templates</div>
-            <div class="stat-value text-primary text-2xl">349</div>
-        </div>
+    <div class="stat">
+        <div class="stat-title">Templates</div>
+        <div class="stat-value text-primary text-2xl">349</div>
     </div>
-    <div class="stats shadow bg-base-100 border border-base-300">
-        <div class="stat">
-            <div class="stat-title">Clients</div>
-            <div class="stat-value text-error text-2xl">2986</div>
-        </div>
+    <div class="stat">
+        <div class="stat-title">Clients</div>
+        <div class="stat-value text-error text-2xl">2986</div>
     </div>
 </div>
 
