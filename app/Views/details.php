@@ -206,3 +206,7 @@
 </script>
 
 <?= $this->endSection() ?>
+
+<?= $this->section('footer') ?>
+<?= $this->include('Layout/partials/footer') ?>
+<?= $this->endSection() ?>

@@ -234,3 +234,7 @@ $gameCount = count($allGames);
 <?php endif; ?>
 
 <?= $this->endSection() ?>
+
+<?= $this->section('footer') ?>
+<?= $this->include('Layout/partials/footer') ?>
+<?= $this->endSection() ?>

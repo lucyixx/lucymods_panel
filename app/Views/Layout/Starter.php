@@ -39,7 +39,7 @@
             <div class="max-w-5xl mx-auto w-full p-4"><?= $this->renderSection('content') ?></div>
         </main>
 
-        <?= $this->include('Layout/partials/footer') ?>
+        <?= $this->renderSection('footer') ?>
     </div>
 
     <!-- Cookie consent notice -->

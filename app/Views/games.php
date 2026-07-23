@@ -87,6 +87,10 @@ $defaultSort = 'newest';
 
 <?= $this->endSection() ?>
 
+<?= $this->section('footer') ?>
+<?= $this->include('Layout/partials/footer') ?>
+<?= $this->endSection() ?>
+
 <?= $this->section('js') ?>
 <script>
     (function() {
