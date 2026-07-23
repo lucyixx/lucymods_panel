@@ -17,7 +17,7 @@
         <img loading="lazy" class="rounded-lg w-16 h-16 object-cover shrink-0 border border-base-300" id="app_icon" itemprop="image">
         <div>
             <h1 class="text-xl app_name text-white m-0"></h1>
-            <p class="text-success app_developer text-sm m-0"></p>
+            <p class="text-white/70 app_developer text-sm m-0"></p>
         </div>
     </div>
 </div>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Developer</p>
-                    <p class="text-sm text-success truncate app_developer"></p>
+                    <p class="text-sm truncate app_developer"></p>
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs uppercase tracking-wide opacity-50 mb-0.5">Package Name</p>
@@ -78,14 +78,14 @@
 
         <div class="flex items-center justify-center gap-3 text-sm opacity-70 py-2 border-t border-base-300">
             <span class="app_installs"></span>
-            <span class="border-r border-base-300 h-4"></span>
+            <div class="divider divider-horizontal mx-0"></div>
             <span class="app_rating"></span>
         </div>
         <p class="text-xs opacity-50 text-center">Last updated <span class="app_lastUpdated"></span></p>
     </div>
 
     <!-- Main content: MOD Info, About, Reviews, Related Applications -->
-    <div class="order-3 lg:order-none lg:col-span-2 lg:row-start-2 flex flex-col gap-6 min-w-0">
+    <div class="order-3 lg:order-none lg:col-span-2 lg:row-start-2 flex flex-col gap-6">
         <details class="collapse collapse-arrow bg-base-200 border border-base-300 rounded-box">
             <summary class="collapse-title">MOD Info</summary>
             <div class="collapse-content"><ul class="text-sm opacity-80"><li>Draw Esp</li><li>Chams hack</li><li>[more..]</li></ul></div>
@@ -127,14 +127,19 @@
     }
 
     $(document).ready(function() {
-        $.ajax({
+        // Exposed (via Promise.resolve, since jQuery's jqXHR isn't a real
+        // Promise instance) as window.__pageDataReady so
+        // Layout/preloader.php waits for this response before hiding —
+        // previously the loader was hidden directly in the success
+        // handler below, racing independently against window.load and
+        // sometimes clearing before the banner/gallery images had
+        // actually rendered.
+        window.__pageDataReady = Promise.resolve($.ajax({
             url: "<?= site_url('proxy.php?id=') . esc($_GET['id'] ?? '', 'url') ?>",
             type: "GET",
             dataType: "json",
             success: function(response) {
                 if (response.success) {
-                    $('.body__preloader').addClass("loaded");
-
                     $('#app_featureGraphic').attr('src', response.featureGraphic);
                     $('#app_icon').attr('src', response.icon);
                     $('.app_name').text(response.name);
@@ -157,7 +162,9 @@
                     var reviews = '';
                     response.reviews.forEach(function(element) {
                         var stars = '';
-                        for (let i = 0; i < 5; i++) stars += `<svg class="icon ${element.stars > i ? 'text-warning' : 'opacity-20'}"><use href="#i-check-circle" /></svg>`;
+                        for (let i = 1; i <= 5; i++) {
+                            stars += `<div class="mask mask-star-2 ${element.stars >= i ? 'bg-warning' : 'bg-base-content/20'}" aria-label="${i} star" ${element.stars >= i ? 'aria-current="true"' : ''}></div>`;
+                        }
                         reviews += `
                             <div>
                                 <div class="flex mb-2 justify-between items-center">
@@ -165,7 +172,7 @@
                                         <img style="display:block; width:2rem; height:2rem; border-radius:9999px; object-fit:cover;" aria-hidden="true" loading="lazy" src="${element.reviewer.avatar}" alt="">
                                         <span class="text-sm">${element.reviewer.name}</span>
                                     </div>
-                                    <div class="opacity-70 flex gap-0.5">${stars}</div>
+                                    <div class="rating rating-xs" aria-label="${element.stars} out of 5 stars">${stars}</div>
                                 </div>
                                 <div class="p-2 rounded bg-base-300">
                                     <p class="text-sm opacity-70 m-0">${element.review_text}</p>
@@ -181,7 +188,7 @@
                         var related = '';
                         response.similarApps.forEach(function(app) {
                             related += `
-                                <a href="<?= site_url('games/details') ?>?id=${encodeURIComponent(app.packageName)}"
+                                <a href="<?= site_url('details') ?>?id=${encodeURIComponent(app.packageName)}"
                                    class="card card-border bg-base-100 border-base-300 hover:border-primary/50 transition-colors flex-row items-center gap-3 p-3">
                                     <img src="${app.icon}" loading="lazy" alt="" style="display:block; width:2.5rem; height:2.5rem; border-radius:0.75rem; object-fit:cover; flex-shrink:0;">
                                     <div class="min-w-0 flex-1">
@@ -201,7 +208,7 @@
             error: function() {
                 console.error(`Error making request to the server`);
             }
-        });
+        }));
     });
 </script>
 

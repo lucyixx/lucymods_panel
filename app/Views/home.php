@@ -59,7 +59,7 @@ $gameCount = count($allGames);
 
                     <div class="mt-1.5 h-4 md:h-6 flex items-center">
                         <div id="heroDeveloperSkeleton" class="skeleton h-3 w-24 md:h-3.5 md:w-32 rounded"></div>
-                        <p id="heroDeveloper" class="text-xs md:text-base text-success" style="display:none"></p>
+                        <p id="heroDeveloper" class="text-xs md:text-base text-white/70" style="display:none"></p>
                     </div>
 
                     <div class="hidden md:block mt-1.5 max-w-lg" style="height: 2.6em;">
@@ -72,8 +72,8 @@ $gameCount = count($allGames);
                 </div>
             </div>
             <div class="flex gap-2 w-full md:w-auto shrink-0">
-                <a id="heroViewDetails" href="<?= site_url('games/details?id=' . esc($field($heroGame, 'id'), 'url')) ?>" class="btn bg-white/10 text-white border-white/20 hover:bg-white/20 btn-sm md:btn-md flex-1 md:flex-none">View Details</a>
-                <a id="heroGetAccess" href="<?= site_url('games/details?id=' . esc($field($heroGame, 'id'), 'url')) ?>" class="btn btn-primary btn-sm md:btn-md flex-1 md:flex-none shadow-[0_0_20px_rgba(255,255,255,0.35)] hover:shadow-[0_0_28px_rgba(255,255,255,0.55)] hover:-translate-y-0.5 transition-all font-semibold">Get Access</a>
+                <a id="heroViewDetails" href="<?= site_url('details?id=' . esc($field($heroGame, 'id'), 'url')) ?>" class="btn bg-white/10 text-white border-white/20 hover:bg-white/20 btn-sm md:btn-md flex-1 md:flex-none">View Details</a>
+                <a id="heroGetAccess" href="<?= site_url('details?id=' . esc($field($heroGame, 'id'), 'url')) ?>" class="btn btn-primary btn-sm md:btn-md flex-1 md:flex-none shadow-[0_0_20px_rgba(255,255,255,0.35)] hover:shadow-[0_0_28px_rgba(255,255,255,0.55)] hover:-translate-y-0.5 transition-all font-semibold">Get Access</a>
             </div>
         </div>
     </div>
@@ -89,7 +89,7 @@ $gameCount = count($allGames);
                     data-id="<?= esc($field($game, 'id'), 'attr') ?>"
                     data-name="<?= esc($field($game, 'name'), 'attr') ?>"
                     data-icon="<?= esc($field($game, 'image_url'), 'attr') ?>"
-                    data-details-url="<?= site_url('games/details?id=' . esc($field($game, 'id'), 'url')) ?>">
+                    data-details-url="<?= site_url('details?id=' . esc($field($game, 'id'), 'url')) ?>">
                 <img src="<?= esc($field($game, 'image_url')) ?>" alt="" loading="lazy" class="w-10 h-10 rounded-xl object-cover">
                 <span class="text-xs font-medium max-w-16 truncate"><?= esc($field($game, 'name')) ?></span>
             </button>
@@ -204,7 +204,7 @@ $gameCount = count($allGames);
             applyVersionBadge(null, null);
             applyArtwork(''); // reset to skeleton while the new artwork loads
 
-            fetch(proxyBase + encodeURIComponent(id))
+            return fetch(proxyBase + encodeURIComponent(id))
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data || !data.success) return;
@@ -217,11 +217,18 @@ $gameCount = count($allGames);
         }
 
         document.querySelectorAll('.game-selector-item').forEach(function (btn) {
-            btn.addEventListener('click', function () { selectGame(btn); });
+            btn.addEventListener('click', function () {
+                if (btn.classList.contains('btn-active')) return; // already selected — no-op
+                selectGame(btn);
+            });
         });
 
         // Initial load — same fetch, for the game already shown server-side.
-        selectGame(document.querySelector('.game-selector-item.btn-active') || document.querySelector('.game-selector-item'));
+        // Exposed as window.__pageDataReady so Layout/preloader.php waits
+        // for this before hiding, instead of only waiting on window.load
+        // (which doesn't know about this fetch and would otherwise let the
+        // preloader clear before the Hero's real data has arrived).
+        window.__pageDataReady = selectGame(document.querySelector('.game-selector-item.btn-active') || document.querySelector('.game-selector-item'));
     })();
 </script>
 <?php endif; ?>

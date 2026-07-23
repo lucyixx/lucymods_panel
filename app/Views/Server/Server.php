@@ -1,34 +1,45 @@
-<?= $this->extend('Layout/AppShell') ?>
+<?= $this->extend('Layout/BootstrapLayout') ?>
 <?= $this->section('content') ?>
-
-<div class="max-w-md">
-    <?= $this->include('Layout/msgStatus') ?>
-
-    <?= form_open() ?>
-    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-4">
-        <legend class="fieldset-legend">Server base mod</legend>
-
-        <label class="label">Current status: <span class="font-medium"><?= esc($row->status) ?></span></label>
-        <div class="flex flex-col gap-2 mb-2">
-            <label class="label cursor-pointer justify-start gap-2">
-                <input type="radio" name="radios" value="1" class="radio" <?= $row->status === 'on' ? 'checked' : '' ?> required>
-                Online server
-            </label>
-            <label class="label cursor-pointer justify-start gap-2">
-                <input type="radio" name="radios" value="2" class="radio" <?= $row->status !== 'on' ? 'checked' : '' ?>>
-                Offline server
-            </label>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <?= $this->include('Layout/BootstrapMsgStatus') ?>
+        <div class="card shadow-sm mb-3">
+            <div class="card-header">
+                <div class="card-title m-0"><span>Server Base Mod</span></div>
+            </div>
+            <div class="card-body">
+                <?= form_open() ?>
+                <div class="my-3">
+                    <div class="mb-3">
+                        <label for="status">Current Status: <span class="text-danger">*</span><span style="color: #a39c9b;"><?= $row->status; ?></span></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                <input type="radio" id="radio" name="radios" value="1" aria-label="Checkbox for following text input" required>
+                                <small required>&nbsp; Online Server</small>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                <input type="radio" id="radio" name="radios" value="2" aria-label="Checkbox for following text input">
+                                <small required>&nbsp; Offline Server</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="modname" class="input-group-text">Information</label>
+                        <input type="text" name="modname" id="modname" class="form-control" value="<?= $row->modname ?>" placeholder="Input Information" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="myInput" class="input-group-text">Offline Msg</label>
+                        <textarea class="form-control" placeholder="Maintenance" name="myInput" id="myInput" id="exampleFormControlTextarea1" rows="1"><?= $row->myinput; ?></textarea>
+                    </div>
+                </div>
+                <div class="text-end mt-3">
+                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                </div>
+                <?= form_close() ?>
+            </div>
         </div>
-
-        <label class="label">Information</label>
-        <input type="text" name="modname" id="modname" class="input w-full" value="<?= $row->modname ?>" placeholder="Input information" required>
-
-        <label class="label">Offline message</label>
-        <textarea class="textarea w-full" placeholder="Maintenance" name="myInput" id="myInput" rows="3"><?= $row->myinput ?></textarea>
-
-        <button type="submit" class="btn btn-primary mt-4">Update</button>
-    </fieldset>
-    <?= form_close() ?>
+    </div>
 </div>
-
 <?= $this->endSection() ?>

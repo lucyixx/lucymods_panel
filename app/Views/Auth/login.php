@@ -1,44 +1,48 @@
-<?= $this->extend('Layout/Starter') ?>
+<?= $this->extend('Layout/BootstrapLayout') ?>
 <?= $this->section('content') ?>
-
-<div class="flex flex-col items-center gap-4 py-8 sm:py-12 md:py-20">
-    <div class="w-full max-w-xs sm:max-w-sm px-4 sm:px-0">
-        <?= $this->include('Layout/msgStatus') ?>
-    </div>
-
-    <div class="card card-border bg-base-100 border-base-300 shadow-lg w-full max-w-xs sm:max-w-sm mx-4 sm:mx-0">
-        <div class="card-body p-6 md:p-8">
-            <h1 class="text-2xl md:text-3xl font-bold mb-1">Welcome back</h1>
-            <p class="text-sm opacity-60 mb-6">Log in to manage your account</p>
-
-            <?= form_open() ?>
-            <label class="input w-full">
-                <svg class="icon opacity-50"><use href="#i-user" /></svg>
-                <input type="text" name="username" id="username" class="grow" placeholder="Your username" required minlength="4">
-            </label>
-
-            <label class="input w-full mt-3">
-                <svg class="icon opacity-50"><use href="#i-lock" /></svg>
-                <input type="password" name="password" id="password" class="grow" placeholder="Your password" required minlength="6">
-                <button type="button" class="opacity-50 hover:opacity-100" onclick="togglePw('password', this)" aria-label="Show password">
-                    <svg class="icon"><use href="#i-eye" /></svg>
-                </button>
-            </label>
-
-            <label class="label cursor-pointer gap-2 mt-3">
-                <input type="checkbox" class="checkbox checkbox-sm" name="stay_log" id="stay_log" value="yes">
-                Stay logged in
-            </label>
-
-            <button type="submit" class="btn btn-primary w-full mt-4">Login</button>
-            <?= form_close() ?>
+<div class="row justify-content-center pt-5">
+    <div class="col-lg-4">
+        <div class="mx-auto">
+            <?= $this->include('Layout/BootstrapMsgStatus') ?>
+            <div class="card mb-5">
+                <div class="card-header">
+                    <div class="card-title m-0"><span>Login</span></div>
+                </div>
+                <div class="card-body">
+                    <?= form_open() ?>
+                    <div class="row my-3">
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <label for="username" class="input-group-text"><i class="bi bi-person"></i></label>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Your username" required minlength="4">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <label for="password" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Your password" required minlength="6">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="stay_log" id="stay_log" value="yes">
+                                <label class="form-check-label" for="stay_log">Stay login?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-box-arrow-in-right"></i> Log in</button>
+                    </div>
+                    <?= form_close() ?>
+                </div>
+            </div>
+            <p class="text-center text-muted after-card">
+                <small class="px-auto p-2 rounded">
+                    Don't have an account yet?
+                    <a href="<?= site_url('register') ?>" class="text-primary">Register here</a>
+                </small>
+            </p>
         </div>
     </div>
-
-    <p class="text-sm opacity-60 px-4 text-center">
-        Don't have an account yet?
-        <a href="<?= site_url('register') ?>" class="link link-hover text-primary font-medium">Register here</a>
-    </p>
 </div>
-
 <?= $this->endSection() ?>

@@ -48,7 +48,7 @@ class Filters extends BaseConfig
 			],
 			'auth' => [
 				'except' => [
-					'/', 'login', 'register', 'connect', 'keys/free', 'keys/free/recreate', 'games', 'games/details'
+					'/', 'login', 'register', 'connect', 'keys/free', 'keys/free/recreate', 'details', 'games'
 				]
 			],
         ],

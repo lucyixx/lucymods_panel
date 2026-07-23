@@ -30,11 +30,28 @@
 </div>
 
 <script>
-    window.addEventListener("load", function() {
+    window.addEventListener("load", function () {
         const loader = document.querySelector(".body__preloader");
         if (!loader) return;
-        setTimeout(() => {
-            loader.classList.add("loaded");
-        }, 400);
+
+        // Pages with an initial AJAX call (Home's Hero, Details) assign
+        // their fetch promise to window.__pageDataReady so the preloader
+        // doesn't hide until that data has actually arrived — otherwise
+        // window.load alone fires before an async fetch finishes, and the
+        // page flashes empty/skeleton content right after the preloader
+        // clears. Pages with nothing async (Games) don't define this, so
+        // this resolves immediately and behaves exactly as before.
+        const candidate = window.__pageDataReady;
+        const dataReady = candidate && typeof candidate.then === "function"
+            ? candidate
+            : Promise.resolve();
+
+        dataReady
+            .catch(() => { /* never block the page on a failed fetch */ })
+            .then(() => {
+                setTimeout(() => {
+                    loader.classList.add("loaded");
+                }, 200);
+            });
     });
 </script>

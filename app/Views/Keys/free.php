@@ -47,92 +47,110 @@ $options = new Options([
 $chart->options($options);
 ?>
 
-<?= $this->extend('Layout/AppShell') ?>
+
+
+<?= $this->extend('Layout/BootstrapLayout') ?>
 <?= $this->section('content') ?>
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 </script>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <div class="flex flex-col gap-3">
-        <?= $this->include('Layout/msgStatus') ?>
-        <?php if (session()->getFlashdata('user_key')) : ?>
-            <div role="alert" class="alert alert-success">
-                <div>
-                    <p><span class="font-medium">Game:</span> <?= esc(session()->getFlashdata('game')) ?> / <?= esc(session()->getFlashdata('duration')) ?> Days</p>
-                    <p><span class="font-medium">License:</span> <?= esc(session()->getFlashdata('user_key')) ?></p>
-                    <p>Available for <?= esc(session()->getFlashdata('max_devices')) ?> Devices</p>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <div id="game_view" class="card bg-base-200 border border-base-300" hidden>
-            <div class="card-body flex-row items-center gap-3 p-3">
-                <img class="w-14 h-14 rounded-xl object-cover shrink-0" id="game_img" width="96" height="96" aria-hidden="true" alt="" itemprop="image" data-atf="true">
-                <div class="min-w-0">
-                    <h2 class="font-medium truncate" id="game_name"></h2>
-                    <p class="text-sm text-success truncate" id="game_dev"></p>
-                    <p class="text-xs opacity-60 truncate" id="game_i"></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card card-border bg-base-100 border-base-300">
-            <div class="card-body">
-                <div class="flex flex-wrap items-center justify-between gap-2">
-                    <h2 class="card-title">Create license</h2>
-                    <div class="flex items-center gap-1 text-sm opacity-60">
-                        <svg class="icon" style="width:1em;height:1em"><use href="#i-link" /></svg>
-                        <?= $link_total ?> links
+<div class="justify-content-center">
+    <div class="row mb-5">
+        <div class="col-lg-6 mb-3 px-0 px-lg-3">
+            <div class="mb-3">
+                <?= $this->include('Layout/BootstrapMsgStatus') ?>
+                <?php if (session()->getFlashdata('user_key')) : ?>
+                    <div class="alert alert-success" role="alert">
+                        <strong>Game: </strong><?= esc(session()->getFlashdata('game')) ?> / <?= esc(session()->getFlashdata('duration')) ?> Days<br>
+                        <strong>License: </strong><?= esc(session()->getFlashdata('user_key')) ?><br>
+                        Available for <?= esc(session()->getFlashdata('max_devices')) ?> Devices<br>
                     </div>
-                </div>
+                <?php endif; ?>
+            </div>
 
-                <?= form_open() ?>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                    <div>
-                        <label class="label">Game</label>
-                        <?= form_dropdown('game', ['FREE' => 'All Games'], 'ALL', 'id="game" class="select w-full" disabled') ?>
-                    </div>
-                    <div>
-                        <label class="label">Max devices</label>
-                        <div class="join w-full">
-                            <input type="number" name="max_devices" id="max_devices" class="input join-item w-full" value="1" disabled>
-                            <span class="join-item btn btn-disabled no-animation">device</span>
+            <div id="game_view" class="mb-3" hidden>
+                <div class="text-body border rounded overflow-hidden d-block h-100 position-relative" style="background-color: var(--bs-workflow-bg);">
+                    <div class="d-flex" style="padding: 0.5rem;">
+                        <div class="flex-shrink-0 me-2" style="width: 3.75rem;">
+                            <img class="rounded-3" id="game_img" width="96" height="96" aria-hidden="true" alt="Icon image" itemprop="image" data-atf="true">
+                        </div>
+                        <div style="min-width: 0;">
+                            <h2 class="h6" id="game_name" style="margin-bottom: 2px;"></h2>
+                            <div class="small text-truncate">
+                                <span id="game_dev" class="text-success"></span>
+                            </div>
+                            <div class="small text-muted text-truncate">
+                                <span id="game_i" class="small"></span>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <label class="label">Duration</label>
-                        <?= form_dropdown('duration', ['1' => '1 Days'], '1', 'class="select w-full" disabled') ?>
-                    </div>
-                    <div>
-                        <label class="label">Vip key</label>
-                        <?= form_dropdown('vip_key', ['1' => 'FREE'], '1', 'class="select w-full" disabled') ?>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <span class="card-title m-0"><span>Create License</span></span>
+                    <div class="text-secondary">
+                        <i class="bi bi-pass"></i>
+                        <span class="small"><?= $link_total ?> links</span>
                     </div>
                 </div>
-                <div id="validationResult"></div>
+                <div class="card-body my-3">
 
-                <button type="submit" class="btn btn-primary mt-4" id="btn_submit">
-                    <svg class="icon"><use href="#i-arrow-right" /></svg>
-                    Generate
-                </button>
-                <?= form_close() ?>
+                    <?= form_open() ?>
+                    <div class="my-0">
+                        <div class="row">
+                            <div class="col-lg-6 mb-3">
+                                <div class="input-group">
+                                    <label for="game" class="input-group-text"><i class="bi bi-controller"></i></label>
+                                    <?= form_dropdown('game', ['FREE' => 'All Games'], 'ALL', 'id="game" class="form-select" disabled') ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <div class="input-group">
+                                    <label for="max_devices" class="input-group-text"><i class="bi bi-phone"></i></label>
+                                    <input type="number" name="max_devices" id="max_devices" class="form-control" value="1" disabled>
+                                    <div class="input-group-text">device</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <div class="input-group">
+                                    <label for="duration" class="input-group-text"><i class="bi bi-calendar-day"></i></label>
+                                    <?= form_dropdown('duration', ['1' => '1 Days'], '1', 'class="form-select" disabled') ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <div class="input-group">
+                                    <label for="vip_key" class="input-group-text"><i class="bi bi-gem"></i></label>
+                                    <?= form_dropdown('vip_key', ['1' => 'FREE'], '1', 'class="form-select" disabled') ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="validationResult"></div>
+                    </div>
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary" id="btn_submit"><i class="bi bi-box-arrow-in-right"></i> Generate</button>
+                    </div>
+                    <?= form_close() ?>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div>
-        <?= $chart->toHtml('my_chart'); ?>
-    </div>
-
-    <div class="lg:col-span-2">
-        <div class="card card-border bg-base-100 border-base-300">
-            <div class="card-body">
-                <h2 class="card-title">Minimum seller price</h2>
-                <div class="overflow-x-auto">
-                    <table class="table table-sm text-center">
+        <div class="col-lg-6 mb-3 px-0 px-lg-3">
+            <?= $chart->toHtml('my_chart'); ?>
+        </div>
+        <div class="mb-3 px-0 px-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title m-0"><span>Minimum Seller Price</span></div>
+                </div>
+                <div class="card-body text-center">
+                    <table class="table table-borderless table-striped">
                         <thead>
                             <tr>
-                                <th>Number of days</th>
+                                <th>Number Of Days</th>
                                 <th>Price vnđ</th>
                                 <th>Price dollar</th>
                             </tr>
@@ -154,9 +172,12 @@ $chart->options($options);
     </div>
 </div>
 
-<p class="text-center text-sm opacity-60 mt-4">
-    Get key with donate?
-    <a href="https://t.me/tis_nquyen" target="_blank" class="link link-hover text-primary">Contact Admin</a>
+<p class="text-center text-muted after-card">
+    <small class="px-auto p-2 rounded">
+        Get key with donate?
+        <a href="https://t.me/tis_nquyen" target="_blank" class="text-primary">Contact Admin</a>
+    </small>
 </p>
+</div>
 
 <?= $this->endSection() ?>

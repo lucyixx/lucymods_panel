@@ -1,60 +1,63 @@
-<?= $this->extend('Layout/AppShell') ?>
+<?php
+
+
+
+?>
+<?= $this->extend('Layout/BootstrapLayout') ?>
 
 <?= $this->section('content') ?>
-
-<?= $this->include('Layout/msgStatus') ?>
-
-<div class="card card-border bg-base-100 border-base-300">
-    <div class="card-body">
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-            <h2 class="card-title">Keys registered</h2>
-            <div class="flex items-center gap-1">
-                <a class="btn btn-ghost btn-sm btn-square" href="<?= site_url('keys/generate') ?>" aria-label="Generate new key">
-                    <svg class="icon"><use href="#i-plus" /></svg>
-                </a>
-                <a class="btn btn-ghost btn-sm btn-square" href="<?= site_url('keys/download/all') ?>" aria-label="Download all keys">
-                    <svg class="icon"><use href="#i-download" /></svg>
-                </a>
-                <div class="dropdown dropdown-end">
-                    <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-square" aria-label="More actions">
-                        <svg class="icon"><use href="#i-trash" /></svg>
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <?= $this->include('Layout/BootstrapMsgStatus') ?>
+    </div>
+    <div class="col-lg-12">
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="">
+                        <div class="card-title m-0"><span>Keys Registered</span></div>
                     </div>
-                    <ul tabindex="0" class="dropdown-content menu bg-base-200 border border-base-300 rounded-box z-10 w-52 p-2 shadow-lg mt-2">
-                        <li><a href="<?= site_url('keys/start') ?>">Keys Not Use</a></li>
-                        <li><a href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
-                    </ul>
+                    <div class="text-end">
+                        <a class="btn btn-default btn-sm" href="<?= site_url('keys/generate') ?>"><i class="bi bi-person-plus"></i></a>
+                        <a class="btn btn-default btn-sm" href="<?= site_url('keys/download/all') ?>"><i class="bi bi-download"></i></a>
+                        <a class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><span class="me-1"><i class=" bi bi-trash"></i></span></a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="<?= site_url('keys/start')  ?>">Keys Not Use</a></li>
+                            <li><a class="dropdown-item" href="<?= site_url('keys/delExp') ?>">Expired Keys</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <?php if ($keylist) : ?>
-            <div class="overflow-x-auto">
-                <table id="datatable" class="table table-sm w-full">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Game</th>
-                            <th>User Keys</th>
-                            <th>Devices</th>
-                            <th>Duration</th>
-                            <th>Expired</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>
+            <div class="card-body">
+                <?php if ($keylist) : ?>
+                    <div class="table-responsive">
+                        <table id="datatable" class="table table-borderless table-sm table-hover table-striped w-100">
+                            <thead>
+                                <tr class="border-0">
+                                    <th>ID</th>
+                                    <th>Game</th>
+                                    <th>User Keys</th>
+                                    <th>Devices</th>
+                                    <th>Duration</th>
+                                    <th>Expired</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                <?php else : ?>
+                    <p class="text-center">Nothing keys to show</p>
+                <?php endif; ?>
             </div>
-        <?php else : ?>
-            <p class="text-center">Nothing keys to show</p>
-        <?php endif; ?>
+        </div>
     </div>
 </div>
-
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
 <script type="text/javascript">
     $(document).ready(function() {
-        const table = $('#datatable').DataTable(daisyuiTableDefaults({
+        const table = $('#datatable').DataTable({
             processing: true,
             serverSide: true,
             order: [
@@ -68,21 +71,21 @@
                     data: 'id',
                     name: 'id_keys',
                     render: function(data, type, row, meta) {
-                        return `<span class="text-sm">${data}</span>`
+                        return `<span class="small">${data}</span>`
                     }
                 },
                 {
                     data: 'game',
                     render: function(data, type, row, meta) {
-                        return `<span class="text-sm">${data}</span>`;
+                        return `<span class="small">${data}</span>`;
                     }
                 },
                 {
                     data: 'user_key',
                     render: function(data, type, row, meta) {
-                        const is_valid = (row.status == 'Active') ? "text-success" : "text-error";
+                        const is_valid = (row.status == 'Active') ? "text-success" : "text-danger";
                         const key = row.user_key ?? '&mdash;';
-                        return `<span class="text-sm ${is_valid}" data-key="${key}">${key}</span> `;
+                        return `<span class="small text-muted ${is_valid}" data-key="${key}">${key}</span> `;
                     }
                 },
                 {
@@ -90,18 +93,18 @@
                     render: function(data, type, row, meta) {
                         const totalDevice = (row.devices ? row.devices : 0);
                         if (row.key_level == 1) {
-                            return `<span class="badge badge-success" id="devMax-${row.user_key}">Free ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="small badge text-success" id="devMax-${row.user_key}">Free ${totalDevice}/${row.max_devices}</span>`;
                         } else if (row.key_level == 2) {
-                            return `<span class="badge badge-warning" id="devMax-${row.user_key}">Vip ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="small badge text-warning" id="devMax-${row.user_key}">Vip ${totalDevice}/${row.max_devices}</span>`;
                         } else if (row.key_level == 3) {
-                            return `<span class="badge badge-primary" id="devMax-${row.user_key}">Test ${totalDevice}/${row.max_devices}</span>`;
+                            return `<span class="small badge text-primary" id="devMax-${row.user_key}">Test ${totalDevice}/${row.max_devices}</span>`;
                         }
                     }
                 },
                 {
                     data: 'duration',
                     render: function(data, type, row, meta) {
-                        return `<span class="text-sm">${data}</span>`;
+                        return `<span class="small">${data}</span>`;
                     }
                 },
                 {
@@ -110,20 +113,21 @@
                     render: function(data, type, row, meta) {
                         const currentDate = new Date();
                         const expirationDate = new Date(data + 'Z');
-                        return `<span class="text-sm text-nowrap ${row.expired && expirationDate <= currentDate ? 'text-error' : ''}">${row.expired ? data : '(not started yet)'}</span>`;
+                        return `<span class="small text-nowrap ${row.expired && expirationDate <= currentDate ? 'text-danger' : ''}">${row.expired ? data : '(not started yet)'}</span>`;
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, row, meta) {
-                        const btnReset = `<button class="join-item btn btn-sm btn-ghost text-warning" onclick="resetUserKey('${row.user_key}')"><svg class="icon"><use href="#i-refresh"/></svg></button>`;
-                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="join-item btn btn-sm btn-ghost"><svg class="icon"><use href="#i-gear"/></svg></a>`;
-                        const btnDelete = `<button class="join-item btn btn-sm btn-ghost text-error" onclick="deleteKeys('${row.user_key}')"><svg class="icon"><use href="#i-trash"/></svg></button>`;
-                        return `<div class="join">${btnReset}${btnEdits}${btnDelete}</div>`;
+                        console.log(row);
+                        const btnReset = `<button class="btn text-warning" onclick="resetUserKey('${row.user_key}')"><i class="bi bi-bootstrap-reboot"></i></button>`;
+                        const btnEdits = `<a href="<?= base_url('keys/') ?>${row.id}" class="btn btn-sm"><i class="bi bi-gear"></i></a>`;
+                        const btnDelete = `<button class="btn text-danger btn-sm" onclick="deleteKeys('${row.user_key}')"><i class="bi bi-trash"></i></button>`;
+                        return `<div class="btn-group btn-group-sm">${btnReset} ${btnEdits} ${btnDelete}</div>`;
                     }
                 }
             ]
-        }));
+        });
     });
 
     function deleteKeys(keys) {

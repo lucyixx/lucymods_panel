@@ -1,52 +1,55 @@
-<?= $this->extend('Layout/Starter') ?>
+<?= $this->extend('Layout/BootstrapLayout') ?>
+
 <?= $this->section('content') ?>
 
-<div class="flex flex-col items-center gap-4 py-8 sm:py-12 md:py-20">
-    <div class="w-full max-w-xs sm:max-w-sm px-4 sm:px-0">
-        <?= $this->include('Layout/msgStatus') ?>
-    </div>
-
-    <div class="card card-border bg-base-100 border-base-300 shadow-lg w-full max-w-xs sm:max-w-sm mx-4 sm:mx-0">
-        <div class="card-body p-6 md:p-8">
-            <h1 class="text-2xl md:text-3xl font-bold mb-1">Create your account</h1>
-            <p class="text-sm opacity-60 mb-6">Join to start requesting access</p>
-
-            <?= form_open() ?>
-            <label class="input w-full">
-                <svg class="icon opacity-50"><use href="#i-user" /></svg>
-                <input type="text" name="username" id="username" class="grow" placeholder="Your username" minlength="4" maxlength="24" value="<?= old('username') ?>" required>
-            </label>
-
-            <label class="input w-full mt-3">
-                <svg class="icon opacity-50"><use href="#i-lock" /></svg>
-                <input type="password" name="password" id="password" class="grow" placeholder="Your password" minlength="6" maxlength="24" required>
-                <button type="button" class="opacity-50 hover:opacity-100" onclick="togglePw('password', this)" aria-label="Show password">
-                    <svg class="icon"><use href="#i-eye" /></svg>
-                </button>
-            </label>
-
-            <label class="input w-full mt-3">
-                <svg class="icon opacity-50"><use href="#i-lock" /></svg>
-                <input type="password" name="password2" id="password2" class="grow" placeholder="Confirm password" minlength="6" maxlength="24" required>
-                <button type="button" class="opacity-50 hover:opacity-100" onclick="togglePw('password2', this)" aria-label="Show password">
-                    <svg class="icon"><use href="#i-eye" /></svg>
-                </button>
-            </label>
-
-            <label class="input w-full mt-3">
-                <svg class="icon opacity-50"><use href="#i-gift" /></svg>
-                <input type="text" name="referral" id="referral" class="grow" placeholder="Referral code" value="<?= old('referral') ?>" maxlength="25" required>
-            </label>
-
-            <button type="submit" class="btn btn-primary w-full mt-4">Register</button>
-            <?= form_close() ?>
+<div class="row justify-content-center pt-5">
+    <div class="col-lg-4">
+        <?= $this->include('Layout/BootstrapMsgStatus') ?>
+        <div class="card mb-5">
+            <div class="card-header">
+                <div class="card-title m-0"><span>Rigister</span></div>
+            </div>
+            <div class="card-body">
+                <?= form_open() ?>
+                <div class="row my-3">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <label for="username" class="input-group-text"><i class="bi bi-person"></i></label>
+                            <input type="text" class="form-control" name="username" id="username" placeholder="Your username" minlength="4" maxlength="24" value="<?= old('username') ?>" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <label for="password" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Your password" minlength="6" maxlength="24" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <label for="password2" class="input-group-text"><i class="bi bi-shield-lock"></i></label>
+                            <input type="password" name="password2" id="password2" class="form-control" placeholder="Confirm password" minlength="6" maxlength="24" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <label for="referral" class="input-group-text"><i class="bi bi-upc-scan"></i></label>
+                            <input type="text" name="referral" id="referral" class="form-control" placeholder="Referral code" value="<?= old('referral') ?>" maxlength="25" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-end mt-3">
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-box-arrow-in-right"></i> Register</button>
+                </div>
+                <?= form_close() ?>
+            </div>
         </div>
+        <p class="text-center text-muted after-card">
+            <small class="px-auto p-2 rounded">
+                Already have an account?
+                <a href="<?= site_url('login') ?>" class="text-primary">Login here</a>
+            </small>
+        </p>
     </div>
-
-    <p class="text-sm opacity-60 px-4 text-center">
-        Already have an account?
-        <a href="<?= site_url('login') ?>" class="link link-hover text-primary font-medium">Login here</a>
-    </p>
 </div>
 
 <?= $this->endSection() ?>

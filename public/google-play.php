@@ -60,55 +60,6 @@ class GooglePlay {
     else return null;
   }
 
-  /** Shorten a URL for display purposes only. The full URL is preserved
-   *  in the href attribute by sanitizeLongUrls(); this only shortens the
-   *  visible text so long plain-text links don't force horizontal layout
-   *  overflow on narrow viewports.
-   * @method protected shortenUrlForDisplay
-   * @param string url     the full URL
-   * @param int    maxLen  maximum length of the visible text (default 40)
-   * @return string        shortened, human readable representation of the URL
-   */
-  protected function shortenUrlForDisplay($url, $maxLen = 40) {
-    // URLs are always plain ASCII (percent-encoded), so plain strlen/substr is safe here
-    // and avoids requiring the mbstring extension just for this helper.
-    if (strlen($url) <= $maxLen) return $url;
-    $parts = parse_url($url);
-    $short = (isset($parts['host']) ? $parts['host'] : '') . (isset($parts['path']) ? $parts['path'] : '');
-    if (empty($short)) $short = $url; // parse_url failed for some reason, fall back to raw url
-    if (strlen($short) > $maxLen) $short = substr($short, 0, $maxLen - 1) . '...';
-    return $short;
-  }
-
-  /** Find plain-text URLs inside an HTML fragment (i.e. URLs that are not
-   *  already part of an href="" or src="" attribute) and turn them into
-   *  proper <a href="..."> links with a shortened display text.
-   *  Root-cause fix for: Google Play descriptions sometimes contain very
-   *  long raw URLs as plain text (no surrounding <a> tag). Some mobile
-   *  browsers (e.g. Chrome/Android) refuse to soft-wrap such long
-   *  unbroken strings, which stretches the container and causes
-   *  horizontal overflow. Converting them into anchors with a short,
-   *  human-readable label removes the long unbreakable text node while
-   *  the full, clickable URL is preserved in the href attribute — no
-   *  content is lost, and CSS/JS workarounds on the client become
-   *  unnecessary. Any existing HTML (<br>, <b>, ...) is left untouched.
-   * @method protected sanitizeLongUrls
-   * @param string html   raw HTML fragment (e.g. a Google Play description)
-   * @return string       HTML fragment with long plain-text URLs converted to short <a> links
-   */
-  protected function sanitizeLongUrls($html) {
-    if (empty($html)) return $html;
-    // Skip URLs that already sit inside href="..." or src="..." (either quote style)
-    $pattern = '/(?<!href=")(?<!href=\')(?<!src=")(?<!src=\')\bhttps?:\/\/[^\s<>"\']+/i';
-    return preg_replace_callback($pattern, function ($m) {
-      $url = rtrim($m[0], '.,;:!?)'); // don't swallow trailing sentence punctuation into the link
-      $trailing = substr($m[0], strlen($url));
-      $display = htmlspecialchars($this->shortenUrlForDisplay($url), ENT_QUOTES, 'UTF-8');
-      $href = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
-      return '<a href="' . $href . '" target="_blank" rel="noopener noreferrer">' . $display . '</a>' . $trailing;
-    }, $html);
-  }
-
   /** Create a stream context for file_get_contents
    * @parameter optional string method          method to use (default: GET)
    * @parameter optional bool   ignoreErrors    whether to fetch the content even on failure status codes (default: false)
@@ -361,13 +312,6 @@ class GooglePlay {
     } else {
       $values["review_token"] = '';
     }
-
-    // Root-cause fix for horizontal overflow caused by long plain-text URLs
-    // (e.g. https://www.youtube.com/channel/...) inside the description/whatsnew
-    // HTML: convert them to <a href="..."> with a shortened label so no client
-    // (Chrome, Kiwi, WebView, ...) ever receives an unbreakable long text node.
-    if ( !empty($values["description"]) ) $values["description"] = $this->sanitizeLongUrls($values["description"]);
-    if ( !empty($values["whatsnew"]) )    $values["whatsnew"]    = $this->sanitizeLongUrls($values["whatsnew"]);
 
     if ($this->debug) {
       print_r($values);
