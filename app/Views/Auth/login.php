@@ -11,20 +11,15 @@
 
                 <?= form_open() ?>
                 <fieldset class="fieldset gap-4">
-                    <div>
-                        <label class="label" for="username">Username</label>
-                        <input type="text" class="input w-full" name="username" id="username" placeholder="Your username" required minlength="4">
-                    </div>
+                    <label class="input w-full">
+                        <svg class="icon opacity-50"><use href="#i-user" /></svg>
+                        <input type="text" class="grow" name="username" id="username" placeholder="Your username" required minlength="4">
+                    </label>
 
-                    <div>
-                        <label class="label" for="password">Password</label>
-                        <div class="join w-full">
-                            <input type="password" class="input join-item w-full" name="password" id="password" placeholder="Your password" required minlength="6">
-                            <button type="button" class="btn btn-outline join-item" id="togglePassword" aria-label="Show password">
-                                <svg class="icon"><use href="#i-eye" /></svg>
-                            </button>
-                        </div>
-                    </div>
+                    <label class="input w-full">
+                        <svg class="icon opacity-50"><use href="#i-lock" /></svg>
+                        <input type="password" class="grow" name="password" id="password" placeholder="Your password" required minlength="6">
+                    </label>
 
                     <label class="label cursor-pointer justify-start gap-2">
                         <input type="checkbox" class="checkbox checkbox-sm" name="stay_log" id="stay_log" value="yes">
@@ -46,19 +41,4 @@
     </div>
 </div>
 
-<?= $this->endSection() ?>
-
-<?= $this->section('js') ?>
-<script>
-    // Show/hide password: swap type + icon, no separate library needed.
-    (function() {
-        const toggle = document.getElementById('togglePassword');
-        const input = document.getElementById('password');
-        toggle.addEventListener('click', function() {
-            const isHidden = input.type === 'password';
-            input.type = isHidden ? 'text' : 'password';
-            toggle.querySelector('use').setAttribute('href', isHidden ? '#i-eye-off' : '#i-eye');
-        });
-    })();
-</script>
 <?= $this->endSection() ?>
