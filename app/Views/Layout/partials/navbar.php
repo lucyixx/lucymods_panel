@@ -83,7 +83,6 @@ $navLinks = [
 $menuItems = [
     ['icon' => 'i-server', 'label' => 'Dashboard', 'url' => 'dashboard', 'key' => 'dashboard'],
     ['icon' => 'i-key', 'label' => 'Keys', 'url' => 'keys', 'key' => 'keys'],
-    ['icon' => 'i-plus', 'label' => 'Generate', 'url' => 'keys/generate', 'key' => 'generate'],
     ['icon' => 'i-gear', 'label' => 'Settings', 'url' => 'settings', 'key' => 'settings'],
 ];
 
@@ -103,8 +102,6 @@ $uri = strtolower(trim(uri_string(), '/'));
 if ($isLoggedIn) {
     if ($uri === 'dashboard') {
         $active = 'dashboard';
-    } elseif (str_starts_with($uri, 'keys/generate')) {
-        $active = 'generate';
     } elseif (str_starts_with($uri, 'keys')) {
         $active = 'keys';
     } elseif (str_starts_with($uri, 'settings')) {

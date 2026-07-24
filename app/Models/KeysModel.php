@@ -46,7 +46,7 @@ class KeysModel extends Model
             $builder->where('registrator', $user->username);
         }
 
-        $builder = $builder->select('CONCAT(keys_code.id_keys) as id, game, user_key, key_level, duration, CONCAT(keys_code.expired_date) as expired, max_devices, devices, status, registrator');
+        $builder = $builder->select('CONCAT(keys_code.id_keys) as id, game, user_key, key_level, duration, CONCAT(keys_code.expired_date) as expired, max_devices, devices, status, registrator, logins_remaining, status as raw_status, duration as raw_duration, devices as raw_devices, CONCAT(keys_code.expired_date) as raw_expired_date');
 
         return DataTable::of($builder)
             ->setSearchableColumns(['id_keys', 'game', 'user_key', 'key_level', 'duration', 'expired_date', 'max_devices', 'devices', 'status', 'registrator'])

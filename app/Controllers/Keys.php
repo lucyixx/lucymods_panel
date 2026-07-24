@@ -67,6 +67,10 @@ class Keys extends BaseController
             'user' => $user,
             'keylist' => $keys,
             'time' => $this->time,
+            'game' => $this->game_list,
+            'levels' => $this->levels,
+            'duration' => $this->duration,
+            'price' => json_encode($this->price),
         ];
         return view('Keys/list', $data);
     }
