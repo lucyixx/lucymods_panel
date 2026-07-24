@@ -34,7 +34,7 @@
             <div class="card-body">
                 <div class="flex justify-between items-center">
                     <h2 class="card-title">Create License</h2>
-                    <a class="btn btn-ghost btn-sm" href="<?= site_url('keys') ?>" aria-label="Back to keys list">
+                    <a class="btn btn-soft btn-sm" href="<?= site_url('keys') ?>" aria-label="Back to keys list">
                         <svg class="icon"><use href="#i-users" /></svg>
                     </a>
                 </div>

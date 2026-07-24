@@ -40,12 +40,12 @@
                     <svg class="icon"><use href="#i-plus" /></svg>Create License
                 </button>
                 <div class="tooltip" data-tip="Download all keys">
-                    <a class="btn btn-ghost btn-sm" href="<?= site_url('keys/download/all') ?>" aria-label="Download all keys">
+                    <a class="btn btn-soft btn-sm" href="<?= site_url('keys/download/all') ?>" aria-label="Download all keys">
                         <svg class="icon"><use href="#i-download" /></svg>
                     </a>
                 </div>
                 <div class="dropdown dropdown-end">
-                    <div tabindex="0" role="button" class="btn btn-ghost btn-sm" aria-label="More bulk actions">
+                    <div tabindex="0" role="button" class="btn btn-soft btn-sm" aria-label="More bulk actions">
                         More
                         <svg class="icon" style="width:0.8rem;height:0.8rem"><use href="#i-chev-r" /></svg>
                     </div>
@@ -305,7 +305,7 @@
                             <div class="join">
                                 ${btnEdit}
                                 <div class="dropdown dropdown-end">
-                                    <div tabindex="0" role="button" class="btn btn-ghost btn-xs join-item" aria-label="More actions for ${row.user_key}">More</div>
+                                    <div tabindex="0" role="button" class="btn btn-soft btn-xs join-item" aria-label="More actions for ${row.user_key}">More</div>
                                     <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-2 w-40 p-2 shadow-sm">
                                         <li><a onclick="resetUserKey('${row.user_key}')"><svg class="icon" style="width:0.85rem;height:0.85rem"><use href="#i-refresh" /></svg>Reset</a></li>
                                         <li><a onclick="deleteKeys('${row.user_key}')" class="text-error"><svg class="icon" style="width:0.85rem;height:0.85rem"><use href="#i-trash" /></svg>Delete</a></li>

@@ -15,10 +15,10 @@
                 <div class="flex items-center justify-between">
                     <h2 class="card-title">Key Information</h2>
                     <div class="flex items-center gap-1">
-                        <a class="btn btn-ghost btn-sm" href="<?= site_url('keys/generate') ?>" aria-label="Generate key">
+                        <a class="btn btn-soft btn-sm" href="<?= site_url('keys/generate') ?>" aria-label="Generate key">
                             <svg class="icon"><use href="#i-plus" /></svg>
                         </a>
-                        <a class="btn btn-ghost btn-sm" href="<?= site_url('keys') ?>" aria-label="Back to keys list">
+                        <a class="btn btn-soft btn-sm" href="<?= site_url('keys') ?>" aria-label="Back to keys list">
                             <svg class="icon"><use href="#i-users" /></svg>
                         </a>
                     </div>
