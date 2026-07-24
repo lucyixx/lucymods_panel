@@ -86,7 +86,7 @@
 
 <!-- Edit User Modal — one shared modal for all rows, populated via data-* on click -->
 <dialog id="editUserModal" class="modal">
-    <div class="modal-box">
+    <div class="modal-box max-h-[85vh] overflow-y-auto">
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" aria-label="Close">
                 <svg class="icon"><use href="#i-x" /></svg>
@@ -131,9 +131,7 @@
         </fieldset>
 
         <div class="modal-action">
-            <form method="dialog">
-                <button class="btn">Cancel</button>
-            </form>
+            <button type="button" class="btn" onclick="editUserModal.close()">Cancel</button>
             <button type="submit" form="editUserForm" class="btn btn-primary">Save Changes</button>
         </div>
         <?= form_close() ?>

@@ -84,7 +84,7 @@
      unprefixed ids (#game/#user_key/#duration/#key_level/#max_devices) since those
      are the ones explicitly required to stay as-is. -->
 <dialog id="createLicenseModal" class="modal">
-    <div class="modal-box max-w-2xl">
+    <div class="modal-box max-w-2xl max-h-[85vh] overflow-y-auto">
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" aria-label="Close">
                 <svg class="icon"><use href="#i-x" /></svg>
@@ -131,9 +131,7 @@
         </fieldset>
 
         <div class="modal-action">
-            <form method="dialog">
-                <button class="btn">Cancel</button>
-            </form>
+            <button type="button" class="btn" onclick="createLicenseModal.close()">Cancel</button>
             <button type="submit" form="generateForm" class="btn btn-primary">Create License</button>
         </div>
         <?= form_close() ?>
@@ -146,7 +144,7 @@
 <!-- Edit License Modal (was Keys/key_edit.php) — one shared modal for every row,
      populated from the DataTables row object (no per-row modal, no AJAX fetch). -->
 <dialog id="editLicenseModal" class="modal">
-    <div class="modal-box max-w-2xl">
+    <div class="modal-box max-w-2xl max-h-[85vh] overflow-y-auto">
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" aria-label="Close">
                 <svg class="icon"><use href="#i-x" /></svg>
@@ -218,10 +216,8 @@
         </fieldset>
 
         <div class="modal-action">
-            <form method="dialog">
-                <button class="btn">Cancel</button>
-            </form>
-            <button class="btn btn-primary btnUpdate" form="editKeyForm" disabled>Save Changes</button>
+            <button type="button" class="btn" onclick="editLicenseModal.close()">Cancel</button>
+            <button type="submit" class="btn btn-primary btnUpdate" form="editKeyForm" disabled>Save Changes</button>
         </div>
         <?= form_close() ?>
     </div>
@@ -308,7 +304,7 @@
                         return `
                             <div class="join">
                                 ${btnEdit}
-                                <div class="dropdown dropdown-end join-item">
+                                <div class="dropdown dropdown-end">
                                     <div tabindex="0" role="button" class="btn btn-ghost btn-xs join-item" aria-label="More actions for ${row.user_key}">More</div>
                                     <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-box z-[var(--z-modal)] mt-2 w-40 p-2 shadow-sm">
                                         <li><a onclick="resetUserKey('${row.user_key}')"><svg class="icon" style="width:0.85rem;height:0.85rem"><use href="#i-refresh" /></svg>Reset</a></li>

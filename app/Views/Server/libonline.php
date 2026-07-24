@@ -90,7 +90,7 @@ function formatPermissions($file) : string
 
 <!-- Upload dialog: native <dialog>, showModal()/close() — no Bootstrap Modal JS -->
 <dialog id="uploadModal" class="modal">
-    <div class="modal-box">
+    <div class="modal-box max-h-[85vh] overflow-y-auto">
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" aria-label="Close">
                 <svg class="icon"><use href="#i-x" /></svg>
